@@ -1,6 +1,7 @@
 COMMON: &common
   DEBUG: False
   TESTING: False
+  SECRET_KEY: "asdfx123456"
 
 DEVELOPMENT: &development
   <<: *common
