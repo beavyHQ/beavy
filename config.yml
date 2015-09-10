@@ -2,4 +2,4 @@ NAME: "Nullable"
 
 MODULES:
  - likes
- # - comments
+ - comments

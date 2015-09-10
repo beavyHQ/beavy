@@ -11,6 +11,11 @@ You'll need python3 (3.4+) and npm (2.14+). Start by doing the following:
  source venv/bin/activate
  pip install -r requirements.txt
  npm install
+
+ # Now edit your app.yml
+
+ # upgrade to latest database
+ python manager.py db upgrade heads
 ```
 
 
