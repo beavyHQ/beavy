@@ -30,7 +30,7 @@ this will serve the flask backend on `http://localhost:5000/`
 Then for webpack you do:
 
 ```
-  ./node_modules/.bin/webpack-dev-server
+  npm run hot-dev-server
 ```
 
 This will start the webpack-dev-server in hot-reload mode on `http://localhost:8080/`
