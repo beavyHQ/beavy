@@ -1,5 +1,5 @@
 NAME: "Nullable"
 
 MODULES:
- - likes
- # - comments
+ # - likes
+ - comments
