@@ -42,49 +42,49 @@ function chatRoomPlusUsers(result) {
 stores = module.exports = {
 	Router: new ItemsStore(desc.Router),
 
-	TodoList: new ItemsStore({
-		// REST API at "/_/list/" (read/write)
-		// the API also returns "TodoItem"s for requests
+	// TodoList: new ItemsStore({
+	// 	// REST API at "/_/list/" (read/write)
+	// 	// the API also returns "TodoItem"s for requests
 
-		writeAndReadSingleItem: writeAndReadSingleItem("/_/list/", todoListPlusItems),
-		readSingleItem: readSingleItem("/_/list/", todoListPlusItems),
+	// 	writeAndReadSingleItem: writeAndReadSingleItem("/_/list/", todoListPlusItems),
+	// 	readSingleItem: readSingleItem("/_/list/", todoListPlusItems),
 
-		queueRequest: queue.push.bind(queue),
-		...desc.TodoList
-	}, initialData.TodoList),
+	// 	queueRequest: queue.push.bind(queue),
+	// 	...desc.TodoList
+	// }, initialData.TodoList),
 
-	TodoItem: new ItemsStore({
-		// REST API at "/_/todo" (read/write)
-		// it supports reading up to 10 items at once
+	// TodoItem: new ItemsStore({
+	// 	// REST API at "/_/todo" (read/write)
+	// 	// it supports reading up to 10 items at once
 
-		writeAndReadSingleItem: writeAndReadSingleItem("/_/todo/"),
-		readSingleItem: readSingleItem("/_/todo/"),
-		readMultipleItems: readMultipleItems("/_/todo/"),
+	// 	writeAndReadSingleItem: writeAndReadSingleItem("/_/todo/"),
+	// 	readSingleItem: readSingleItem("/_/todo/"),
+	// 	readMultipleItems: readMultipleItems("/_/todo/"),
 
-		queueRequest: queue.push.bind(queue),
-		maxWriteItems: 10,
-		...desc.TodoItem
-	}, initialData.TodoItem),
+	// 	queueRequest: queue.push.bind(queue),
+	// 	maxWriteItems: 10,
+	// 	...desc.TodoItem
+	// }, initialData.TodoItem),
 
-	ChatRoom: new ItemsStore({
-		// REST API at "/_/chat-room" (read/write)
-		// the API also returns "ChatUsers"s for requests
+	// ChatRoom: new ItemsStore({
+	// 	// REST API at "/_/chat-room" (read/write)
+	// 	// the API also returns "ChatUsers"s for requests
 
-		writeAndReadSingleItem: writeAndReadSingleItem("/_/chat-room/", chatRoomPlusUsers),
-		readSingleItem: readSingleItem("/_/chat-room/", chatRoomPlusUsers),
+	// 	writeAndReadSingleItem: writeAndReadSingleItem("/_/chat-room/", chatRoomPlusUsers),
+	// 	readSingleItem: readSingleItem("/_/chat-room/", chatRoomPlusUsers),
 
-		queueRequest: queue.push.bind(queue),
-		...desc.ChatRoom
-	}, initialData.ChatRoom),
+	// 	queueRequest: queue.push.bind(queue),
+	// 	...desc.ChatRoom
+	// }, initialData.ChatRoom),
 
-	ChatUser: new ItemsStore({
-		// REST API at "/_/chat-user" (read only)
+	// ChatUser: new ItemsStore({
+	// 	// REST API at "/_/chat-user" (read only)
 
-		readSingleItem: readSingleItem("/_/chat-user/"),
+	// 	readSingleItem: readSingleItem("/_/chat-user/"),
 
-		queueRequest: queue.push.bind(queue),
-		...desc.ChatUser
-	}, initialData.ChatUser)
+	// 	queueRequest: queue.push.bind(queue),
+	// 	...desc.ChatUser
+	// }, initialData.ChatUser)
 };
 
 
