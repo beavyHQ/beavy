@@ -5,9 +5,8 @@ COMMON: &common
 DEVELOPMENT: &development
   <<: *common
   DEBUG: True
-  DATABASE: 'development_db'
+  SQLALCHEMY_DATABASE_URI: "sqlite:///app.db"
 
 PRODUCTION: &production
   <<: *common
-  DATABASE: 'production_db'
 
