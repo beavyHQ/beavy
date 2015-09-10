@@ -49,13 +49,13 @@ module.exports = {
       loader: 'json'
     },{
       test: /\.less/,
-      loader: 'style-loader!css-loader!less-loader'
+      loader: 'style!css!less'
     },{
-      test: /\.sass/,
-      loader: 'style-loader!css-loader!sass-loader?outputStyle=expanded'
+      test: /\.(sass|scss)/,
+      loader: 'style!css!sass?outputStyle=expanded'
     },{
       test: /\.css$/,
-      loader: 'style-loader!css-loader'
+      loader: 'style!css'
     },{
       test: /\.(png|jpg)$/,
       loader: 'url-loader?limit=8192'
