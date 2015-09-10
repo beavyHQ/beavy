@@ -90,30 +90,30 @@ stores = module.exports = {
 
 // bind actions to stores
 
-import { Todo, Chat } from "./actions";
+// import { Todo, Chat } from "./actions";
 
-Todo.fetch.listen(function() {
-	stores.TodoList.update();
-	stores.TodoItem.update();
-});
+// Todo.fetch.listen(function() {
+// 	stores.TodoList.update();
+// 	stores.TodoItem.update();
+// });
 
-Todo.add.listen(function(list, item) {
-	stores.TodoList.updateItem(list, { $push: [item] });
-});
+// Todo.add.listen(function(list, item) {
+// 	stores.TodoList.updateItem(list, { $push: [item] });
+// });
 
-Todo.update.listen(function(id, update) {
-	stores.TodoItem.updateItem(id, update);
-});
+// Todo.update.listen(function(id, update) {
+// 	stores.TodoItem.updateItem(id, update);
+// });
 
-Todo.fetchItem.listen(function(id) {
-	stores.TodoItem.update(id);
-});
+// Todo.fetchItem.listen(function(id) {
+// 	stores.TodoItem.update(id);
+// });
 
-Chat.fetch.listen(function() {
-	stores.ChatRoom.update();
-	stores.ChatUser.update();
-});
+// Chat.fetch.listen(function() {
+// 	stores.ChatRoom.update();
+// 	stores.ChatUser.update();
+// });
 
-Chat.send.listen((room, msg) => {
-	stores.ChatRoom.updateItem(room, [msg]);
-});
+// Chat.send.listen((room, msg) => {
+// 	stores.ChatRoom.updateItem(room, [msg]);
+// });
