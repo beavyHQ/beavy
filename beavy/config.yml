@@ -1,0 +1,13 @@
+COMMON: &common
+  DEBUG: False
+  TESTING: False
+
+DEVELOPMENT: &development
+  <<: *common
+  DEBUG: True
+  DATABASE: 'development_db'
+
+PRODUCTION: &production
+  <<: *common
+  DATABASE: 'production_db'
+
