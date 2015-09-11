@@ -16,13 +16,13 @@ class MorphingField(Field):
     #     return obj.__class__.__name__
 
     def _obj_to_name(self, obj):
-        return getattr(obj, obj.__mapper_args__["polymorphic_on"], None)
+        return obj.__mapper__.polymorphic_identity and obj.__mapper__.polymorphic_identity.__class__.__name__
 
-    def _serialize(self, value):
+    def _serialize(self, value, attr, obj):
         if value is None:
             return None
         if self.many:
-            return [self._get_serializer(x).dump(x).data for x in value]
+            return [self._get_serializer(value).dump(x).data for x in value]
         return self._get_serializer(value).dump(value).data
 
     def _get_serializer(self, obj):
@@ -34,4 +34,4 @@ class MorphingField(Field):
             elif callable(kls):
                 return kls()
 
-        return self.registry.get(name, self.baseObject)()
+        return self.registry.get(name, self.fallback)()
