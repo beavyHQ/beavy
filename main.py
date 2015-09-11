@@ -1,13 +1,7 @@
+from beavy.utils import fallbackRender
 from beavy.app import app
 
 @app.route("/")
+@fallbackRender('home.html')
 def hello():
-    return """<html>
-    <head>
-        <title>Test Page</title>
-    </head>
-    <body id="content">
-        <h1>Hello World</h1>
-        <script type="text/javascript" src="/assets/main.js"></script>
-    </body>
-"""
+    return {"title": "home"}
