@@ -6,7 +6,7 @@ COMMON: &common
 DEVELOPMENT: &development
   <<: *common
   DEBUG: True
-  SQLALCHEMY_DATABASE_URI: "sqlite:///app.db"
+  SQLALCHEMY_DATABASE_URI: "postgresql://localhost/beavy-dev"
 
 PRODUCTION: &production
   <<: *common

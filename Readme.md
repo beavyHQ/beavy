@@ -2,6 +2,11 @@
 
 Beavy is a modular (content) community building framework.
 
+## Requirements:
+
+ - Python 3.4+
+ - Postgresql 9.4+
+
 ## Development setup:
 
 You'll need python3 (3.4+) and npm (2.14+). Start by doing the following:
