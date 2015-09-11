@@ -1,7 +1,7 @@
-from werkzeug.exceptions import UnsupportedMediaType, NotAcceptable
 from werkzeug.wrappers import Response as ResponseBase
-from flask import request, render_template, Response, jsonify
+from flask import request, render_template, Response, json
 from functools import wraps
+from marshmallow import MarshalResult
 
 import importlib
 
@@ -27,9 +27,11 @@ def fallbackRender(template, nativeTypes=('application/json', )):
                 return resp
 
             accepted = set(request.accept_mimetypes.values())
-            if len(accepted & nativeTypes):
+            if len(accepted & nativeTypes) or request.args.get("json"):
                 # we've found one, return json
-                return Response(jsonify(resp),
+                if isinstance(resp, MarshalResult):
+                    resp = resp.data
+                return Response(json.dumps(resp),
                                 200, content_type='application/json')
 
             return Response(render_template(template, data=resp),
