@@ -1,3 +1,5 @@
+alembic==0.8.2
+aniso8601==1.0.0
 blinker==1.4
 click==5.1
 Flask==0.10.1
@@ -7,18 +9,26 @@ Flask-DebugToolbar==0.10.0
 -e git+https://github.com/ligthyear/flask-environments.git@bceef9e26720728cddf0e581efe81d5246b1513b#egg=Flask_Environments-master
 Flask-Login==0.2.11
 Flask-Mail==0.9.1
+flask-marshmallow==0.6.1
+Flask-Migrate==1.5.1
 Flask-Principal==0.4.0
-Flask-Restless==0.17.0
 Flask-Script==2.0.5
 Flask-Security==1.7.4
+Flask-SQLAlchemy==2.0
 Flask-WTF==0.12
 itsdangerous==0.24
 Jinja2==2.8
+Mako==1.0.2
 MarkupSafe==0.23
+marshmallow==2.0.0b5
+marshmallow-sqlalchemy==0.4.0
 mimerender==0.5.5
 passlib==1.6.5
+psycopg2==2.6.1
 python-dateutil==2.4.2
+python-editor==0.4
 python-mimeparse==0.1.4
+pytz==2015.4
 PyYAML==3.11
 six==1.9.0
 SQLAlchemy==1.0.8
