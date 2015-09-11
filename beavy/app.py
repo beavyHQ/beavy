@@ -39,7 +39,8 @@ manager = Manager(app)
 manager.add_command('db', MigrateCommand)
 
 
-from beavy.models import User, Role
+from beavy.models.user import User
+from beavy.models.role import Role
 
 # Setup Flask-Security
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
