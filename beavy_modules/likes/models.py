@@ -4,7 +4,9 @@ from beavy.models.object import Object
 
 
 class Like(Activity):
-    pass
+    __mapper_args__ = {
+        'polymorphic_identity': 'like'
+    }
 
 
 Object.likes_count = db.Column(db.Integer)
