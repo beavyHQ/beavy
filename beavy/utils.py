@@ -5,6 +5,7 @@ from functools import wraps
 
 import importlib
 
+
 def load_modules(app):
     for modl in app.config.get("MODULES", []):
         # load module
@@ -13,6 +14,7 @@ def load_modules(app):
         if hasattr(subm, "init_app"):
             print(subm, subm.init_app)
             subm.init_app(app)
+
 
 def fallbackRender(template, nativeTypes=('application/json', )):
     nativeTypes = set(nativeTypes)
@@ -34,3 +36,16 @@ def fallbackRender(template, nativeTypes=('application/json', )):
                             200, content_type="text/html")
         return decorated_view
     return wrapper
+
+
+def as_page(query, per_page=30, **kwargs):
+    page = 1
+    try:
+        page = int(request.args.get("page") or 1)
+    except (KeyError, ValueError):
+        pass
+
+    if page <= 0:
+        page = 1
+
+    return query.paginate(page, per_page, **kwargs)
