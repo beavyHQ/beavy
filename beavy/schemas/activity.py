@@ -8,7 +8,7 @@ class BaseActivity(Schema):
     id = fields.Integer()
     created_at = fields.DateTime()
     subject = fields.Nested(BaseUser)
-    object = fields.Integer()  # don't leak
+    object_id = fields.Integer()  # don't leak
 
 
 class ActivityField(MorphingField):

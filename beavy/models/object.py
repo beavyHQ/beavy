@@ -15,7 +15,8 @@ class Object(db.Model):
     discriminator = db.Column('type', db.String(100))
     created_at = db.Column('created_at', db.DateTime())
     payload = db.Column('payload', JSONB)
-    owner = db.Column(db.Integer, db.ForeignKey(User.id))
+    owner_id = db.Column(db.Integer, db.ForeignKey(User.id))
+    owner = db.relationship(User, backref=db.backref('objects'))
     belongs_to = db.Column(db.Integer, db.ForeignKey("objects.id"),
                            nullable=True)
     # children = db.relationship("Object", backref=db.backref('belongs_to',
