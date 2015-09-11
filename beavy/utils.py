@@ -1,5 +1,5 @@
 from werkzeug.wrappers import Response as ResponseBase
-from flask import request, render_template, Response, json
+from flask import request, render_template, make_response, json
 from functools import wraps
 from marshmallow import MarshalResult
 
@@ -26,16 +26,25 @@ def fallbackRender(template, nativeTypes=('application/json', )):
             if isinstance(resp, ResponseBase):
                 return resp
 
+            data, code, headers = unpack(resp)
+
             accepted = set(request.accept_mimetypes.values())
             if len(accepted & nativeTypes) or request.args.get("json"):
                 # we've found one, return json
-                if isinstance(resp, MarshalResult):
-                    resp = resp.data
-                return Response(json.dumps(resp),
-                                200, content_type='application/json')
+                if isinstance(data, MarshalResult):
+                    data = data.data
+                resp = make_response(json.dumps(data), code)
+                ct = 'application/json'
+            else:
+                resp = make_response(render_template(template, data=data),
+                                     code)
+                ct = "text/html"
 
-            return Response(render_template(template, data=resp),
-                            200, content_type="text/html")
+            if headers:
+                resp.headers.update(headers)
+            resp.headers["Content-Type"] = ct
+            return resp
+
         return decorated_view
     return wrapper
 
@@ -51,3 +60,30 @@ def as_page(query, per_page=30, **kwargs):
         page = 1
 
     return query.paginate(page, per_page, **kwargs)
+
+
+# --- start of Flask-RESTful code ---
+# Copyright (c) 2013, Twilio, Inc.
+# All rights reserved.
+# This code is part of Flask-RESTful and is governed by its
+# license. Please see the LICENSE file in the root of this package.
+def unpack(value):
+    """Return a three tuple of data, code, and headers"""
+    if not isinstance(value, tuple):
+        return value, 200, {}
+
+    try:
+        data, code, headers = value
+        return data, code, headers
+    except ValueError:
+        pass
+
+    try:
+        data, code = value
+        if not isinstance(code, int):
+            raise ValueError()
+        return data, code, {}
+    except ValueError:
+        pass
+
+    return value, 200, {}
