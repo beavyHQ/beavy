@@ -12,15 +12,15 @@ Beavy is a modular (content) community building framework.
 You'll need python3 (3.4+) and npm (2.14+). Start by doing the following:
 
 ```
- virtualenv --python python3 venv
- source venv/bin/activate
- pip install -r requirements.txt
- npm install
+virtualenv --python python3 venv
+source venv/bin/activate
+pip install -r requirements.txt
+npm install
 
- # Now edit your app.yml
+# Now edit your app.yml
 
- # upgrade to latest database
- python manager.py db upgrade heads
+# upgrade to latest database
+python manager.py db upgrade heads
 ```
 
 
@@ -31,8 +31,8 @@ You need two terminals open to run the webpack dev server and flask at the same 
 For flask do:
 
 ```
-  source venv/bin/activate
-  flask --app=main --debug run
+source venv/bin/activate
+flask --app=main --debug run
 ```
 
 this will serve the flask backend on `http://localhost:5000/`
@@ -40,7 +40,7 @@ this will serve the flask backend on `http://localhost:5000/`
 Then for webpack you do:
 
 ```
-  npm run hot-dev-server
+$ npm run hot-dev-server
 ```
 
 This will start the webpack-dev-server in hot-reload mode on `http://localhost:8080/`
