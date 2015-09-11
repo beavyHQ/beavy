@@ -1,4 +1,3 @@
-
 from beavy.app import db
 from beavy.models.activity import Activity
 from beavy.models.object import Object

@@ -1,5 +1,9 @@
+from flask import Blueprint
 
-from .models import Like
+blueprint = Blueprint('likes', __name__,
+                      template_folder='templates')
+
+from .views import *
 
 def init_app(app):
-    print("in App {}".format(app))
+    app.register_blueprint(blueprint)
