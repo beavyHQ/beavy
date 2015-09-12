@@ -1,5 +1,7 @@
 NAME: "Nullable"
 
+FRONTEND: 'twitter'
+
 MODULES:
  - likes
  - comments
