@@ -16,7 +16,7 @@ class MorphingField(Field):
     #     return obj.__class__.__name__
 
     def _obj_to_name(self, obj):
-        return obj.__mapper__.polymorphic_identity and obj.__mapper__.polymorphic_identity.__class__.__name__
+        return obj.__mapper__.polymorphic_identity
 
     def _serialize(self, value, attr, obj):
         if value is None:
