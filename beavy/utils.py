@@ -1,7 +1,8 @@
 from werkzeug.wrappers import Response as ResponseBase
 from flask import request, render_template, make_response, json
-from functools import wraps
 from marshmallow import MarshalResult
+
+from functools import wraps
 
 import importlib
 

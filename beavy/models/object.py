@@ -1,7 +1,9 @@
-from beavy.app import db
 from sqlalchemy.dialects.postgresql import JSONB
+from beavy.common.access_query import AccessQuery
 
 from .user import User
+from beavy.app import db
+from collections import defaultdict
 
 
 class Object(db.Model):
@@ -10,6 +12,7 @@ class Object(db.Model):
     we know of inside the system
     """
     __tablename__ = "objects"
+    query_class = AccessQuery
 
     id = db.Column(db.Integer, primary_key=True)
     discriminator = db.Column('type', db.String(100))
@@ -23,3 +26,5 @@ class Object(db.Model):
                                                             # remote_side=id))
 
     __mapper_args__ = {'polymorphic_on': discriminator}
+
+Object.__access_filters = defaultdict(list)
