@@ -4,12 +4,11 @@ import ReactLogo from "elements/ReactLogo";
 import styles from './MainMenu.scss';
 import classnames from 'classnames';
 
-var MenuItems = []
+let MainMenuItems = []
+let NavigationTools = []
 
-export function registerMainMenuItem(item){
-	console.log(item)
-	MenuItems.push(item);
-}
+export var registerMainMenuItem = i => MainMenuItems.push(i);
+export var registerNavigationToolsItem = i => NavigationTools.push(i);
 
 export class MainMenu extends React.Component {
 	render() {
@@ -21,39 +20,11 @@ export class MainMenu extends React.Component {
 			    <a href="javascript:void(0)" className={styles.navigationMenuButton} id="js-mobile-menu">MENU</a>
 			    <nav role="navigation">
 			      <ul id="js-navigation-menu" className={classnames(styles.navigationMenu, styles.show)}>
-			      	{MenuItems.map(x=>x.apply(this))}
-			        <li><a href="javascript:void(0)">Products</a></li>
-			        <li><a href="javascript:void(0)">About Us</a></li>
-			        <li><a href="javascript:void(0)">Contact</a></li>
-			        <li className={styles.more}><a href="javascript:void(0)">More</a>
-			          <ul className={styles.submenu}>
-			            <li><a href="javascript:void(0)">Submenu Item</a></li>
-			            <li><a href="javascript:void(0)">Another Item</a></li>
-			            <li className={styles.more}><a href="javascript:void(0)">Item with submenu</a>
-			              <ul className={styles.submenu}>
-			                <li><a href="javascript:void(0)">Sub-submenu Item</a></li>
-			                <li><a href="javascript:void(0)">Another Item</a></li>
-			              </ul>
-			            </li>
-			            <li className={styles.more}><a href="javascript:void(0)">Another submenu</a>
-			              <ul className={styles.submenu}>
-			                <li><a href="javascript:void(0)">Sub-submenu</a></li>
-			                <li><a href="javascript:void(0)">An Item</a></li>
-			              </ul>
-			            </li>
-			          </ul>
-			        </li>
+			      	{MainMenuItems.map(x=>x.apply(this))}
 			      </ul>
 			    </nav>
 			    <div className={styles.navigationTools}>
-			      <div className={styles.searchBar}>
-			        <form role="search">
-			          <input type="search" placeholder="Enter Search" />
-			          <button type="submit">
-			            <img src="https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/search-icon.png" alt="Search Icon" />
-			          </button>
-			        </form>
-			      </div>
+			    	{NavigationTools.map(x=>x.apply(this))}
 			    </div>
 			  </div>
 		</div>;
