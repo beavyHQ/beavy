@@ -4,7 +4,7 @@ import { MainMenu } from "components/MainMenu";
 import { createContainer } from "items-store";
 
 
-import styles from "./twitter.css";
+import styles from "./styles.css";
 
 class Application extends React.Component {
     static getProps(stores, params) {
