@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router";
-import {registerMainMenuItem} from '../../jsbeavy/app/components/MainMenu.jsx';
+import {registerMainMenuItem} from 'components/MainMenu.jsx';
 
 console.log(registerMainMenuItem)
 
