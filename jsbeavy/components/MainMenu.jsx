@@ -12,12 +12,13 @@ export var registerNavigationToolsItem = i => NavigationTools.push(i);
 
 export class MainMenu extends React.Component {
 	render() {
+		let logo = this.props.logo || 'https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/placeholder_logo_1.png'
 		return <div className={styles.navigation} role="banner">
 			  <div className={styles.navigationWrapper}>
-			    <a href="javascript:void(0)" className="logo">
-			      <img src="https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/placeholder_logo_1.png" alt="Logo Image" />
+			    <a href="" className={styles.logo}>
+			      <img src={logo} alt="Logo Image" />
 			    </a>
-			    <a href="javascript:void(0)" className={styles.navigationMenuButton} id="js-mobile-menu">MENU</a>
+			    <a href="" className={styles.navigationMenuButton} id="js-mobile-menu">MENU</a>
 			    <nav role="navigation">
 			      <ul id="js-navigation-menu" className={classnames(styles.navigationMenu, styles.show)}>
 			      	{MainMenuItems.map(x=>x.apply(this))}
