@@ -1,7 +1,12 @@
 from .app import app, mail, celery, security
 from .schemas.user import CurrentUser
 from flask_security import current_user
-from .utils import load_modules
+from .utils import load_modules, url_converters
+
+
+app.url_map.converters['model'] = url_converters.ModelConverter
+app.url_map.converters['user'] = url_converters.UserConverter
+
 
 #  LOAD all external modules
 load_modules(app)
