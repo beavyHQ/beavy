@@ -7,9 +7,15 @@ from .utils import load_modules, url_converters
 app.url_map.converters['model'] = url_converters.ModelConverter
 app.url_map.converters['user'] = url_converters.UserConverter
 
-
-#  LOAD all external modules
+# LOAD all external modules
 load_modules(app)
+
+# allows them to register on blueprints before we do that setup
+
+
+# register blueprints
+from .blueprints import setup as register_blueprints
+register_blueprints(app)
 
 
 # inject current_user in the template
