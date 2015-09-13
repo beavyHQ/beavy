@@ -10,7 +10,10 @@
     </style>
 
     <script type="text/javascript">
-    var DATA = {{ data|tojson|safe }};
+    window.BEAVY = {
+        CURRENT_USER: {{ SERIALIZED_USER | safe }},
+        PRELOAD: {{ data | tojson | safe }}
+    }
     // we do not accept iframe inclusion
     {% if config.DEBUG %}
         if (parent !== window && parent.location.pathname != "/webpack-dev-server/") parent.location.reload();
