@@ -5,5 +5,7 @@ blueprint = Blueprint('likes', __name__,
 
 from .views import *
 
+
 def init_app(app):
+    # tell flask about our own templates
     app.register_blueprint(blueprint)

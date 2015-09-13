@@ -1,5 +1,5 @@
 from beavy.utils import fallbackRender, as_page
-from beavy_modules.likes import blueprint
+from beavy.blueprints import users as users_bp
 from sqlalchemy.orm import subqueryload
 
 from beavy.models.object import Object
@@ -7,7 +7,7 @@ from .models import Like
 from .schemas import user_likes_paged
 
 
-@blueprint.route("/u/<user:user>/likes")
+@users_bp.route("/<user:user>/likes")
 @fallbackRender('user_likes.html')
 def user_likes(user):
     print(user)
