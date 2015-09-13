@@ -1,5 +1,6 @@
 from werkzeug.wrappers import Response as ResponseBase
 from flask import request, render_template, make_response, json
+from logging import getLogger
 from marshmallow import MarshalResult
 
 from functools import wraps
@@ -8,12 +9,14 @@ import importlib
 
 
 def load_modules(app):
+    logger = getLogger("beavy.loadModules")
     for modl in app.config.get("MODULES", []):
         # load module
+        logger.debug("Importing Module {}".format(modl))
         subm = importlib.import_module("beavy_modules.{}".format(modl))
         # call init on module if found
         if hasattr(subm, "init_app"):
-            print(subm, subm.init_app)
+            logger.debug("Init Module {}".format(modl))
             subm.init_app(app)
 
 

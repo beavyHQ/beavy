@@ -3,6 +3,7 @@ from flask.ext import migrate as ext_migrate
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+
 def patched_migrate(fn):
     def wrapped(*args, **kwargs):
         paths = list(filter(lambda x: os.path.isdir(x),
