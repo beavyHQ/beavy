@@ -1,0 +1,23 @@
+{% extends "_layout.html" %}
+
+
+{% block header %}
+    <style type="text/css">
+        /* we only include minimal style directly*/
+        #content {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+
+    <script type="text/javascript">
+    function _frameResize(){
+        var frameEl = window.frameElement;
+        if (frameEl) {
+          frameEl.style.height = (document.body.scrollHeight + 20) + "px";
+        };
+    }
+    </script>
+{% endblock %}
+
+{% block bodytags %} onload="_frameResize()" {% endblock %}
