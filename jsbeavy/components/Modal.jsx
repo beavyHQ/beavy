@@ -21,7 +21,7 @@ export class Modal extends React.Component {
             <div className={styles.modalFadeScreen}>
               <div className={styles.modalInner}>
                 <div className={styles.modalClose}></div>
-                <h1>{this.props.title}</h1>
+                {this.props.title ? <h1>{this.props.title}</h1> : null}
                 {this.props.children}
               </div>
             </div>

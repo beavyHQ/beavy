@@ -19,7 +19,7 @@ export class MainMenu extends React.Component {
 
 	render() {
 		let logo = this.props.logo || 'https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/placeholder_logo_1.png',
-				loginModal = this.state.loginOpen ? <Modal isOpen={true} title="Login"><iframe src="/login?"></iframe></Modal> : null;
+				loginModal = this.state.loginOpen ? <Modal isOpen={true}><iframe src="/login?"></iframe></Modal> : null;
 		return <div className={styles.navigation} role="banner">
 						{loginModal}
 					  <div className={styles.navigationWrapper}>
@@ -32,7 +32,9 @@ export class MainMenu extends React.Component {
 					      	{MainMenuItems.map(x=>x.apply(this))}
 					      </ul>
 					    </nav>
-					    <button onClick={this.toggleLogin.bind(this)}>Login</button>
+					    {BEAVY.CURRENT_USER ?
+					    	<a href="/logout">Logout</a> :
+					    	<button onClick={this.toggleLogin.bind(this)}>Login</button>}
 					    <div className={styles.navigationTools}>
 					    	{NavigationTools.map(x=>x.apply(this))}
 					    </div>

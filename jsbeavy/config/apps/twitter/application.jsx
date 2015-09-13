@@ -17,7 +17,7 @@ class Application extends React.Component {
         var { loading } = this.props;
         return <div className={styles.this + (loading ? " " + styles.loading : "")}>
             <div className={styles.loadingElement}>loading...</div>
-            <MainMenu logo='http://svgporn.com/logos/foundation.svg'/>
+            <MainMenu logo='http://svgporn.com/logos/twitter.svg'/>
             <h1>Twitter</h1>
             <RouteHandler />
         </div>;
