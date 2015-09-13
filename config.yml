@@ -1,6 +1,6 @@
 NAME: "Nullable"
 
-FRONTEND: 'twitter'
+FRONTEND: 'minima'
 
 MODULES:
  - likes
