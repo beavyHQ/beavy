@@ -1,0 +1,152 @@
+@import "main";
+
+.modal {
+  $base-border-color: #dcdcdc !default;
+  $base-border-radius: 3px !default;
+  $base-background-color: #fff !default;
+  $base-font-size: 1em !default;
+  $base-line-height: 1.5em !default;
+  $action-color: #477dca !default;
+  $dark-gray: #333 !default;
+  $light-gray: #ddd !default;
+  $medium-screen: em(640) !default;
+  $large-screen: em(860) !default;
+  $base-font-color: $dark-gray !default;
+  $modal-padding: 3em !default;;
+  $modal-background: $base-background-color !default;
+  $modal-close-color: $light-gray !default;
+  $modal-image-height: 135px !default;
+  $modal-image-width: $modal-image-height !default;
+  $modal-trigger-image-width: 300px !default;
+
+  label {
+    cursor: pointer;
+    margin-bottom: 0;
+  }
+
+  label img {
+    border-radius: $modal-trigger-image-width / 2;
+    display: block;
+    max-width: $modal-trigger-image-width;
+  }
+
+  .modalFadeScreen { // overlay
+    @include transition(opacity 0.25s ease);
+    @include position(fixed, 0);
+    background-color: rgba(#000, 0.85);
+    opacity: 0;
+    padding-top: 0.6em;
+    text-align: left;
+    visibility: hidden;
+    z-index: 99999999999;
+
+    @include media($large-screen) {
+      padding-top: 10em;
+    }
+
+    .modalBg {
+      @include position(absolute, 0);
+      cursor: pointer;
+    }
+  }
+
+  .modalClose {
+    @include position(absolute, ($modal-padding /2) ($modal-padding /2) null null);
+    @include size(1.5em);
+    background: $modal-background;
+    cursor: pointer;
+
+    &:after,
+    &:before {
+      @include position(absolute, 3px 3px 0 50%);
+      @include transform(rotate(45deg));
+      @include size(0.15em 1.5em);
+      background: $modal-close-color;
+      content: '';
+      display: block;
+      margin: -3px 0 0 -1px;
+    }
+
+    &:hover:after,
+    &:hover:before {
+      background: darken($modal-close-color, 10%);
+    }
+
+    &:before {
+      @include transform(rotate(-45deg));
+    }
+  }
+
+  .modalInner {
+    @include transition(opacity 0.25s ease);
+    background: $modal-background;
+    border-radius: $base-border-radius;
+    margin-top: 0;
+    margin: auto;
+    max-height: 95%;
+    overflow: auto;
+    padding: $modal-padding / 2;
+    position: relative;
+    width: 95%;
+
+    @include media($medium-screen) {
+      max-height: 70%;
+      padding: $modal-padding;
+      width: 60%;
+    }
+
+    @include media($large-screen) {
+      width: 50%;
+    }
+
+    h1 {
+      color: $base-font-color;
+      margin-bottom: 0 0 0.6em 0;
+      text-align: left;
+      text-transform: capitalize;
+    }
+
+    p {
+      color: $base-font-color;
+      line-height: $base-line-height;
+    }
+
+    .modalIntro {
+      margin-bottom: 1em;
+    }
+
+    .modalContent {
+      color: $base-font-color;
+
+      @include media($medium-screen) {
+        @include columns(2 8em);
+      }
+    }
+
+    a.cta {
+      color: $base-background-color;
+      display: inline-block;
+      margin-right: 0.5em;
+      margin-top: 1em;
+
+      &:last-child {
+        padding: 0 2em;
+      }
+    }
+  }
+
+  &.open .modalFadeScreen {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  &.open .modalFadeScreen .modalInner {
+    top: 0.5em;
+  }
+}
+
+// .modalOpen {
+//   overflow: hidden;
+// }
+
+// Based on code by Kasper Mikiewicz
