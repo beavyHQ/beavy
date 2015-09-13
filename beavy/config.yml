@@ -11,6 +11,7 @@ DEVELOPMENT: &development
   SECRET_KEY: "asdfx123456"
   SQLALCHEMY_DATABASE_URI: "postgresql://localhost/beavy-dev"
   SQLALCHEMY_ECHO: True
+  SECURITY_REGISTERABLE: True
 
 PRODUCTION: &production
   <<: *common

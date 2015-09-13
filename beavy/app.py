@@ -1,11 +1,11 @@
-from flask import Flask
+from flask import Flask, session, url_for, redirect
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.script import Manager
 from flask.ext.marshmallow import Marshmallow
 from flask.ext.migrate import Migrate, MigrateCommand
 from flask.ext.security import Security, SQLAlchemyUserDatastore
 
-from flask_social_blueprint.core import SocialBlueprint
+from flask_social_blueprint.core import SocialBlueprint as SocialBp
 from flask.ext.babel import Babel
 
 from flask_environments import Environments
@@ -60,6 +60,20 @@ from beavy.models.social_connection import SocialConnection
 # Setup Flask-Security
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 security = Security(app, user_datastore)
+
+
+class SocialBlueprint(SocialBp):
+    def login_failed_redirect(self, profile, provider):
+        if not app.config.get("SECURITY_REGISTERABLE"):
+            return redirect("/")
+
+        session["_social_profile"] = profile.data
+        # keep the stuff around, so we can set it up after
+        # the user provided us with a nice email address
+        return redirect(url_for('security.register',
+                name="{} {}".format(profile.data.get("first_name"),
+                                    profile.data.get("last_name"))))
+
 
 # add social authentication
 SocialBlueprint.init_bp(app, SocialConnection, url_prefix="/_social")

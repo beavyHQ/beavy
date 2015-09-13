@@ -1,6 +1,6 @@
 from flask_babel import gettext as _
 from sqlalchemy import orm
-from ..app import db
+from ..app import db, app
 from .user import User
 
 import logging
@@ -10,7 +10,7 @@ import datetime
 class SocialConnection(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = orm.relationship("User", foreign_keys=user_id,
+    user = orm.relationship(User, foreign_keys=user_id,
                             backref=orm.backref('connections', order_by=id))
     provider = db.Column(db.String(255))
     profile_id = db.Column(db.String(255))
@@ -35,25 +35,30 @@ class SocialConnection(db.Model):
     @classmethod
     def from_profile(cls, user, profile):
         if not user or user.is_anonymous():
+            if not app.config.get("SECURITY_REGISTERABLE"):
+                msg = "User not found. Registration disabled."
+                logging.warning(msg)
+                raise Exception(_(msg))
             email = profile.data.get("email")
             if not email:
-                msg = "Cannot create new user, authentication provider did not not provide email"
+                msg = "Please provide an email address."
                 logging.warning(msg)
                 raise Exception(_(msg))
             conflict = User.query.filter(User.email == email).first()
             if conflict:
-                msg = "Cannot create new user, email {} is already used. Login and then connect external profile."
+                msg = "Email {} is already used. Login and then connect external profile."
                 msg = _(msg).format(email)
                 logging.warning(msg)
                 raise Exception(msg)
 
+            now = datetime.now()
             user = User(
                 email=email,
                 name="{} {}".format(profile.data.get("first_name"),
                                     profile.data.get("last_name")),
-                confirmed_at=email and datetime.now() or None,
-                active=email and email or None,
-            )
+                confirmed_at=now,
+                active=True)
+
             db.session.add(user)
             db.session.flush()
 
