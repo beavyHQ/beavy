@@ -12,6 +12,8 @@ DEVELOPMENT: &development
   SQLALCHEMY_DATABASE_URI: "postgresql://localhost/beavy-dev"
   SQLALCHEMY_ECHO: True
   SECURITY_REGISTERABLE: True
+  CELERY_BROKER_URL: redis://localhost:6379
+  CELERY_RESULT_BACKEND: redis://localhost:637
 
 PRODUCTION: &production
   <<: *common

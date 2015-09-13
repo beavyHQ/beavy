@@ -1,7 +1,11 @@
 alembic==0.8.2
+amqp==1.4.6
 aniso8601==1.0.0
+anyjson==0.3.3
 Babel==2.0
+billiard==3.3.0.20
 blinker==1.4
+celery==3.1.18
 click==5.1
 facebook-sdk==0.4.0
 Flask==0.10.1
@@ -26,6 +30,7 @@ google-api-python-client==1.4.2
 httplib2==0.9.1
 itsdangerous==0.24
 Jinja2==2.8
+kombu==3.0.26
 Mako==1.0.2
 MarkupSafe==0.23
 marshmallow==2.0.0b5
@@ -44,6 +49,7 @@ python-mimeparse==0.1.4
 -e git+https://github.com/ligthyear/python-twitter@python-v3\#egg\=python-twitter
 pytz==2015.4
 PyYAML==3.11
+redis==2.10.3
 requests==2.7.0
 requests-oauthlib==0.5.0
 rsa==3.2
