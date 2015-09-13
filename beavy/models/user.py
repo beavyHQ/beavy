@@ -1,5 +1,7 @@
-from beavy.app import db
 from flask.ext.security import UserMixin
+from flask_security.forms import ConfirmRegisterForm, RegisterForm, TextField
+
+from beavy.app import db
 
 # Define models
 roles_users = db.Table('roles_users',
@@ -7,6 +9,10 @@ roles_users = db.Table('roles_users',
                                  db.ForeignKey('user.id')),
                        db.Column('role_id',
                                  db.Integer(), db.ForeignKey('role.id')))
+
+
+RegisterForm.name = TextField('Full Name')
+ConfirmRegisterForm.name = TextField('Full Name')
 
 
 class User(db.Model, UserMixin):
