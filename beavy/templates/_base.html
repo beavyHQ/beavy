@@ -15,6 +15,7 @@
         var frameEl = window.frameElement;
         if (frameEl) {
           frameEl.style.height = (document.body.scrollHeight + 20) + "px";
+          frameEl.parentElement && frameEl.parentElement.scrollTo(0,0);
         };
     }
     </script>
