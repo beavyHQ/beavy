@@ -1,8 +1,11 @@
 var path = require("path");
+var fs = require("fs");
+var yaml = require('js-yaml');
 var webpack = require("webpack");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var StatsPlugin = require("stats-webpack-plugin");
 var loadersByExtension = require("./config/loadersByExtension");
+var appConfig = yaml.safeLoad(fs.readFileSync('config.yml'));
 
 module.exports = function(options) {
 	var entry = {
@@ -31,10 +34,15 @@ module.exports = function(options) {
 	var cssLoader = options.minimize ? "css-loader?module" : "css-loader?module&localIdentName=[path][name]---[local]---[hash:base64:5]";
 	var stylesheetLoaders = {
 		"css": cssLoader,
-		"less": [cssLoader, "less-loader"],
+		// "less": [cssLoader, "less-loader"],
 		"styl": [cssLoader, "stylus-loader"],
-		"scss|sass": [cssLoader, "sass-loader?includePaths[]=" +
-								 	encodeURIComponent(path.resolve(__dirname, "styles"))]
+		"scss|sass": [cssLoader, "sass-loader" +
+			// highest priority: __CUSTOM/styles
+			"?includePaths[]=" + encodeURIComponent(path.resolve(__dirname, "__CUSTOM", "styles")) +
+			// second: App
+			"&includePaths[]=" + encodeURIComponent(path.resolve(__dirname, "config", "apps", appConfig.FRONTEND, "styles")) +
+			// third: defaults
+			"&includePaths[]=" + encodeURIComponent(path.resolve(__dirname, "styles"))]
 	};
 	var additionalLoaders = [
 		// { test: /some-reg-exp$/, loader: "any-loader" }
