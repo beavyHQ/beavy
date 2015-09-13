@@ -1,11 +1,13 @@
 COMMON: &common
   DEBUG: False
   TESTING: False
-  SECRET_KEY: "asdfx123456"
+  SECURITY_CONFIRMABLE: True
+  SECURITY_TRACKABLE: True
 
 DEVELOPMENT: &development
   <<: *common
   DEBUG: True
+  SECRET_KEY: "asdfx123456"
   SQLALCHEMY_DATABASE_URI: "postgresql://localhost/beavy-dev"
   SQLALCHEMY_ECHO: True
 
