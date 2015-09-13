@@ -3,6 +3,7 @@ COMMON: &common
   TESTING: False
   SECURITY_CONFIRMABLE: True
   SECURITY_TRACKABLE: True
+  SOCIAL_LOGINS: {}
 
 DEVELOPMENT: &development
   <<: *common

@@ -1,11 +1,12 @@
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.script import Manager
-from flask.ext import migrate as ext_migrate
 from flask.ext.marshmallow import Marshmallow
 from flask.ext.migrate import Migrate, MigrateCommand
-from flask.ext.security import Security, SQLAlchemyUserDatastore, \
-    UserMixin, RoleMixin, login_required
+from flask.ext.security import Security, SQLAlchemyUserDatastore
+
+from flask_social_blueprint.core import SocialBlueprint
+from flask.ext.babel import Babel
 
 from flask_environments import Environments
 
@@ -24,6 +25,16 @@ env = Environments(app, var_name="BEAVY_ENV")
 env.from_yaml(os.path.join(BASE_DIR, 'config.yml'))
 env.from_yaml(os.path.join(os.getcwd(), 'config.yml'))
 
+if env.env == 'DEVELOPMENT':
+    env.from_yaml(os.path.join(os.getcwd(), 'dev_config.yml'))
+
+# update social buttons
+_FLBLPRE = "flask_social_blueprint.providers.{}"
+if not "SOCIAL_BLUEPRINT" in app.config:
+    app.config["SOCIAL_BLUEPRINT"] = dict([
+        ("." in name and name or _FLBLPRE.format(name), values)
+        for name, values in app.config.get("SOCIAL_LOGINS").items()])
+
 
 # start database
 db = SQLAlchemy(app)
@@ -38,12 +49,21 @@ manager = Manager(app)
 # add DB+migrations commands
 manager.add_command('db', MigrateCommand)
 
+# initialize i18n
+babel = Babel(app)
+
 
 from beavy.models.user import User
 from beavy.models.role import Role
+from beavy.models.social_connection import SocialConnection
 
 # Setup Flask-Security
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 security = Security(app, user_datastore)
+
+# add social authentication
+SocialBlueprint.init_bp(app, SocialConnection, url_prefix="/_social")
+
+
 
 load_modules(app)
