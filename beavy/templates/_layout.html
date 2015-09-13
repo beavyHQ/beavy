@@ -1,0 +1,12 @@
+<html>
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+    </head>
+    <link rel="stylesheet" href="/assets/main.css" />
+    {% block header %}{% endblock %}
+
+    <body {% block bodytags %}{% endblock %}>
+        {% block body %}
+        {% endblock %}
+    </body>
+</html>

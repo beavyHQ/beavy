@@ -1,0 +1,23 @@
+{% extends "_layout.html" %}
+
+{% block header %}
+    <style type="text/css">
+        /* we only include minimal style directly*/
+        #content {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+
+    <script type="text/javascript">
+    var DATA = {{ data|tojson|safe }};
+    </script>
+{% endblock %}
+
+{% block bodytags %} id="content" {% endblock %}
+
+{% block body %}
+    {% block content %}
+    {% endblock %}
+    <script type="text/javascript" src="/assets/main.js"></script>
+{% endblock %}
