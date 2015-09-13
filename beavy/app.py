@@ -13,8 +13,6 @@ from flask_environments import Environments
 
 from celery import Celery
 
-from .utils import load_modules
-
 import os
 
 
@@ -62,17 +60,6 @@ def make_celery(app):
 
     celery.Task = ContextTask
     return celery
-
-
-def setup_security_bg_mail(app, security, mail):
-
-    @celery.task
-    def send_security_email(msg):
-        mail.send(msg)
-
-    @security.send_mail_task
-    def delay_security_email(msg):
-        send_security_email.delay(msg)
 
 
 class SocialBlueprint(SocialBp):
@@ -127,12 +114,9 @@ from beavy.models.social_connection import SocialConnection
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 security = Security(app, user_datastore)
 
-# defer emails to be send in teh background
-setup_security_bg_mail(app, security, mail)
-
 # add social authentication
 SocialBlueprint.init_bp(app, SocialConnection, url_prefix="/_social")
 
 
 #  ----- finally, load all configured modules ---------
-load_modules(app)
+from .setup import *

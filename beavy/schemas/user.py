@@ -5,3 +5,5 @@ class BaseUser(Schema):
     name = fields.String()
     active = fields.Boolean()
     created_at = fields.DateTime()
+
+class CurrentUser(BaseUser): pass
