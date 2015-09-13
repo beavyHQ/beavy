@@ -15,9 +15,9 @@ export class MainMenu extends React.Component {
 		let logo = this.props.logo || 'https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/placeholder_logo_1.png'
 		return <div className={styles.navigation} role="banner">
 			  <div className={styles.navigationWrapper}>
-			    <a href="" className={styles.logo}>
+			    <Link to="app" className={styles.logo}>
 			      <img src={logo} alt="Logo Image" />
-			    </a>
+			    </Link>
 			    <a href="" className={styles.navigationMenuButton} id="js-mobile-menu">MENU</a>
 			    <nav role="navigation">
 			      <ul id="js-navigation-menu" className={classnames(styles.navigationMenu, styles.show)}>
