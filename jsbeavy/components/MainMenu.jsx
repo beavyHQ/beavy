@@ -5,11 +5,7 @@ import { Modal } from "./Modal";
 import styles from './MainMenu.scss';
 import classnames from 'classnames';
 
-let MainMenuItems = []
-let NavigationTools = []
-
-export var registerMainMenuItem = i => MainMenuItems.push(i);
-export var registerNavigationToolsItem = i => NavigationTools.push(i);
+import { getExtensions } from "config/extensions";
 
 export class MainMenu extends React.Component {
 	constructor(props) {
@@ -29,14 +25,14 @@ export class MainMenu extends React.Component {
 					    <a href="" className={styles.navigationMenuButton} id="js-mobile-menu">MENU</a>
 					    <nav role="navigation">
 					      <ul id="js-navigation-menu" className={classnames(styles.navigationMenu, styles.show)}>
-					      	{MainMenuItems.map(x=>x.apply(this))}
+					      	{getExtensions('MainMenuItem').map(x=>x.apply(this))}
 					      </ul>
 					    </nav>
 					    {BEAVY.CURRENT_USER ?
 					    	<a href="/logout">Logout</a> :
 					    	<button onClick={this.toggleLogin.bind(this)}>Login</button>}
 					    <div className={styles.navigationTools}>
-					    	{NavigationTools.map(x=>x.apply(this))}
+					    	{getExtensions('MainNavigationTool').map(x=>x.apply(this))}
 					    </div>
 					  </div>
 				</div>;
