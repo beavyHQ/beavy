@@ -1,24 +1,11 @@
 import React from "react";
-import { RouteHandler } from "react-router";
 import { MainMenu } from "components/MainMenu";
-import { createContainer } from "items-store";
 
-class Application extends React.Component {
-    static getProps(stores, params) {
-        return {}
-    }
-
+export default class Application extends React.Component {
     render() {
         return <div>
                     <MainMenu logo='http://svgporn.com/logos/kong.svg'/>
-                    <RouteHandler />
+                    {this.props.children}
                 </div>;
     }
 }
-
-Application.contextTypes = {
-    stores: React.PropTypes.object
-};
-
-
-export default createContainer(Application);

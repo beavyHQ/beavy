@@ -1,4 +1,7 @@
+
 import React from 'react';
+import configureStore from 'stores';
+import createBrowserHistory from 'history/lib/createBrowserHistory';
 
 // polyfill
 if(!Object.assign)
@@ -9,14 +12,15 @@ require("styles/main.scss")
 import config from "config/config";
 import modules from 'config/modules';
 
-console.log(config.USERS_URL)
+import Root      from 'containers/Root';
 
-import makeRoutes from "config/routes";
-import stores from "config/mainStores";
-import renderApplication from "config/renderApplication";
+// tie it all together
+const Application = require("module-imports?ext=/application.jsx&path=config/apps/!grep?FRONTEND!yaml!../config.yml").default;
+console.log(Application);
 
-let Application = require("module-imports?ext=/application.jsx&path=config/apps/!grep?FRONTEND!yaml!../config.yml").default;
+const target = document.getElementById('content');
+const store  = configureStore({}); //window.BEAVY.PRELOAD);
 
-renderApplication(makeRoutes(Application), stores, {
-  timeout: 600
-});
+React.render(<Root routerHistory={createBrowserHistory()}
+                   application={Application}
+                   store={store} />, target);

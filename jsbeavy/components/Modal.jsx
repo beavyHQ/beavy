@@ -7,6 +7,7 @@ export class Modal extends React.Component {
   propTypes: {
     isOpen: React.PropTypes.bool.isRequired,
     onRequestClose: React.PropTypes.func,
+    // title: React.PropTypes.string,
     // closeTimeoutMS: React.PropTypes.number,
     ariaHideApp: React.PropTypes.bool
   }
@@ -21,7 +22,6 @@ export class Modal extends React.Component {
             <div className={styles.modalFadeScreen}>
               <div className={styles.modalInner}>
                 <div className={styles.modalClose}></div>
-                {this.props.title ? <h1>{this.props.title}</h1> : null}
                 {this.props.children}
               </div>
             </div>

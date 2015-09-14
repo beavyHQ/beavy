@@ -81,6 +81,7 @@ module.exports = function(options) {
 		new webpack.PrefetchPlugin("react/lib/ReactComponentBrowserEnvironment"),
 		new webpack.DefinePlugin({
 				__DEBUG__    : !!options.debug,
+				__REDUX_DEV_TOOLS__: !!options.redux_dev_tools,
   			__DEBUG_NW__ : !!options.nw}),
 	];
 	if(options.prerender) {

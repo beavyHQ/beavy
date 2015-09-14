@@ -1,12 +1,12 @@
 import React from "react";
-import { RouteHandler } from "react-router";
 import { MainMenu } from "components/MainMenu";
-import { createContainer } from "items-store";
+import { connect } from 'react-redux';
 
 
 import styles from "./styles/twitterApp.scss";
 
-class Application extends React.Component {
+
+export default class Application extends React.Component {
     static getProps(stores, params) {
         var transition = stores.Router.getItem("transition");
         return {
@@ -19,14 +19,7 @@ class Application extends React.Component {
             <div className={styles.loadingElement}>loading...</div>
             <MainMenu logo='http://svgporn.com/logos/twitter.svg'/>
             <h1>Twitter</h1>
-            <RouteHandler />
+            {this.props.children}
         </div>;
     }
-}
-
-Application.contextTypes = {
-    stores: React.PropTypes.object
 };
-
-
-export default createContainer(Application);
