@@ -18,11 +18,11 @@ export class MainMenu extends React.Component {
 					    <a href="" className={styles.navigationMenuButton} id="js-mobile-menu">MENU</a>
 					    <nav role="navigation">
 					      <ul id="js-navigation-menu" className={classnames(styles.navigationMenu, styles.show)}>
-					      	{getExtensions('MainMenuItem').map(x=>x.apply(this))}
+					      	{getExtensions('MainMenuItem').map(x=>x.call(this))}
 					      </ul>
 					    </nav>
 					    <div className={styles.navigationTools}>
-					    	{getExtensions('MainNavigationTools').map(x=>x.apply(this))}
+					    	{getExtensions('MainNavigationTools').map(x=>x.call(this))}
 					    </div>
 					  </div>
 				</div>;
