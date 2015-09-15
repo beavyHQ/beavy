@@ -1,9 +1,12 @@
 import React from "react";
-import { Link } from "react-router";
+import { Link, Route } from "react-router";
 import { connect } from "react-redux";
 import { addExtension } from 'config/extensions';
-import config from 'config/config';
+import { make_url } from 'utils';
+
+
 import { loadUserLikes } from './actions';
+import UserLikesView from './views/UserLikes';
 
 class MenuItem extends React.Component {
   static propTypes = {
@@ -20,3 +23,5 @@ class MenuItem extends React.Component {
 const ConnectedMenuItem = connect()(MenuItem);
 
 addExtension("MainMenuItem", () => <ConnectedMenuItem />);
+addExtension("userMenu", (function() {return <Link to={make_url.users(this.props.userId + "/likes/")}> Likes </Link>;}));
+addExtension("userRoutes", <Route path="likes/" component={UserLikesView} /> );

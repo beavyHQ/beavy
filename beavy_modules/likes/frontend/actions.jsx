@@ -1,7 +1,7 @@
 
 import { CALL_API } from 'middleware/api';
 import { userLike } from './schemas';
-import config from 'config/config';
+import { make_url } from 'utils';
 
 export const USER_LIKES_REQUEST = 'USER_LIKES_REQUEST';
 export const USER_LIKES_SUCCESS = 'USER_LIKES_SUCCESS';
@@ -11,7 +11,7 @@ function fetchUserLikes(user_id) {
   return {
     [CALL_API]: {
       types: [USER_LIKES_REQUEST, USER_LIKES_SUCCESS, USER_LIKES_FAILURE],
-      endpoint: config.USERS_URL + "/" + user_id + "/likes",
+      endpoint: make_url.users(user_id + "/likes/"),
       schema: userLike
     }
   };

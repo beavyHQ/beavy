@@ -7,7 +7,7 @@ from .models import Like
 from .schemas import user_likes_paged
 
 
-@users_bp.route("/<user:user>/likes")
+@users_bp.route("/<user:user>/likes/")
 @fallbackRender('user_likes.html')
 def user_likes(user):
     print(user)

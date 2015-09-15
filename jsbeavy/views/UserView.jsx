@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { loadUser } from 'actions/user';
+import { getExtensions } from 'config/extensions';
 import { USER } from 'reducers/user';
 
 function checkUser(props){
@@ -27,6 +28,9 @@ class UserView extends Component {
     return (
       <div>
         <h1>{user.name} (user.id)</h1>
+        <h2>Menu</h2>
+        {getExtensions("userMenu").map(x=> x.call(this))}
+
         {children}
       </div>
     );
