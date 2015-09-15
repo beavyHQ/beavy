@@ -10,6 +10,7 @@ export function createConstants (...constants) {
 }
 
 function makePrefixUrlMaker(prefix){
+  if (prefix.slice(-1) != '/') prefix += "/";
   return (function makeUrl(inp){
     let url = prefix + inp;
     if (url.slice(-1) != '/'){
