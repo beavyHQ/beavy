@@ -1,10 +1,18 @@
 import React        from 'react';
 import { Provider } from 'react-redux';
 import invariant    from 'invariant';
-import makeRoutes   from 'config/routes';
 import { Router, RoutingContext } from 'react-router';
 import { createDevToolsWindow } from 'utils';
 import { DevTools, LogMonitor, DebugPanel } from 'redux-devtools/lib/react';
+
+import { Route, DefaultRoute, NotFoundRoute } from "react-router";
+
+/* eslint-disable no-multi-spaces */
+// Only import from `route-handlers/*`
+import { getExtensions } from "config/extensions";
+import setupViews from "views";
+
+/* eslint-enable */
 
 export default class Root extends React.Component {
 
@@ -13,6 +21,7 @@ export default class Root extends React.Component {
   // is provided by the server and provides a full router state.
   static propTypes = {
     store          : React.PropTypes.object.isRequired,
+    application    : React.PropTypes.func.isRequired,
     routerHistory  : React.PropTypes.object,
     routingContext : React.PropTypes.object
   }
@@ -46,7 +55,9 @@ export default class Root extends React.Component {
       return <RoutingContext {...this.props.routingContext} />;
     } else {
       return <Router history={this.props.routerHistory}>
-                {makeRoutes(this.props.application)}
+                <Route name="app" path="/" component={this.props.application}>
+                  {getExtensions('routes')}
+                </Route>
               </Router>;
     }
   }
@@ -57,7 +68,6 @@ export default class Root extends React.Component {
     if (__REDUX_DEV_TOOLS__) {
       debugTools = this.renderDevTools();
     }
-
 
     return (
       <div>

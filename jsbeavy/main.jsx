@@ -13,7 +13,7 @@ require("styles/main.scss")
 import config from "config/config";
 import modules from 'config/modules';
 
-import Root from 'containers/Root';
+import Root from 'config/root';
 
 // tie it all together
 const Application = require("module-imports?ext=/application.jsx&path=config/apps/!grep?FRONTEND!yaml!../config.yml").default;
