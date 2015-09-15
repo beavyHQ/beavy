@@ -22,9 +22,7 @@ const target = document.getElementById('content');
 
 import configureStore from 'stores';
 
-const store  = configureStore({
-          CURRENT_USER: window.BEAVY.CURRENT_USER
-        }); //window.BEAVY.PRELOAD);
+const store  = configureStore(window.PRELOAD);
 
 setupSchemas();
 

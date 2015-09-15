@@ -10,9 +10,9 @@
     </style>
 
     <script type="text/javascript">
-    window.BEAVY = {
+    window.PRELOAD = {
         CURRENT_USER: {{ SERIALIZED_USER | safe }},
-        PRELOAD: {{ data | tojson | safe }}
+        {{ key | default("PAYLOAD") }}: {{ data | tojson | safe }}
     }
     // we do not accept iframe inclusion
     {% if config.DEBUG %}

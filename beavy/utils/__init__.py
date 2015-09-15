@@ -20,7 +20,7 @@ def load_modules(app):
             subm.init_app(app)
 
 
-def fallbackRender(template, nativeTypes=('application/json', )):
+def fallbackRender(template, key=None, nativeTypes=('application/json', )):
     nativeTypes = set(nativeTypes)
 
     def wrapper(fn):
@@ -40,7 +40,9 @@ def fallbackRender(template, nativeTypes=('application/json', )):
                 resp = make_response(json.dumps(data), code)
                 ct = 'application/json'
             else:
-                resp = make_response(render_template(template, data=data),
+                resp = make_response(render_template(template,
+                                                     key=key,
+                                                     data=data),
                                      code)
                 ct = "text/html"
 
