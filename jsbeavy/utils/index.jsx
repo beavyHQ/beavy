@@ -1,4 +1,5 @@
 import React from 'react';
+import config from 'config/config';
 import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
 
 export function createConstants (...constants) {
@@ -8,13 +9,26 @@ export function createConstants (...constants) {
   }, {});
 }
 
-export function createReducer (initialState, reducerMap) {
-  return (state = initialState, action) => {
-    const reducer = reducerMap[action.type];
-
-    return reducer ? reducer(state, action.payload) : state;
-  };
+function makePrefixUrlMaker(prefix){
+  return (function makeUrl(inp){
+    let url = prefix + inp;
+    if (url.slice(-1) != '/'){
+      url += "/"
+    }
+    return url;
+  })
 }
+
+export const make_url = function(cfg){
+  const urlMakers = {};
+  for (var key in cfg){
+    if (cfg.hasOwnProperty(key) && key.slice(-4) === "_URL"){
+      urlMakers[key.slice(0, -4).toLowerCase()] = makePrefixUrlMaker(cfg[key]);
+    }
+  }
+  return urlMakers;
+}(config);
+
 
 export function createDevToolsWindow (store) {
   const win = window.open(
