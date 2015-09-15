@@ -30,6 +30,10 @@ export function insertExtension(key, position, item){
   base.splice(position, 0, item);
 }
 
+export function addManyExtensions(key, items){
+  extensions[key] = getOrDefault(key, []).concat(items);
+}
+
 export function addExtension(key, item){
   let base = getOrDefault(key, []);
   base.push(item);
