@@ -14,6 +14,7 @@ ActivityField.registry['Like'] = BaseLike
 
 class UserLike(Schema):
     created_at = fields.DateTime()
+    object_id = fields.Integer()
     object = ObjectField()
 
 
