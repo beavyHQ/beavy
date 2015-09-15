@@ -1,7 +1,7 @@
 
 import React from 'react';
-import configureStore from 'stores';
 import { getNamedExtensions } from "config/extensions";
+import { setupSchemas } from 'schemas';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 
 // polyfill
@@ -19,9 +19,14 @@ import Root from 'containers/Root';
 const Application = require("module-imports?ext=/application.jsx&path=config/apps/!grep?FRONTEND!yaml!../config.yml").default;
 
 const target = document.getElementById('content');
+
+import configureStore from 'stores';
+
 const store  = configureStore({
           CURRENT_USER: window.BEAVY.CURRENT_USER
         }); //window.BEAVY.PRELOAD);
+
+setupSchemas();
 
 React.render(<Root routerHistory={createBrowserHistory()}
                    application={Application}
