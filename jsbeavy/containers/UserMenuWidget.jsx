@@ -17,7 +17,7 @@ const mapDispatchToProps = (state) => ({
 export class UserMenuWidget extends React.Component {
   static propTypes = {
     dispatch : React.PropTypes.func,
-    is_authenticated : React.PropTypes.boolean,
+    is_authenticated : React.PropTypes.bool,
     user : React.PropTypes.object
   }
 
