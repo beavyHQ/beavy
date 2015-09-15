@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router";
 import ReactLogo from "elements/ReactLogo";
 import { Modal } from "components/Modal";
-import config from 'config/config';
+import { make_url } from 'utils';
 import { connect } from 'react-redux';
 import {openLogin, openRegister} from 'actions/user_modal'
 // import styles from './MainMenu.scss';
@@ -40,7 +40,7 @@ export class UserMenuWidget extends React.Component {
   render() {
     if (!this.props.is_authenticated) return this.renderLoggedOut()
 
-    return <a href="/logout">Logout</a>;
+    return <Link to={make_url.users(this.props.user.id)}>Me</Link>;
   }
 }
 
