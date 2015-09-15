@@ -69,6 +69,8 @@ export default class Root extends React.Component {
       debugTools = this.renderDevTools();
     }
 
+    setupViews(this.props.application);
+
     return (
       <div>
         {debugTools}

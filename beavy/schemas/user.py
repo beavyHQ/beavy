@@ -13,3 +13,7 @@ class BaseUser(Schema):
 
 class CurrentUser(BaseUser):
     pass
+
+
+class UserProfile(BaseUser):
+    pass

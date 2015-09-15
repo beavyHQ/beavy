@@ -9,6 +9,8 @@ app.url_map.converters['user'] = url_converters.UserConverter
 
 # LOAD all external modules
 load_modules(app)
+# then load our views:
+from beavy import views
 
 # allows them to register on blueprints before we do that setup
 
