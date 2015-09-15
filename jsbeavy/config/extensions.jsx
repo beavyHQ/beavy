@@ -1,11 +1,38 @@
 
+// our extensions collection
+// not exported, please use the helper functions below
 let extensions = {}
 
-export function addExtension(key, item){
+function getOrDefault(key, df){
   if(!extensions[key]){
-    extensions[key] = [];
+    extensions[key] = df;
   }
-  extensions[key].push(item);
+  return extensions[key];
+}
+
+// dictionary based
+
+export function addNamedExtension(key, name, item){
+  let base = getOrDefault(key, {});
+  if (base[name]) throw "Name " + name + " has already been registerd for " + key;
+  base[name] = item;
+}
+
+export function getNamedExtensions(key){
+  return extensions[key] || {};
+}
+
+
+/// list based
+
+export function insertExtension(key, position, item){
+  let base = getOrDefault(key, []);
+  base.splice(position, 0, item);
+}
+
+export function addExtension(key, item){
+  let base = getOrDefault(key, []);
+  base.push(item);
 }
 
 export function getExtensions(key){

@@ -1,6 +1,6 @@
-import { compose, createStore } from 'redux';
+import { compose, createStore, combineReducers } from 'redux';
 import { devTools } from 'redux-devtools';
-import rootReducer from 'reducers';
+import { getNamedExtensions,addNamedExtension } from 'config/extensions';
 
 let createStoreWithMiddleware;
 
@@ -10,15 +10,18 @@ if (__DEBUG__) {
   createStoreWithMiddleware = createStore;
 }
 
+addNamedExtension("reducers", "CURRENT_USER", (x=null) => x)
+
 export default function configureStore (initialState) {
-  const store = createStoreWithMiddleware(rootReducer, initialState);
+  const store = createStoreWithMiddleware(
+      combineReducers(getNamedExtensions("reducers")), initialState);
 
-  if (module.hot) {
-    module.hot.accept('../reducers', () => {
-      const nextRootReducer = require('../reducers/index');
+  // if (module.hot) {
+  //   module.hot.accept('../reducers', () => {
+  //     const nextRootReducer = require('../reducers/index');
 
-      store.replaceReducer(nextRootReducer);
-    });
-  }
+  //     store.replaceReducer(nextRootReducer);
+  //   });
+  // }
   return store;
 }

@@ -5,7 +5,6 @@ import classnames from 'classnames';
 
 export class Modal extends React.Component {
   propTypes: {
-    isOpen: React.PropTypes.bool.isRequired,
     onRequestClose: React.PropTypes.func,
     // title: React.PropTypes.string,
     // closeTimeoutMS: React.PropTypes.number,
@@ -18,10 +17,10 @@ export class Modal extends React.Component {
     // closeTimeoutMS: 0
   }
   render() {
-    return <div className={classnames(styles.modal, this.props.isOpen ? styles.open : '')}>
+    return <div className={classnames(styles.modal, styles.open)}>
             <div className={styles.modalFadeScreen}>
               <div className={styles.modalInner}>
-                <div className={styles.modalClose}></div>
+                <div onClick={this.props.onRequestClose} className={styles.modalClose}></div>
                 {this.props.children}
               </div>
             </div>

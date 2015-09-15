@@ -5,5 +5,6 @@
 export default Object.assign({
   'MODULES': [],
   'FRONTEND': 'minima',
-  'USERS_URL': '/u'
-}, require("json!grep?MODULES,FRONTEND,USERS_URL!yaml!../../config.yml"))
+  'USERS_URL': '/u',
+  'SECURITY_REGISTERABLE': true
+}, require("json!grep?MODULES,SECURITY_REGISTERABLE,FRONTEND,USERS_URL!yaml!../../config.yml"))
