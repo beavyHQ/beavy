@@ -12,11 +12,11 @@ function checkUser(props){
 class UserView extends Component {
 
   componentWillMount(){
-    this.props.checkUser(this.props);
+    checkUser(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.props.checkUser(nextProps);
+    checkUser(nextProps);
   }
 
   render() {
@@ -49,6 +49,5 @@ function mapStateToProps(state, ownProps) {
 }
 
 export default connect(
-  mapStateToProps,
-  { checkUser }
+  mapStateToProps
 )(UserView);
