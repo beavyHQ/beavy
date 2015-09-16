@@ -10,14 +10,18 @@ import importlib
 
 def load_modules(app):
     logger = getLogger("beavy.loadModules")
+    loaders = []
     for modl in app.config.get("MODULES", []):
         # load module
         logger.debug("Importing Module {}".format(modl))
         subm = importlib.import_module("beavy_modules.{}".format(modl))
         # call init on module if found
         if hasattr(subm, "init_app"):
-            logger.debug("Init Module {}".format(modl))
-            subm.init_app(app)
+            loaders.append((modl, subm.init_app))
+
+    for (modl, init_app) in loaders:
+        logger.debug("Init Module {}".format(modl))
+        init_app(app)
 
 
 def fallbackRender(template, key=None, nativeTypes=('application/json', )):
