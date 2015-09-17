@@ -32,10 +32,10 @@ class PrivateMessage(Object):
                                                       lazy='dynamic'))
 
 
-def filter_private_messages_for_view(cls, method):
-    if not current_user or current_user.is_anonymous():
-        return
-    return and_(cls.discriminator == PM_ID,
-                current_user.id in cls.participants)
+# def filter_private_messages_for_view(cls, method):
+#     if not current_user or current_user.is_anonymous():
+#         return
+#     return and_(cls.discriminator == PM_ID,
+#                 cls.id.in_(current_user.private_messages))
 
-Object.__access_filters['view'].append(filter_private_messages_for_view)
+# Object.__access_filters['view'].append(filter_private_messages_for_view)

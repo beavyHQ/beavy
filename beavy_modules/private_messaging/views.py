@@ -7,7 +7,6 @@ from .schemas import pm_paged
 
 @account_bp.route("/private_messages/")
 @login_required
-@fallbackRender('home.html')
+@fallbackRender('home.html', 'private_messages')
 def private_messages():
-    print("IN")
-    return pm_paged.dump(as_page(current_user.private_messages, error_out=False))
+    return pm_paged.dump(as_page(current_user.private_messages, error_out=False)).data
