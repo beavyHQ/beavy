@@ -1,14 +1,18 @@
 from flask.ext.security import UserMixin
 from flask_security.forms import ConfirmRegisterForm, RegisterForm, TextField
-
+from sqlalchemy import func
 from beavy.app import db
 
 # Define models
 roles_users = db.Table('roles_users',
-                       db.Column('user_id', db.Integer(),
-                                 db.ForeignKey('user.id')),
+                       db.Column('user_id',
+                                 db.Integer(),
+                                 db.ForeignKey('user.id'),
+                                 nullable=False),
                        db.Column('role_id',
-                                 db.Integer(), db.ForeignKey('role.id')))
+                                 db.Integer(),
+                                 db.ForeignKey('role.id'),
+                                 nullable=False))
 
 
 RegisterForm.name = TextField('Full Name')
@@ -18,7 +22,9 @@ ConfirmRegisterForm.name = TextField('Full Name')
 class User(db.Model, UserMixin):
     __LOOKUP_ATTRS__ = []
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(255), unique=True)
+    created_at = db.Column('created_at', db.DateTime(), nullable=False,
+                           server_default=func.now())
+    email = db.Column(db.String(255), unique=True, nullable=False)
     name = db.Column(db.String(255))
     password = db.Column(db.String(255))
     active = db.Column(db.Boolean())

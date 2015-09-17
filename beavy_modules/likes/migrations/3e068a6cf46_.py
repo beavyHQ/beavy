@@ -1,18 +1,18 @@
 """empty message
 
-Revision ID: 2bbba89c769
-Revises: 33e616d4d32
-Create Date: 2015-09-11 12:05:26.783183
+Revision ID: 3e068a6cf46
+Revises: 1d461753b2e
+Create Date: 2015-09-17 18:20:12.465046
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '2bbba89c769'
-down_revision = '33e616d4d32'
-depends_on = "242c2fd98af"
+revision = '3e068a6cf46'
+down_revision = None
+depends_on = '1d461753b2e'
 
 # add this here in order to use revision with branch_label
-branch_labels = None
+branch_labels = ('beavy.likes', )
 
 from alembic import op
 import sqlalchemy as sa

@@ -1,5 +1,5 @@
 from flask_babel import gettext as _
-from sqlalchemy import orm
+from sqlalchemy import orm, func
 from ..app import db, app
 from .user import User
 
@@ -9,11 +9,13 @@ import datetime
 
 class SocialConnection(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    created_at = db.Column('created_at', db.DateTime(),
+                           nullable=False, server_default=func.now())
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = orm.relationship(User, foreign_keys=user_id,
                             backref=orm.backref('connections', order_by=id))
-    provider = db.Column(db.String(255))
-    profile_id = db.Column(db.String(255))
+    provider = db.Column(db.String(255), nullable=False)
+    profile_id = db.Column(db.String(255), nullable=False)
     username = db.Column(db.String(255))
     email = db.Column(db.String(255))
     access_token = db.Column(db.String(255))
