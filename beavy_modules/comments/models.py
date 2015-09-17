@@ -3,16 +3,13 @@ from beavy.models.activity import Activity
 from beavy.schemas.object import ObjectField, Schema, fields
 from flask_security.core import current_user
 from sqlalchemy.sql import and_
+from beavy.common.rendered_text_mixin import RenderedTextMixin
 
 
-class CommentObject(Object):
+class CommentObject(Object, RenderedTextMixin):
     __mapper_args__ = {
         'polymorphic_identity': 'comment'
     }
-
-    @property
-    def text(self):
-        return '(EMPTY)'
 
 
 class CommentActivity(Activity):
@@ -25,7 +22,7 @@ class CommentSchema(Schema):
     id = fields.Integer()
     created_at = fields.DateTime()
     owner_id = fields.Integer()
-    text = fields.String()
+    text = fields.String(attribute='cooked')
     belongs_to_id = fields.Integer()
     klass = fields.String(attribute="discriminator")
 
