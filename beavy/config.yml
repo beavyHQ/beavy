@@ -4,6 +4,8 @@ COMMON: &common
   SECURITY_CONFIRMABLE: True
   SECURITY_TRACKABLE: True
   SOCIAL_LOGINS: {}
+  SECURITY_PASSWORD_HASH: "bcrypt"
+
 
 DEVELOPMENT: &development
   <<: *common
@@ -14,6 +16,7 @@ DEVELOPMENT: &development
   SECURITY_REGISTERABLE: True
   CELERY_BROKER_URL: redis://localhost:6379
   CELERY_RESULT_BACKEND: redis://localhost:637
+  SECURITY_PASSWORD_SALT: "__DEV"
 
 PRODUCTION: &production
   <<: *common

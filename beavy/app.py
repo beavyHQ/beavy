@@ -4,12 +4,14 @@ from flask.ext.script import Manager
 from flask.ext.marshmallow import Marshmallow
 from flask.ext.migrate import Migrate, MigrateCommand
 from flask.ext.security import Security, SQLAlchemyUserDatastore
+from flask.ext.security.utils import encrypt_password
 from flask_mail import Mail
 
 from flask_social_blueprint.core import SocialBlueprint as SocialBp
 from flask.ext.babel import Babel
 
 from flask_environments import Environments
+from pprint import pprint
 
 from celery import Celery
 
@@ -120,3 +122,34 @@ SocialBlueprint.init_bp(app, SocialConnection, url_prefix="/_social")
 
 #  ----- finally, load all configured modules ---------
 from .setup import *
+
+# ----- some debug features
+
+if app.debug:
+
+    @app.before_first_request
+    def ensure_users():
+        from datetime import datetime
+        admin_role = user_datastore.find_or_create_role('admin')
+
+        if not user_datastore.find_user(email="user@example.org"):
+            user_datastore.create_user(email="user@example.org",
+                                       confirmed_at=datetime.now(),
+                                       active=True,
+                                       password=encrypt_password("password"))
+
+        if not user_datastore.find_user(email="admin@example.org"):
+            user_datastore.add_role_to_user(
+                user_datastore.create_user(email="admin@example.org",
+                                           confirmed_at=datetime.now(),
+                                           active=True,
+                                           password=encrypt_password("password")), admin_role)
+
+        user_datastore.commit()
+
+    @app.before_first_request
+    def print_routes():
+        pprint([rule.rule for rule in app.url_map.iter_rules()
+                 if rule.endpoint !='static'])
+
+
