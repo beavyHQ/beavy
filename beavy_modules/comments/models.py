@@ -27,6 +27,7 @@ class CommentSchema(Schema):
     owner_id = fields.Integer()
     text = fields.String()
     belongs_to_id = fields.Integer()
+    klass = fields.String(attribute="discriminator")
 
 
 def filter_comments_for_view(cls, method):

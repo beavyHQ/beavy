@@ -7,6 +7,7 @@ class BaseObject(Schema):
     created_at = fields.DateTime()
     owner_id = fields.Integer()
     belongs_to_id = fields.Integer()  # don't leak
+    klass = fields.String(attribute="discriminator")
 
 
 class ObjectField(MorphingField):
