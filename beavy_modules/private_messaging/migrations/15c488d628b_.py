@@ -9,7 +9,7 @@ Create Date: 2015-09-17 18:22:53.615421
 # revision identifiers, used by Alembic.
 revision = '15c488d628b'
 down_revision = None
-depens_on = '1d461753b2e'
+depends_on = '1d461753b2e'
 
 # add this here in order to use revision with branch_label
 branch_labels = ('beavy.private_messaging', )
