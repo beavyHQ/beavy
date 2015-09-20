@@ -1,12 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { fetchPMs } from '../actions';
+import { loadPMs } from '../actions';
 import { PRIVATE_MESSAGES } from '../reducers';
 
 function checkUserLikes(props){
   const {private_messages} = props;
-  if (private_messages && private_messages.page) return true;
-  props.dispatch(fetchPMs());
+  if (private_messages && private_messages.data) return true;
+  props.dispatch(loadPMs());
 }
 
 class PrivateMessagesView extends Component {
@@ -31,14 +31,13 @@ class PrivateMessagesView extends Component {
     }
     return (
       <div>
-        <h1>{private_messages.length} PMs</h1>
+        <h1>{private_messages.meta.total} PMs</h1>
       </div>
     );
   }
 }
 
 function mapStateToProps(state, ownProps) {
-  console.log(state);
   let private_messages = state[PRIVATE_MESSAGES];
   if (!private_messages){ private_messages = null}
 
