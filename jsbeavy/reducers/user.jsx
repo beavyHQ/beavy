@@ -11,4 +11,4 @@ function userMapper(state = {}, action) {
 
 export const USER = 'user';
 
-addNamedExtension("reducers", "user", userMapper)
+addNamedExtension("reducers", "user", userMapper);

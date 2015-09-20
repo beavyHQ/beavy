@@ -4,8 +4,10 @@ import ReactLogo from "elements/ReactLogo";
 import { Modal } from "components/Modal";
 import { make_url } from 'utils';
 import { connect } from 'react-redux';
+import { getExtensions } from 'config/extensions';
+import config from 'config/config';
 import {openLogin, openRegister} from 'actions/user_modal'
-// import styles from './MainMenu.scss';
+import mmStyles from 'components/MainMenu.scss';
 import classnames from 'classnames';
 
 
@@ -23,24 +25,32 @@ export class UserMenuWidget extends React.Component {
 
   renderLoggedOut(){
     if (config.SECURITY_REGISTERABLE)
-        return <div>
+        return <li className={mmStyles.navLink}>
                   <button onClick={(e) => this.props.dispatch(openLogin())}>
                     Login
                   </button>
                   <button onClick={(e) => this.props.dispatch(openRegister())}>
                     Sign up
                   </button>
-                </div>;
+               </li>;
       else
-        return <button onClick={(e) => this.props.dispatch(openLogin())}>
-                  Login
-               </button>;
+        return <li className={mmStyles.navLink}>
+                  <button onClick={(e) => this.props.dispatch(openLogin())}>
+                    Login
+                  </button>
+                </li>;
   }
 
   render() {
     if (!this.props.is_authenticated) return this.renderLoggedOut()
 
-    return <Link to={make_url.users(this.props.user.id)}>Me</Link>;
+    return <li className={classnames(mmStyles.navLink, mmStyles.more)}>
+              <Link to={make_url.users(this.props.user.id)}>Me</Link>
+              <ul className={mmStyles.submenu}>
+                {getExtensions('userNavigationItems').map(x=>x.call(this))}
+                <li><a href="/logout">Logout</a></li>
+              </ul>
+            </li>;
   }
 }
 

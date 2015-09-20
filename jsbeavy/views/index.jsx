@@ -11,5 +11,11 @@ export default function setupViews(Application){
       <Route name="user" path={make_url.users("/:userId/")} component={UserView}>
         {getExtensions('userRoutes')}
       </Route>);
+
+  addExtension('routes',
+      <Route name="account" path={make_url.account("")}>
+        {getExtensions('accountRoutes')}
+      </Route>);
+
   addExtension('routes', <Route component={HomeView} path="*" />);
 }
