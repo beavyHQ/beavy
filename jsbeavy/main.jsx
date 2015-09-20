@@ -21,8 +21,18 @@ const Application = require("module-imports?ext=/application.jsx&path=config/app
 const target = document.getElementById('content');
 
 import configureStore from 'stores';
+import { extract_entities } from 'reducers/entities';
 
-const store  = configureStore(window.PRELOAD);
+let initData = {CURRENT_USER: window.PRELOAD.CURRENT_USER}
+if (window.PRELOAD.PAYLOAD){
+  initData['entities'] = extract_entities(window.PRELOAD.PAYLOAD.data);
+  initData[window.PRELOAD.PAYLOAD.key] = window.PRELOAD.PAYLOAD.data;
+
+}
+
+console.log(initData);
+
+const store  = configureStore(initData);
 
 setupSchemas();
 
