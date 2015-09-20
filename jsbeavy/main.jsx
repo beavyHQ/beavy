@@ -21,14 +21,10 @@ const Application = require("module-imports?ext=/application.jsx&path=config/app
 const target = document.getElementById('content');
 
 import configureStore from 'stores';
-import { extract_entities } from 'reducers/entities';
+import { format_jsonapi_result } from 'middleware/api';
 
-let initData = {CURRENT_USER: window.PRELOAD.CURRENT_USER}
-if (window.PRELOAD.PAYLOAD){
-  initData['entities'] = extract_entities(window.PRELOAD.PAYLOAD.data);
-  initData[window.PRELOAD.PAYLOAD.key] = window.PRELOAD.PAYLOAD.data;
-
-}
+let initData = format_jsonapi_result(window.PRELOAD.PAYLOAD.data, window.PRELOAD.PAYLOAD.key)
+initData.CURRENT_USER = window.PRELOAD.CURRENT_USER;
 
 console.log(initData);
 

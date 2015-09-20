@@ -1,6 +1,5 @@
 
 import { CALL_API } from 'middleware/api';
-import { privateMessage } from './schemas';
 import { make_url } from 'utils';
 
 export const PMS_REQUEST = 'PMS_REQUEST';
@@ -12,7 +11,7 @@ function fetchPMs(user_id) {
     [CALL_API]: {
       types: [PMS_REQUEST, PMS_SUCCESS, PMS_FAILURE],
       endpoint: make_url.account("private_messages/"),
-      schema: privateMessage
+      key: "private_messages"
     }
   };
 }

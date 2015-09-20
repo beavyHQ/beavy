@@ -5,7 +5,7 @@ import { PRIVATE_MESSAGES } from '../reducers';
 
 function checkUserLikes(props){
   const {private_messages} = props;
-  if (private_messages && private_messages.data) return true;
+  if (private_messages && private_messages.meta) return true;
   props.dispatch(loadPMs());
 }
 
@@ -26,8 +26,8 @@ class PrivateMessagesView extends Component {
 
   render() {
     const { private_messages } = this.props;
-    if (!private_messages) {
-      return <h1><i>Loading likes...</i></h1>;
+    if (!private_messages || private_messages.isFetching) {
+      return <h1><i>Loading private messages...</i></h1>;
     }
     return (
       <div>
@@ -39,7 +39,7 @@ class PrivateMessagesView extends Component {
 
 function mapStateToProps(state, ownProps) {
   let private_messages = state[PRIVATE_MESSAGES];
-  if (!private_messages){ private_messages = null}
+  if (!private_messages || !private_messages.meta){ private_messages = null}
 
   return { private_messages };
 }

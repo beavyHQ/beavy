@@ -1,15 +1,73 @@
-import { Schema, arrayOf, normalize } from 'normalizr';
-import { camelizeKeys } from 'humps';
+import merge from "lodash/object/merge";
+import forEach from "lodash/collection/forEach";
+import map from "lodash/collection/map";
 import 'isomorphic-fetch';
 
 // loosely based on the awesome redux real-world example from
 // https://github.com/rackt/redux/blob/master/examples/real-world/middleware/api.js
 
+export function format_jsonapi_result(input, key){
+  // console.log("IN", input);
+  const entitiesMap = {},
+        result = {},
+        output = {
+          entities: entitiesMap,
+        },
+        addToMap = (x) =>  {
+          // console.log("atm", x);
+          if(!entitiesMap[x.type]) entitiesMap[x.type] = {};
+          entitiesMap[x.type][x.id] = x;
+        },
+        addAttributesToMap = (x) => {
+          // console.log("aa", x)
+          if (x.attributes){
+            addToMap(merge({type: x.type, id: x.id},
+                            x.attributes))
+          }
+        },
+        extract_relationships = (data) => {
+          forEach(data.relationships || {}, (n, key) => {
+            // console.log(n, key);
+            if (Array.isArray(n)){
+              forEach(n, addAttributesToMap)
+            } else {
+              addAttributesToMap(n)
+            }
+          });
+        };
+
+  if (input.included){
+    forEach(input.included, addToMap);
+  }
+
+  if (input.meta){ result.meta = input.meta };
+  if (input.links){ result.links = input.links };
+
+  if (input.data) {
+    if (Array.isArray(input.data)) {
+      result.data = [];
+      forEach(input.data, x => {
+        result.data.push({type: x.type, id: x.id});
+        addAttributesToMap(x);
+        extract_relationships(x);
+      });
+    } else {
+      result.data = input.data;
+      addAttributesToMap(input.data);
+      extract_relationships(input.data);
+    }
+  }
+  output[key] = result;
+  console.log("returning", output);
+  return output;
+}
+
+
 
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
-function callApi(endpoint, schema) {
-  console.log(endpoint, schema);
+function callApi(endpoint, key) {
+  console.log(endpoint, key);
   return fetch(endpoint, {
       credentials: 'same-origin', // keep the cookies for the session!
       headers: { // we always ask for json
@@ -24,49 +82,10 @@ function callApi(endpoint, schema) {
         return Promise.reject(json);
       }
 
-      const camelizedJson = camelizeKeys(json);
-
-      // we are in pagination mode
-      if (json.hasOwnProperty("pages") && json.hasOwnProperty("page") && json.hasOwnProperty("items")){
-        const normalized = normalize(json.items, arrayOf(schema));
-        json.items = null; // prevent them to from being copied and release the memory
-        return Object.assign({}, json, normalized);
-      }
-
-      return Object.assign({},
-        normalize(camelizedJson, schema)
-      );
+      return Object.assign({}, format_jsonapi_result(json, key));
     });
 }
 
-// We use this Normalizr schemas to transform API responses from a nested form
-// to a flat form where repos and users are placed in `entities`, and nested
-// JSON objects are replaced with their IDs. This is very convenient for
-// consumption by reducers, because we can easily build a normalized tree
-// and keep it updated as we fetch more data.
-
-// Read more about Normalizr: https://github.com/gaearon/normalizr
-
-
-const userSchema = new Schema('users', {
-  idAttribute: 'login'
-});
-
-const repoSchema = new Schema('repos', {
-  idAttribute: 'fullName'
-});
-
-repoSchema.define({
-  owner: userSchema
-});
-
-// Schemas for Github API responses.
-export const Schemas = {
-  USER: userSchema,
-  USER_ARRAY: arrayOf(userSchema),
-  REPO: repoSchema,
-  REPO_ARRAY: arrayOf(repoSchema)
-};
 
 // Action key that carries API call info interpreted by this Redux middleware.
 export const CALL_API = Symbol('Call API');
@@ -81,7 +100,7 @@ export default store => next => action => {
   }
 
   let { endpoint } = callAPI;
-  const { schema, types } = callAPI;
+  const { key, types } = callAPI;
 
   if (typeof endpoint === 'function') {
     endpoint = endpoint(store.getState());
@@ -90,8 +109,8 @@ export default store => next => action => {
   if (typeof endpoint !== 'string') {
     throw new Error('Specify a string endpoint URL.');
   }
-  if (!schema) {
-    throw new Error('Specify s Schemas.');
+  if (!key) {
+    throw new Error('Specify a result key.');
   }
   if (!Array.isArray(types) || types.length !== 3) {
     throw new Error('Expected an array of three action types.');
@@ -109,7 +128,7 @@ export default store => next => action => {
   const [requestType, successType, failureType] = types;
   next(actionWith({ type: requestType }));
 
-  return callApi(endpoint, schema).then(
+  return callApi(endpoint, key).then(
     response => next(actionWith({
       response,
       type: successType
