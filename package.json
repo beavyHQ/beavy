@@ -33,6 +33,7 @@
     "normalizr": "^1.0.0",
     "react": "^0.13.3",
     "react-dom": "^0.1.0",
+    "react-infinite": "^0.4.1",
     "react-proxy-loader": "^0.3.4",
     "react-router": "^0.13.3",
     "redux-logger": "^1.0.6",
