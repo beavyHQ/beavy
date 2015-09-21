@@ -21,15 +21,15 @@ export function format_jsonapi_result(input, key){
         addAttributesToMap = (x) => {
           if (x.attributes){
             addToMap(merge({type: x.type, id: x.id},
-                            x.attributes))
+                            x.attributes, x.relationships))
           }
         },
         extract_relationships = (data) => {
           forEach(data.relationships || {}, (n, key) => {
-            if (Array.isArray(n)){
-              forEach(n, addAttributesToMap)
+            if (Array.isArray(n.data)){
+              forEach(n.data, addAttributesToMap)
             } else {
-              addAttributesToMap(n)
+              addAttributesToMap(n.data)
             }
           });
         };
@@ -46,8 +46,8 @@ export function format_jsonapi_result(input, key){
       result.data = [];
       forEach(input.data, x => {
         result.data.push({type: x.type, id: x.id});
-        addAttributesToMap(x);
         extract_relationships(x);
+        addAttributesToMap(x);
       });
     } else {
       result.data = input.data;
