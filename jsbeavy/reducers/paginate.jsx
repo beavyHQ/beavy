@@ -57,7 +57,7 @@ export default function paginate({ types, mapActionToKey }) {
       if (typeof key !== 'string') {
         throw new Error('Expected key to be a string.');
       }
-      return merge({}, state, updatePagination(state[key], action, key));
+      return merge({}, state, updatePagination(state, action, key));
     default:
       return state;
     }

@@ -3,23 +3,22 @@ import forEach from "lodash/collection/forEach";
 import map from "lodash/collection/map";
 import 'isomorphic-fetch';
 
+import entites from 'reducers/entities';
+
 // loosely based on the awesome redux real-world example from
 // https://github.com/rackt/redux/blob/master/examples/real-world/middleware/api.js
 
 export function format_jsonapi_result(input, key){
-  // console.log("IN", input);
   const entitiesMap = {},
         result = {},
         output = {
           entities: entitiesMap,
         },
         addToMap = (x) =>  {
-          // console.log("atm", x);
           if(!entitiesMap[x.type]) entitiesMap[x.type] = {};
           entitiesMap[x.type][x.id] = x;
         },
         addAttributesToMap = (x) => {
-          // console.log("aa", x)
           if (x.attributes){
             addToMap(merge({type: x.type, id: x.id},
                             x.attributes))
@@ -27,7 +26,6 @@ export function format_jsonapi_result(input, key){
         },
         extract_relationships = (data) => {
           forEach(data.relationships || {}, (n, key) => {
-            // console.log(n, key);
             if (Array.isArray(n)){
               forEach(n, addAttributesToMap)
             } else {
@@ -58,7 +56,6 @@ export function format_jsonapi_result(input, key){
     }
   }
   output[key] = result;
-  console.log("returning", output);
   return output;
 }
 
@@ -67,7 +64,6 @@ export function format_jsonapi_result(input, key){
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
 function callApi(endpoint, key) {
-  console.log(endpoint, key);
   return fetch(endpoint, {
       credentials: 'same-origin', // keep the cookies for the session!
       headers: { // we always ask for json
@@ -93,7 +89,6 @@ export const CALL_API = Symbol('Call API');
 // A Redux middleware that interprets actions with CALL_API info specified.
 // Performs the call and promises when such actions are dispatched.
 export default store => next => action => {
-  console.log(action);
   const callAPI = action[CALL_API];
   if (typeof callAPI === 'undefined') {
     return next(action);

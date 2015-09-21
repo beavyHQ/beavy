@@ -6,18 +6,18 @@ export const PMS_REQUEST = 'PMS_REQUEST';
 export const PMS_SUCCESS = 'PMS_SUCCESS';
 export const PMS_FAILURE = 'PMS_FAILURE';
 
-function fetchPMs(user_id) {
+function fetchPMs(page=1) {
   return {
     [CALL_API]: {
       types: [PMS_REQUEST, PMS_SUCCESS, PMS_FAILURE],
-      endpoint: make_url.account("private_messages/"),
+      endpoint: make_url.account("private_messages/") + "?page=" + page,
       key: "private_messages"
     }
   };
 }
 
-export function loadPMs(){
+export function loadPMs(page=1){
   return (dispatch, getState) => {
-    return dispatch(fetchPMs());
+    return dispatch(fetchPMs(page=page));
   }
 }
