@@ -1,6 +1,5 @@
 
 import { CALL_API } from 'middleware/api';
-import { userSchema } from 'schemas';
 import { make_url } from 'utils';
 
 export const USER_REQUEST = 'USER_REQUEST';
@@ -12,7 +11,7 @@ function fetchUser(user_id) {
     [CALL_API]: {
       types: [USER_REQUEST, USER_SUCCESS, USER_FAILURE],
       endpoint: make_url.users(user_id),
-      schema: userSchema
+      schema: "users"
     }
   };
 }

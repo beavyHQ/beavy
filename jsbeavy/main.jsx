@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { getNamedExtensions } from "config/extensions";
-import { setupSchemas } from 'schemas';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 
 // polyfill
@@ -29,8 +28,6 @@ initData.CURRENT_USER = window.PRELOAD.CURRENT_USER;
 console.log(initData);
 
 const store  = configureStore(initData);
-
-setupSchemas();
 
 React.render(<Root routerHistory={createBrowserHistory()}
                    application={Application}

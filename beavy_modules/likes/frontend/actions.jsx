@@ -1,6 +1,5 @@
 
 import { CALL_API } from 'middleware/api';
-import { userLike } from './schemas';
 import { make_url } from 'utils';
 
 export const USER_LIKES_REQUEST = 'USER_LIKES_REQUEST';
@@ -12,7 +11,7 @@ function fetchUserLikes(user_id) {
     [CALL_API]: {
       types: [USER_LIKES_REQUEST, USER_LIKES_SUCCESS, USER_LIKES_FAILURE],
       endpoint: make_url.users(user_id + "/likes/"),
-      schema: userLike
+      key: "userLikes"
     }
   };
 }
