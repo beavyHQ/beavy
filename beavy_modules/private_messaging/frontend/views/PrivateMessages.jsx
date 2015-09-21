@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { loadPMs } from '../actions';
 import { PRIVATE_MESSAGES } from '../reducers';
+import map from 'lodash/collection/map';
 import InfiniteList from 'components/InfiniteList';
 
 
@@ -16,12 +17,24 @@ class SimpleListItem extends Component{
   // }
 
   render(){
-    return <div>{this.props.item.type}, {this.props.item.id}</div>
+    // return <div>{this.props.item.type}, {this.props.item.id}</div>
 
-    const entry = this.props.collection[this.props.item.id];
-    return <div>{entry.title}</div>
+    // const entry = this.props.collection[this.props.item.id];
+    return <div>{this.props.entry.title}</div>
   }
 }
+
+function getEntity(state, item){
+  return state.entities[item.type][item.id];
+}
+
+const PMListItem = connect(
+  function(state, ownProps){
+    const entry = getEntity(state, ownProps.item),
+          participants = map(entry.participants.data, x=> getEntity(state, x));
+    return {entry: entry, participants: participants}
+  }
+)(SimpleListItem)
 
 function checkUserPMs(props){
   const {private_messages} = props;
@@ -63,7 +76,7 @@ class PrivateMessagesView extends Component {
           isFetching={private_messages.isFetching}
           >
           {private_messages.data.map(x=>
-              <SimpleListItem item={x} />
+              <PMListItem item={x} />
             )}
         </InfiniteList>
       </div>
