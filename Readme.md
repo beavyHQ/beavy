@@ -97,6 +97,7 @@ python manager.py db upgrade heads
 
 
 
-
+# License
+This Project is licensed under the Mozilla Public License, v. 2.0. You can find the full license text in the LICENSE file in the main directory or at http://mozilla.org/MPL/2.0/ .
 
 
