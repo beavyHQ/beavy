@@ -7,7 +7,42 @@ import { PRIVATE_MESSAGES } from '../reducers';
 import Ago from 'react-ago-component';
 import map from 'lodash/collection/map';
 import InfiniteList from 'components/InfiniteList';
+import ProseMirror from 'react-prosemirror';
+import 'prosemirror/src/convert/to_markdown';
+import 'prosemirror/src/menu/inlinemenu';
+import 'prosemirror/src/menu/buttonmenu';
 
+class WriteReply extends React.Component{
+  constructor(props) {
+    super();
+    this.state = {
+      editing: false
+    }
+    this.options = {
+        docFormat: 'html',
+        menuBar: false,
+        inlineMenu: true,
+        buttonMenu: true
+    }
+  }
+
+  render() {
+    if (this.state.editing)
+      return <div>
+              <h3>Reply</h3>
+              <ProseMirror value={""} options={this.options} ref="editor"/>
+              <button onClick={::this.send}>Send</button>
+            </div>;
+
+    return <div>
+             <h3>Reply</h3>
+             <div onClick={x=> this.setState({editing: true})}>click here to write reply</div>
+           </div>
+  }
+  send(){
+    alert(this.refs.editor.pm.getContent('markdown'));
+  }
+}
 
 class PrivateMessageView extends Component {
 
@@ -24,6 +59,7 @@ class PrivateMessageView extends Component {
             <Ago date={message.created_at} />
             <h2>{message.title}</h2>
             <span>Users: {map(participants, (x) => x.name || x.id)}</span>
+            <WriteReply />
           </div>;
   }
 }

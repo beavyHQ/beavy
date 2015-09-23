@@ -73,8 +73,7 @@ module.exports = function(options) {
 		pathinfo: options.debug || options.prerender
 	};
 	var excludeFromStats = [
-		/node_modules[\\\/]react(-router)?[\\\/]/,
-		/node_modules[\\\/]items-store[\\\/]/
+		/node_modules[\\\/]react(-router)?[\\\/]/
 	];
 	var plugins = [
 		new webpack.PrefetchPlugin("react"),
@@ -148,7 +147,13 @@ module.exports = function(options) {
 		output: output,
 		target: options.prerender ? "node" : "web",
 		module: {
-			loaders: [].concat(loadersByExtension(loaders)).concat(loadersByExtension(stylesheetLoaders)).concat(additionalLoaders)
+			loaders: [
+				{
+					// special behavior for the prosemirror plugin
+				 test: /prosemirror.*js$/,
+				 loader: "babel-loader?stage=0"
+				}
+			].concat(loadersByExtension(loaders)).concat(loadersByExtension(stylesheetLoaders)).concat(additionalLoaders)
 		},
 		devtool: options.devtool,
 		debug: options.debug,
