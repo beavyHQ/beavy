@@ -12,7 +12,11 @@ class PrivateMessageSchema(Schema):
     id = fields.Integer()
     created_at = fields.DateTime()
     title = fields.String()
-    klass = fields.String(attribute="discriminator")
+    type = fields.String(attribute="discriminator")
+
+
+    class Meta:
+        type_ = 'private_message'  # Required
 
     participants = IncludingHyperlinkRelated(BaseUser,
         '/users/{user_id}',
@@ -21,6 +25,8 @@ class PrivateMessageSchema(Schema):
         type_='user'
     )
 
+
+pm = PrivateMessageSchema()
 pm_paged = makePaginationSchema(PrivateMessageSchema)()
 
 ObjectField.registry[PM_ID] = PrivateMessageSchema

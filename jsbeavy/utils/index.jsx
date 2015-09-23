@@ -9,6 +9,10 @@ export function createConstants (...constants) {
   }, {});
 }
 
+export function getStoreEntity(state, item){
+  return state.entities[item.type][item.id];
+}
+
 function makePrefixUrlMaker(prefix){
   if (prefix.slice(-1) != '/') prefix += "/";
   return (function makeUrl(inp){

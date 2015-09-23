@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { loadPMs } from '../actions';
-import { make_url } from 'utils';
+import { make_url, getStoreEntity } from 'utils';
 import { Link } from 'react-router';
 import { PRIVATE_MESSAGES } from '../reducers';
 import Ago from 'react-ago-component';
@@ -33,14 +33,10 @@ class SimpleListItem extends Component{
   }
 }
 
-function getEntity(state, item){
-  return state.entities[item.type][item.id];
-}
-
 const PMListItem = connect(
   function(state, ownProps){
-    const entry = getEntity(state, ownProps.item),
-          participants = map(entry.participants.data, x=> getEntity(state, x));
+    const entry = getStoreEntity(state, ownProps.item),
+          participants = map(entry.participants.data, x=> getStoreEntity(state, x));
     return {entry: entry, participants: participants}
   }
 )(SimpleListItem)

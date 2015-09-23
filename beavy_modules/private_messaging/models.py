@@ -2,6 +2,7 @@ from beavy.models.object import Object
 from beavy.models.object import User
 from flask_security.core import current_user
 from sqlalchemy.sql import and_
+from beavy.utils.url_converters import ModelConverter
 
 from beavy.app import db
 
@@ -31,6 +32,7 @@ class PrivateMessage(Object):
                                    backref=db.backref('{}s'.format(PM_ID),
                                                       lazy='dynamic'))
 
+ModelConverter.__OBJECTS__['private_message'] = PrivateMessage
 
 # def filter_private_messages_for_view(cls, method):
 #     if not current_user or current_user.is_anonymous():
