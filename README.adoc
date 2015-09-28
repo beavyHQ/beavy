@@ -1,6 +1,6 @@
 = Beavy
 
-== Main Repo: https://github.com/ligthyear/beavy
+**Main Repo**: https://github.com/ligthyear/beavy
 
 Beavy is a modular, multi-purpose social community building framework. This is its main source development repository.
 
