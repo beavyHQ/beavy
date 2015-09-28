@@ -4,7 +4,7 @@
 
 Beavy is a modular, multi-purpose social community building framework. This is its main source development repository.
 
-Please see the [Development Documentation]() to learn more about the project.
+Please see the [Development Documentation](https://ligthyear.gitbooks.io/beavy-developer-documentation/content/) to learn more about the project.
 
 
 == License
