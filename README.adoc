@@ -6,7 +6,7 @@ Beavy is a modular, multi-purpose social community building framework. This is i
 
 Please see the [Development Documentation](https://ligthyear.gitbooks.io/beavy-developer-documentation/content/) to learn more about the project.
 
-image::https://github.com/ligthyear/beavy/raw/master/docs/logo/wobmat.svg[The wombat is beavy's mascot]
+image::https://raw.githubusercontent.com/ligthyear/beavy/master/docs/logo/wombat.svg[The wombat is beavy's mascot]
 
 == License
 This Project is licensed under the Mozilla Public License, v. 2.0. You can find the full license text in the LICENSE file in the main directory or at http://mozilla.org/MPL/2.0/ .
