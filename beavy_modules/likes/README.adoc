@@ -1,0 +1,8 @@
+= Beavy Likes
+
+Allows users to show their appreciation of objects in the community.
+
+== Configuration
+
+Add ` likes ` to your list of modules in the `$ROOT/config.yaml`
+

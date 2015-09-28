@@ -1,0 +1,8 @@
+= Beavy Comments
+
+Provides a general comments feature
+
+== Configuration
+
+Add ` comments ` to your list of modules in the `$ROOT/config.yaml`
+

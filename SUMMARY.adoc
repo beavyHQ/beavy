@@ -10,10 +10,12 @@
 .. link:docs/Usage-Simple-Customizing.adoc[Simple Customizing]
 .. link:docs/Usage-Your-First-Social-Community.adoc[Your first Social Community]
 
-. link:docs/Modules.adoc[The Different Modules]
-.. link:docs/Modules-Likes.adoc[Likes]
-.. link:docs/Modules-Comments.adoc[Comments]
-.. link:docs/Modules-Private-Messaging.adoc[Private Messaging]
+. link:docs/Configuration.adoc[General Configuration]
+
+. link:docs/Modules.adoc[The Modules]
+.. link:beavy_modules/likes/README.adoc[Likes]
+.. link:beavy_modules/comments/README.adoc[Comments]
+.. link:beavy_modules/private_messaging/README.adoc[Private Messaging]
 
 . link:docs/Development.adoc[Development]
 .. link:docs/Development-Setup.adoc[Setup]
