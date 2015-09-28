@@ -39,3 +39,8 @@ As an example, this is how the MainMenu is constructred. As a general rule a hoo
 
 As a result one or many modules may provide feature for more hooks than an UI needs or ever will be used. But the overhead of that is incredibly slim.
 
+
+== All is JSON-API
+
+While the frontend is implemented using React in a Redux-Style, the backend provides all it's data in a link:http://jsonapi.org[JSON-API.org] compliant structured API. All URLs a user can surf to with their browser, provides both an HTML-representation (with preloading) and an JSON-Style  when asked for it (you can try that by just adding '?json=1', it detects Ajax-Request and serves JSON if the Content-Header is detected).
+
