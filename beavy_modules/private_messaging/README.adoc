@@ -1,8 +1,8 @@
-= Beavy Comments
+= Beavy Private Messaging
 
-Provides a general comments feature
+Allows users of the network to have private (group) conversations with each other.
 
 == Configuration
 
-Add ` comments ` to your list of modules in the `$ROOT/config.yaml`
+Add ` private_messaging ` to your list of modules in the `$ROOT/config.yaml`
 
