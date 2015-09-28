@@ -1,0 +1,11 @@
+= What is Beavy?
+
+Beavy is a multi purpose, modular social community building framework. In it's core the idea is simple: why do we have to implement features like "likes" or "comments" every time we build our next (social) community system? We shouldn't have to, hence beavy.
+
+Beavy is an opinionated meta-framework. It doesn't only provide you new layers on top of old ones, it ships entire sets of features (called `modules`) implementing an entire user experience and (database) infrastructure – for example "commenting", "private messaging" or "likes". This operates under the assumption that people are trained to expect certain behaviours from certain features and so would they expect that behaviour from your application – say when they see a "like button". At the same time, these features consilidate the best practise and experiences around building and scaling those features you might easily forget if you were to implement them yourself. Modules work independant from each other and plug into the existing UI. They might add further behaviour when other modules are detected.
+
+While Modules bring certain behaviours with them, beavy is modelled with customizability in mind. Meaning that although you for example want to have the like module in your "app", you might want to use the "thumbs up" instead of the "heart" icon. So, while modules also ship their basic frontend styles needed to make them work (and appear very nice in almost all circumstances), you can customise them and their designs entirely.
+
+The entirely of such an UI, including the question whether certain frontend/design components are used and if so where, is called an "App". Beavy ships with a set of example apps, some of which require certain modules to be present to work (take a look at "using the examples"). This is where it all comes together. An "app" implement the big picture behaviour, links to the component and ships the final design. It also acts as the entry point for the website to show.
+
+While you should probably base your own implementation on one of these examples, it is expected that you'll (in the mid and long term) implement your very own "app" holding your own custom behaviours while leveraging the existing modules and components.
