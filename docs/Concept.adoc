@@ -1,0 +1,41 @@
+= Concept
+
+Once you understood what link:./Idea.adoc[what beavy is], the question becomes on how you model and build that. As the idea document already described, the basic idea is that you _build your social community on top of beavy_. But in order to do that, you should understand some base concepts and principles beavy is build upon, as well as understand link:./Architecture.adoc[some of the technologies used].
+
+== Configuration is code for building
+
+As beavy is modeled under the key assumption that you are building an app for yourself (not one to necessarily be distributed to other), configuration considered part of the build process – and doesn't dynamically change during run time. Meaning that whenver you change the `config.yaml` in the main directory _you have to restart the backend app_ and _rebuild the assets_.
+
+=== Strong Configuration
+
+Being able to rely on strong configuration also means that a lot things become much easier and quicker, as we can build them in instead of having to look them up. One of these examples would be url-pathes you can configure (for example the prefix for 'user'-components).
+
+The reason for that ties into the next one:
+
+== Code is compiled or not used at all
+
+When you start beavy it will look up which modules to include in the app by looking at the configuration file. If the module isn't listed _it won't even be loaded_, in order to to prevent bloath your runtime and cluttering it with things that aren't needed ever. This is one of the features that keeps your frontend webpack build nice, neat and clean to exactly those things you need. The same applies to the database migrations – they will only be run/applied _if the module is included in your configuration_.
+
+This allows beavy to ship a ton of code while still having a really small footprint customized to the special setup you want. Heck, some modules even further slim their own code base, dependant on configuration options supplied.
+
+== Styles are code, too
+
+Similar to the idea that configuration is code, styles are considered code, too. Beavy will not load styles or html snippets from the database or any other external configuration as they will be included at compile time.
+
+== True separation of concerns
+
+The core of beavy and jsbeavy is a rather small set of basic components all other modules can rely upon. It brings a lot of handy functions and common and unified behaviours (like JSON-API-Wrappers for paging), which all modules can depend on and should use. If two modules end up implementing the same function, that code should be found in the base setup.
+
+The core also contains the basic framework and mechanismn to load modules, plug their backends together and provide basic functionality (like routing, configuration loading, blueprint management). It also ships the HTML-file, pre-load-json-loading and the jsbeavy frontend modules.
+
+But all other code, among all languages and frameworks is separated in the beavy_modules they belong to. This includes the python flask and worker code, the javascript and react frontend code, scss and css styles as well as database models and migration needed for this module to work. If something is specific to one module – no matter the language it is written in – it belongs into that module. That includes the docmentation.
+
+
+== Hook based UI
+
+In order to allow the modules to ship their UI features without having to rely on what the UI exactly looks like, everything in the frontend is shipped as link:./Architecture.adoc[React-Modules in a redux-style infrastrucutre]. While an App might directly import a specific UI component and includes somewhere explicitly, modules by themselves plug into the UI only via hooks. Hooks are essentially managed lists or directories they add themselves info (with a key-name), which either provide a function to be aplied or a component to be rendered. Any part of the UI as well as components of other modules can then query all hooks of a specific name and include the UI components. A component might still provide features to configure those further.
+
+As an example, this is how the MainMenu is constructred. As a general rule a hook may only be included by one component and use the same parameters for all components included, to have a predictable behaviour of the surroundings. A module can rely on the behaviour of the hook to not change. Should that be the case a new name for the hook should be used instead.
+
+As a result one or many modules may provide feature for more hooks than an UI needs or ever will be used. But the overhead of that is incredibly slim.
+
