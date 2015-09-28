@@ -1,3 +1,10 @@
 = Summary
 
-. link:docs/Development-Setup.adoc[Development Setup]
+. link:docs/Concept.adoc[Concept]
+. link:docs/Architecture.adoc[Architecture]
+.. link:docs/Structures.adoc[Structures]
+
+. link:docs/Development.adoc[Development]
+.. link:docs/Development-Setup.adoc[Setup]
+.. link:docs/Development-Running.adoc[Running]
+.. link:docs/Development-Database-Migrations.adoc[Database Migrations]

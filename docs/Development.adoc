@@ -1,0 +1,3 @@
+= Developing on and with beavy
+
+Make sure you've understood and internalized the concepts, architecture and structures of beavy before you start development with or on it. Something are a little different than from what the usual development environment and to avoid problems down the line, it is fundamental to have understood those before you start developing.
