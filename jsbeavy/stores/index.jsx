@@ -1,12 +1,9 @@
 import { compose, createStore, applyMiddleware, combineReducers } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import apiMiddleware from '../middleware/api';
-import createLogger from 'redux-logger';
-import { devTools, persistState } from 'redux-devtools';
 import { getNamedExtensions, getExtensions, addManyExtensions, addExtension, addNamedExtension } from 'config/extensions';
 
 addManyExtensions("storeMiddlewares", [thunkMiddleware, apiMiddleware]);
-
 
 addNamedExtension("reducers", "CURRENT_USER", (x=null) => x)
 
@@ -15,6 +12,7 @@ export default function configureStore (initialState) {
   if (__DEBUG__) {
     // we concat to make sure we aren't messing with
     // with the extensions list itself but create a copy
+    const createLogger = require('redux-logger');
     middlewares = middlewares.concat([createLogger({
       level: 'info',
       collapsed: true
@@ -24,6 +22,7 @@ export default function configureStore (initialState) {
   let createStoreWithMiddleware = applyMiddleware.apply(this, middlewares);
 
   if (__REDUX_DEV_TOOLS__){
+    const { devTools, persistState } = require('redux-devtools');
     createStoreWithMiddleware = compose(
         createStoreWithMiddleware,
         // Provides support for DevTools:

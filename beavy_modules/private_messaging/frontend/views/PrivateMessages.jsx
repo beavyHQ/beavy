@@ -4,7 +4,7 @@ import { loadPMs } from '../actions';
 import { make_url, getStoreEntity } from 'utils';
 import { Link } from 'react-router';
 import { PRIVATE_MESSAGES } from '../reducers';
-import Ago from 'react-ago-component';
+// import Ago from 'react-ago-component';
 import map from 'lodash/collection/map';
 import InfiniteList from 'components/InfiniteList';
 
@@ -25,7 +25,7 @@ class SimpleListItem extends Component{
     // const entry = this.props.collection[this.props.item.id];
     return <Link to={make_url.account("private_messages/" + this.props.entry.id)}>
           <div>
-            <Ago date={this.props.entry.created_at} />
+            <span>{this.props.entry.created_at}</span>
             <h2>{this.props.entry.title}</h2>
             <span>{map(this.props.participants, (x) => x.name || x.id)}</span>
           </div>

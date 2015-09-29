@@ -1,11 +1,8 @@
 import React        from 'react';
 import { Provider } from 'react-redux';
 import invariant    from 'invariant';
-import { Router, RoutingContext } from 'react-router';
 import { createDevToolsWindow } from 'utils';
-import { DevTools, LogMonitor, DebugPanel } from 'redux-devtools/lib/react';
-
-import { Route, DefaultRoute, NotFoundRoute } from "react-router";
+import { Route, DefaultRoute, NotFoundRoute, Router, RoutingContext  } from "react-router";
 
 /* eslint-disable no-multi-spaces */
 // Only import from `route-handlers/*`
@@ -31,6 +28,7 @@ export default class Root extends React.Component {
   }
 
   renderDevTools () {
+    const { DevTools, LogMonitor, DebugPanel } = require('redux-devtools/lib/react');
     if (__DEBUG_NW__) {
       createDevToolsWindow(this.props.store);
       return null;

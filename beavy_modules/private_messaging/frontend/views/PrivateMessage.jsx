@@ -4,19 +4,17 @@ import { loadPMs } from '../actions';
 import { make_url, getStoreEntity } from 'utils';
 import { Link } from 'react-router';
 import { PRIVATE_MESSAGES } from '../reducers';
-import Ago from 'react-ago-component';
+import LoadEditor from 'Components/Editor';
+// import Ago from 'react-ago-component';
 import map from 'lodash/collection/map';
 import InfiniteList from 'components/InfiniteList';
-import ProseMirror from 'react-prosemirror';
-import 'prosemirror/src/convert/to_markdown';
-import 'prosemirror/src/menu/inlinemenu';
-import 'prosemirror/src/menu/buttonmenu';
 
 class WriteReply extends React.Component{
   constructor(props) {
     super();
     this.state = {
-      editing: false
+      editing: false,
+      editor: null,
     }
     this.options = {
         docFormat: 'html',
@@ -24,16 +22,21 @@ class WriteReply extends React.Component{
         inlineMenu: true,
         buttonMenu: true
     }
+    LoadEditor.then(x=>this.setState({editor: x}));
   }
 
   render() {
-    if (this.state.editing)
+    if (this.state.editing){
+      if (!this.state.editor){
+        return <div>Loading</div>;
+      }
+      const Editor = this.state.editor;
       return <div>
               <h3>Reply</h3>
-              <ProseMirror value={""} options={this.options} ref="editor"/>
+              <Editor value={""} options={this.options} ref="editor"/>
               <button onClick={::this.send}>Send</button>
             </div>;
-
+    }
     return <div>
              <h3>Reply</h3>
              <div onClick={x=> this.setState({editing: true})}>click here to write reply</div>
@@ -56,7 +59,7 @@ class PrivateMessageView extends Component {
     const { message, participants } = this.props;
 
     return <div>
-            <Ago date={message.created_at} />
+            <span>{message.created_at}</span>
             <h2>{message.title}</h2>
             <span>Users: {map(participants, (x) => x.name || x.id)}</span>
             <WriteReply />

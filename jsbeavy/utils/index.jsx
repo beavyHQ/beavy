@@ -1,6 +1,5 @@
 import React from 'react';
 import config from 'config/config';
-import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
 
 export function createConstants (...constants) {
   return constants.reduce((acc, constant) => {
@@ -36,6 +35,9 @@ export const make_url = function(cfg){
 
 
 export function createDevToolsWindow (store) {
+  if (!__REDUX_DEV_TOOLS__) return;
+
+  const { DevTools, DebugPanel, LogMonitor } = require('redux-devtools/lib/react');
   const win = window.open(
     null,
     'redux-devtools', // give it a name so it reuses the same window

@@ -6,20 +6,23 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var StatsPlugin = require("stats-webpack-plugin");
 var loadersByExtension = require("./helpers/loadersByExtension");
 var appConfig = yaml.safeLoad(fs.readFileSync('config.yml'));
-var ROOT = path.join(__dirname, "..", "jsbeavy");
+var ROOT = path.join(__dirname, "..");
+var JS_ROOT = path.join(ROOT, "jsbeavy");
+
 
 module.exports = function(options) {
 	var entry = {
 		// main: options.prerender ? "./config/mainPrerenderer" : "./config/mainApp"
 
     'main': ['./jsbeavy/main.jsx'],
+    // 'vendor': ['react']
 		// second: options.prerender ? "./config/secondPrerenderer" : "./config/secondApp"
 	};
 	var loaders = {
 		"jsx": options.hotComponents ? ["react-hot-loader", "babel-loader?stage=0"] : "babel-loader?stage=0",
 		"js": {
 			loader: "babel-loader?stage=0",
-			include: ROOT
+			include: JS_ROOT
 		},
 		"json": "json-loader",
 		"coffee": "coffee-redux-loader",
@@ -39,11 +42,11 @@ module.exports = function(options) {
 		"styl": [cssLoader, "stylus-loader"],
 		"scss|sass": [cssLoader, "sass-loader" +
 			// highest priority: __CUSTOM/styles
-			"?includePaths[]=" + encodeURIComponent(path.resolve(ROOT, "__CUSTOM", "styles")) +
+			"?includePaths[]=" + encodeURIComponent(path.resolve(JS_ROOT, "__CUSTOM", "styles")) +
 			// second: App
-			"&includePaths[]=" + encodeURIComponent(path.resolve(ROOT, "config", "apps", appConfig.FRONTEND, "styles")) +
+			"&includePaths[]=" + encodeURIComponent(path.resolve(JS_ROOT, "config", "apps", appConfig.FRONTEND, "styles")) +
 			// third: defaults
-			"&includePaths[]=" + encodeURIComponent(path.resolve(ROOT, "styles"))]
+			"&includePaths[]=" + encodeURIComponent(path.resolve(JS_ROOT, "styles"))]
 	};
 	var additionalLoaders = [
 		// { test: /some-reg-exp$/, loader: "any-loader" }
@@ -59,15 +62,15 @@ module.exports = function(options) {
 	];
 	var modulesDirectories = ["web_modules", "node_modules"];
 	var extensions = ["", ".web.js", ".js", ".jsx"];
-	var root = ROOT;
+	var root = JS_ROOT;
 	var publicPath = options.devServer ?
-		"http://localhost:2992/_assets/" :
-		"/_assets/";
+		"http://localhost:2992/assets/" :
+		"/assets/";
 	var output = {
-		path: path.join(__dirname, "build", options.prerender ? "prerender" : "public"),
+		path: path.join(ROOT, "build", options.prerender ? "prerender" : "public"),
 		publicPath: publicPath,
-		filename: "[name].js" + (options.longTermCaching && !options.prerender ? "?[chunkhash]" : ""),
-		chunkFilename: (options.devServer ? "[id].js" : "[name].js") + (options.longTermCaching && !options.prerender ? "?[chunkhash]" : ""),
+		filename: "[name]" + (options.longTermCaching && !options.prerender ? "-[chunkhash]" : "") + ".js",
+		chunkFilename: (options.devServer ? "[id]" : "[name]") + (options.longTermCaching && !options.prerender ? "-[chunkhash]" : "") + ".js",
 		sourceMapFilename: "debugging/[file].map",
 		libraryTarget: options.prerender ? "commonjs2" : undefined,
 		pathinfo: options.debug || options.prerender
@@ -84,7 +87,7 @@ module.exports = function(options) {
   			__DEBUG_NW__ : !!options.redux_dev_tools}),
 	];
 	if(options.prerender) {
-		plugins.push(new StatsPlugin(path.join(__dirname, "build", "stats.prerender.json"), {
+		plugins.push(new StatsPlugin("stats.prerender.json", {
 			chunkModules: true,
 			exclude: excludeFromStats
 		}));
@@ -98,7 +101,7 @@ module.exports = function(options) {
 		);
 		plugins.push(new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }));
 	} else {
-		plugins.push(new StatsPlugin(path.join(__dirname, "build", "stats.json"), {
+		plugins.push(new StatsPlugin("stats.json", {
 			chunkModules: true,
 			exclude: excludeFromStats
 		}));
@@ -125,9 +128,19 @@ module.exports = function(options) {
 		plugins.push(
 			new webpack.optimize.UglifyJsPlugin({
 				compressor: {
-					warnings: false
+					warnings: false,
+          dead_code: true,
+          unused: true,
+          unsafe: true,
+					global_defs: {
+						DEBUG: false,
+						__DEBUG__: false,
+					__REDUX_DEV_TOOLS__: false,
+	  			__DEBUG_NW__ : false
+	  			}
 				}
 			}),
+			// new webpack.optimize.OccurenceOrderPlugin(true),
 			new webpack.optimize.DedupePlugin()
 		);
 	}
@@ -170,11 +183,13 @@ module.exports = function(options) {
 		},
 		plugins: plugins,
 		devServer: {
-	    contentBase: "./assets/",
+	    contentBase: "/assets/",
+	    color: true,
 	    publicPath: "/assets/",
 	    proxy : {"*": "http://127.0.0.1:5000/"},
 			stats: {
 				cached: false,
+				color: true,
 				exclude: excludeFromStats
 			}
 		}
