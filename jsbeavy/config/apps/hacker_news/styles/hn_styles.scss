@@ -13,5 +13,14 @@
         height: 18px;
         width: 18px;
         margin: 2px 4px;
+        display: inline-block;
+        float: left;
+    }
+
+    .title {
+        font-weight: bold;
+        color: black;
+        margin-right: 5px;
+        font-size: 1.2em;
     }
 }
