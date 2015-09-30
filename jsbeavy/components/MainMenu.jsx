@@ -7,9 +7,12 @@ import UserMenuWidget from "containers/UserMenuWidget";
 
 import { getExtensions } from "config/extensions";
 
+export { styles }
+
 export class MainMenu extends React.Component {
 	render() {
-		let logo = this.props.logo || 'https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/placeholder_logo_1.png';
+		const logo = this.props.logo || 'https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/placeholder_logo_1.png',
+					styles = this.props.styles || styles;
 		return <div className={styles.navigation} role="banner">
 					  <div className={styles.navigationWrapper}>
 					    <Link to="app" className={styles.logo}>
