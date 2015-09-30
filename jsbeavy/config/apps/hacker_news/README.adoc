@@ -1,0 +1,20 @@
+= Hacker News Example
+
+**THIS IS STILL INCOMPLETE**
+
+This is a feature complete clone of the famous link:http://news.ycombinator.com[Hacker News by YCombinator]. While it mimics the behaviour and the design, it is not API or URL-Compatible but uses the default features provided by beavy instead.
+
+== Configuration
+
+In order to have this work in a feature complete manner, please put the following into your `config.yaml` (in the root):
+
+```
+NAME: "Hacker News"
+
+FRONTEND: 'hacker_news'
+
+MODULES:
+ - comments
+ - voting
+ - user_points
+ ```

@@ -1,0 +1,15 @@
+@import "bourbon/_bourbon.scss";
+@import "base/_base.scss";
+@import "neat/_neat.scss";
+
+$HN_ORANGE: #ff6600;
+$HN_BACKGROUND: #f6f6ef;
+
+$main-navigation-background: $HN_ORANGE;
+$main-navigation-padding: 0;
+$base-border-color: white;
+$main-navigation-border-color: none;
+$main-navigation-color: #333;
+$main-navigation-height: 22px;
+$main-navigation-color-hover: #2C8ECF !default;
+

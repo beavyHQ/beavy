@@ -1,0 +1,17 @@
+@import "main";
+
+.hackerNews {
+    @include outer-container;
+    background: $HN_BACKGROUND;
+    margin-top: 10px;
+}
+
+.logo {
+    float: left;
+    img {
+        border: 1px solid white;
+        height: 18px;
+        width: 18px;
+        margin: 2px 4px;
+    }
+}
