@@ -154,7 +154,6 @@ module.exports = function(options) {
 			new webpack.NoErrorsPlugin()
 		);
 	}
-
 	return {
 		entry: entry,
 		output: output,
