@@ -1,39 +1,28 @@
 from beavy.models.object import Object
-from beavy.models.activity import Activity
-from beavy.schemas.object import ObjectField, Schema, fields
 from flask_security.core import current_user
 from sqlalchemy.sql import and_
 from beavy.common.rendered_text_mixin import RenderedTextMixin
+from beavy.app import db
+
+COMMENT_ID = "comment"
 
 
 class CommentObject(Object, RenderedTextMixin):
     __mapper_args__ = {
-        'polymorphic_identity': 'comment'
+        'polymorphic_identity': COMMENT_ID
     }
 
-
-class CommentActivity(Activity):
-    __mapper_args__ = {
-        'polymorphic_identity': 'activity'
-    }
-
-
-class CommentSchema(Schema):
-    id = fields.Integer()
-    created_at = fields.DateTime()
-    owner_id = fields.Integer()
-    text = fields.String(attribute='cooked')
-    belongs_to_id = fields.Integer()
-    klass = fields.String(attribute="discriminator")
+    in_reply_to_id = db.Column(db.Integer, db.ForeignKey("objects.id"),
+                               nullable=True)
+    # in_reply_to = db.relationship(Object, backref=db.backref('replies'))
 
 
 def filter_comments_for_view(cls, method):
     if not current_user or current_user.is_anonymous():
         return
-    return and_(cls.discriminator == 'comment',
+    return and_(cls.discriminator == COMMENT_ID,
                 cls.owner_id == current_user.id)
 
 Object.__access_filters['view'].append(filter_comments_for_view)
 
-ObjectField.registry['comment'] = CommentSchema
 
