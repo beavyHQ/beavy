@@ -16,6 +16,7 @@ Flask-Babel==0.9
 Flask-CLI==0.2.1
 Flask-DebugToolbar==0.10.0
 -e git+https://github.com/ligthyear/flask-environments.git@bceef9e26720728cddf0e581efe81d5246b1513b#egg=Flask_Environments-master
+Flask-Limiter==0.8.2
 Flask-Login==0.2.11
 Flask-Mail==0.9.1
 flask-marshmallow==0.6.1

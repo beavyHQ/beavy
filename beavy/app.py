@@ -6,6 +6,7 @@ from flask.ext.migrate import Migrate, MigrateCommand
 from flask.ext.security import Security, SQLAlchemyUserDatastore
 from flask.ext.security.utils import encrypt_password
 from flask_mail import Mail
+from flask_limiter import Limiter
 
 from flask_social_blueprint.core import SocialBlueprint as SocialBp
 from flask.ext.babel import Babel
@@ -106,6 +107,9 @@ babel = Babel(app)
 
 # initialize email support
 mail = Mail(app)
+
+# limit access to the app
+limiter = Limiter(app)
 
 #  ------ Database setup is done after here ----------
 from beavy.models.user import User

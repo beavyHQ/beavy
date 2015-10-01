@@ -5,6 +5,8 @@ COMMON: &common
   SECURITY_TRACKABLE: True
   SOCIAL_LOGINS: {}
   SECURITY_PASSWORD_HASH: "bcrypt"
+  RATELIMIT_HEADERS_ENABLED: True
+  RATELIMIT_GLOBAL: "200/hour"
 
 
 DEVELOPMENT: &development
@@ -17,6 +19,7 @@ DEVELOPMENT: &development
   CELERY_BROKER_URL: redis://localhost:6379
   CELERY_RESULT_BACKEND: redis://localhost:637
   SECURITY_PASSWORD_SALT: "__DEV"
+  RATELIMIT_ENABLED: False
 
 PRODUCTION: &production
   <<: *common
