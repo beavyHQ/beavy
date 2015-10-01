@@ -1,16 +1,19 @@
-from .app import app, mail, celery, security
-from .schemas.user import CurrentUser
-from flask_security import current_user
+from .app import app, mail, celery, security, admin, Role, User, db
 from .utils import load_modules, url_converters
+from .schemas.user import CurrentUser
 
+from flask_security import current_user
+from flask_admin import helpers as admin_helpers
 
 app.url_map.converters['model'] = url_converters.ModelConverter
 app.url_map.converters['user'] = url_converters.UserConverter
 
 # LOAD all external modules
 load_modules(app)
+
 # then load our views:
 from beavy import views
+from beavy.views.admin_model import AdminModelView
 
 # allows them to register on blueprints before we do that setup
 
@@ -38,4 +41,12 @@ def send_security_email(msg):
 @security.send_mail_task
 def delay_security_email(msg):
     send_security_email.delay(msg)
+
+
+# setup admin UI stuff
+admin.add_view(AdminModelView(User, db.session,
+                              name="Users",
+                              menu_icon_type='glyph',
+                              menu_icon_value='glyphicon-user'))
+# admin.add_view(AdminModelView(Role, db.session))
 

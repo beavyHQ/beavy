@@ -3,10 +3,11 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.script import Manager
 from flask.ext.marshmallow import Marshmallow
 from flask.ext.migrate import Migrate, MigrateCommand
-from flask.ext.security import Security, SQLAlchemyUserDatastore
+from flask.ext.security import Security, SQLAlchemyUserDatastore, current_user
 from flask.ext.security.utils import encrypt_password
 from flask_mail import Mail
 from flask_limiter import Limiter
+from flask_admin import Admin, AdminIndexView
 
 from flask_social_blueprint.core import SocialBlueprint as SocialBp
 from flask.ext.babel import Babel
@@ -80,6 +81,16 @@ class SocialBlueprint(SocialBp):
                                             profile.data.get("last_name"))))
 
 
+class BeavyAdminIndexView(AdminIndexView):
+    def is_accessible(self):
+        if not current_user.is_active() or not current_user.is_authenticated():
+            return False
+
+        if current_user.has_role('admin'):
+            return True
+
+        return False
+
 # --------------------------- Setting stuff up in order ----------
 
 
@@ -111,6 +122,7 @@ mail = Mail(app)
 # limit access to the app
 limiter = Limiter(app)
 
+
 #  ------ Database setup is done after here ----------
 from beavy.models.user import User
 from beavy.models.role import Role
@@ -122,6 +134,13 @@ security = Security(app, user_datastore)
 
 # add social authentication
 SocialBlueprint.init_bp(app, SocialConnection, url_prefix="/_social")
+
+# initialize admin backend
+admin = Admin(app,
+              '{} Admin'.format(app.config.get("NAME")),
+              index_view=BeavyAdminIndexView(),
+              # base_template='my_master.html',
+              template_mode='bootstrap3',)
 
 
 #  ----- finally, load all configured modules ---------
