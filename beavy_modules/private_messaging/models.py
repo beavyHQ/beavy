@@ -1,5 +1,6 @@
 from beavy.models.object import Object
 from beavy.models.object import User
+from beavy.common.payload_property import PayloadProperty
 from flask_security.core import current_user
 from sqlalchemy.sql import and_
 from beavy.utils.url_converters import ModelConverter
@@ -26,7 +27,8 @@ class PrivateMessage(Object):
         'polymorphic_identity': PM_ID
     }
 
-    title = db.Column(db.String(255), nullable=False)
+    title = PayloadProperty('title')
+    # db.Column(db.String(255), nullable=False)
 
     participants = db.relationship('User', secondary=PMParticipants,
                                    backref=db.backref('{}s'.format(PM_ID),
