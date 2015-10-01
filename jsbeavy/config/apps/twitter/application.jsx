@@ -5,13 +5,9 @@ import { connect } from 'react-redux';
 import UserModal from "containers/UserModal";
 import UserMenuWidget from "containers/UserMenuWidget";
 
-import { insertExtension } from "config/extensions";
+import { getExtensions } from "config/extensions";
 
 import styles from "./styles/twitterApp.scss";
-
-
-// make sure User Menu is the first in the list
-insertExtension("MainNavigationTools", 0, () => <UserMenuWidget />)
 
 export default class Application extends React.Component {
     static getProps(stores, params) {
@@ -25,8 +21,13 @@ export default class Application extends React.Component {
         return <div className={styles.this + (loading ? " " + styles.loading : "")}>
             <div className={styles.loadingElement}>loading...</div>
             <UserModal />
-            <MainMenu logo='http://svgporn.com/logos/twitter.svg'/>
-            <h1>Twitter</h1>
+            <MainMenu
+              title="Twitter"
+              logo='http://svgporn.com/logos/twitter.svg'
+              MainNavigationTools={<UserMenuWidget />}
+            >
+                {getExtensions('MainMenuItem').map(x=>x.call(this))}
+            </MainMenu>
             {this.props.children}
         </div>;
     }

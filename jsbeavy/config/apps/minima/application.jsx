@@ -3,15 +3,18 @@ import { MainMenu } from "components/MainMenu";
 import UserModal from "containers/UserModal";
 import UserMenuWidget from "containers/UserMenuWidget";
 
-import { insertExtension } from "config/extensions";
-
-insertExtension("MainNavigationTools", 0, () => <UserMenuWidget />)
+import { getExtensions } from "config/extensions";
 
 export default class Application extends React.Component {
     render() {
         return <div>
                   <UserModal />
-                  <MainMenu logo='http://svgporn.com/logos/kong.svg'/>
+                  <MainMenu
+                    logo='http://svgporn.com/logos/kong.svg'
+                    MainNavigationTools={<UserMenuWidget />}
+                  >
+                    {getExtensions('MainMenuItem').map(x=>x.call(this))}
+                  </MainMenu>
                   {this.props.children}
                 </div>;
     }
