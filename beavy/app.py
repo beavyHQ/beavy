@@ -91,6 +91,23 @@ class BeavyAdminIndexView(AdminIndexView):
 
         return False
 
+
+def replaceHomeEndpoint(app):
+    HOME_URL = app.config["HOME_URL"]
+    original_endpoint = None
+    for rule in app.url_map.iter_rules():
+        if HOME_URL == rule.rule:
+            original_endpoint = rule.endpoint
+            rule.rule = "/"
+            rule.compile()
+            break
+
+    if original_endpoint:
+        app.url_map.add(
+            app.url_rule_class(HOME_URL, alias=True,
+                               endpoint=original_endpoint))
+
+
 # --------------------------- Setting stuff up in order ----------
 
 
@@ -154,6 +171,15 @@ admin.add_view(AdminModelView(User, db.session,
 #  ----- finally, load all configured modules ---------
 from .setup import *
 
+
+@app.route("/hello")
+@fallbackRender('home.html')
+def hello():
+    return {"title": "home"}
+
+
+replaceHomeEndpoint(app)
+
 # ----- some debug features
 
 if app.debug:
@@ -180,7 +206,8 @@ if app.debug:
 
     @app.before_first_request
     def print_routes():
-        pprint([rule.rule for rule in app.url_map.iter_rules()
-                 if rule.endpoint !='static'])
+        pprint(["{} -> {}".format(rule.rule, rule.endpoint)
+                for rule in app.url_map.iter_rules()
+                if rule.endpoint != 'static'])
 
 

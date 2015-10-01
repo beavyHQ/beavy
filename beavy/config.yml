@@ -7,6 +7,7 @@ COMMON: &common
   SECURITY_PASSWORD_HASH: "bcrypt"
   RATELIMIT_HEADERS_ENABLED: True
   RATELIMIT_GLOBAL: "200/hour"
+  HOME_URL: '/hello'
 
 
 DEVELOPMENT: &development
