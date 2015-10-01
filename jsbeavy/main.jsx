@@ -25,6 +25,11 @@ import { format_jsonapi_result } from 'middleware/api';
 let initData = format_jsonapi_result(window.PRELOAD.PAYLOAD.data, window.PRELOAD.PAYLOAD.key)
 initData.CURRENT_USER = window.PRELOAD.CURRENT_USER;
 
+if (!__DEBUG__)
+  if (parent !== window) {
+    parent.location.reload();
+    throw "iFrame inclusion not allowed!"
+  }
 
 const store  = configureStore(initData);
 
