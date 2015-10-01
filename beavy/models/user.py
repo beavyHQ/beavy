@@ -38,3 +38,6 @@ class User(db.Model, UserMixin):
 
     roles = db.relationship('Role', secondary=roles_users,
                             backref=db.backref('users', lazy='dynamic'))
+
+    def __str__(self):
+        return "<User #{} '{}' ({})>".format(self.id, self.name or "", self.email)

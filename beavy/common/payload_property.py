@@ -3,7 +3,7 @@ from sqlalchemy.orm.attributes import flag_modified
 
 class PayloadProperty(object):
 
-    def __init__(self, key, path="", attribute='payload', force=True):
+    def __init__(self, key, path=[], attribute='payload', force=True):
         self.key = key
         self.attribute = attribute
         self.force = force
@@ -35,6 +35,9 @@ class PayloadProperty(object):
         return base
 
     def __get__(self, obj, _):
+        if not obj:
+            # someone asked on the class
+            return self
         base = self._findBase(obj)
         key = self.key
 
