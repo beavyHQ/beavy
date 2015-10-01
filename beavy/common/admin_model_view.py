@@ -1,10 +1,11 @@
 from flask import abort, redirect, url_for
-from flask_admin.contrib import sqla
+from flask_admin.contrib.sqla import ModelView
+from sqlalchemy import func
 from flask_security import current_user
 
 
 # Customized model view class
-class AdminModelView(sqla.ModelView):
+class AdminModelView(ModelView):
 
     def is_accessible(self):
         if not current_user.is_active() or not current_user.is_authenticated():
@@ -26,3 +27,19 @@ class AdminModelView(sqla.ModelView):
             else:
                 # login
                 return redirect(url_for('security.login', next=request.url))
+
+
+
+    def get_count_query(self):
+        """
+            Return a the count query for the model type
+
+            A ``query(self.model).count()`` approach produces an excessive
+            subquery, so ``query(func.count('*'))`` should be used instead.
+
+            See commit ``#45a2723`` for details.
+        """
+        if 'polymorphic_identity' in self.model.__mapper_args__:
+            return self.session.query(func.count('*')).select_from(self.model.query.selectable)
+
+        return self.session.query(func.count('*')).select_from(self.model)

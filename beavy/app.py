@@ -143,6 +143,14 @@ admin = Admin(app,
               template_mode='bootstrap3',)
 
 
+from beavy.common.admin_model_view import AdminModelView
+# setup admin UI stuff
+admin.add_view(AdminModelView(User, db.session,
+                              name="Users",
+                              menu_icon_type='glyph',
+                              menu_icon_value='glyphicon-user'))
+
+
 #  ----- finally, load all configured modules ---------
 from .setup import *
 

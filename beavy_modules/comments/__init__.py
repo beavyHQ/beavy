@@ -1,5 +1,5 @@
 from beavy.app import admin, db
-from beavy.views.admin_model import AdminModelView
+from beavy.common.admin_model_view import AdminModelView
 from .models import CommentObject
 from .views import *
 

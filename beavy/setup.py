@@ -1,4 +1,4 @@
-from .app import app, mail, celery, security, admin, Role, User, db
+from .app import app, mail, celery, security
 from .utils import load_modules, url_converters
 from .schemas.user import CurrentUser
 
@@ -13,7 +13,6 @@ load_modules(app)
 
 # then load our views:
 from beavy import views
-from beavy.views.admin_model import AdminModelView
 
 # allows them to register on blueprints before we do that setup
 
@@ -43,10 +42,5 @@ def delay_security_email(msg):
     send_security_email.delay(msg)
 
 
-# setup admin UI stuff
-admin.add_view(AdminModelView(User, db.session,
-                              name="Users",
-                              menu_icon_type='glyph',
-                              menu_icon_value='glyphicon-user'))
 # admin.add_view(AdminModelView(Role, db.session))
 
