@@ -24,7 +24,7 @@ export default class Application extends React.Component {
             <MainMenu
               title="Twitter"
               logo='http://svgporn.com/logos/twitter.svg'
-              MainNavigationTools={<UserMenuWidget />}
+              navigationTools={<UserMenuWidget />}
             >
                 {getExtensions('MainMenuItem').map(x=>x.call(this))}
             </MainMenu>

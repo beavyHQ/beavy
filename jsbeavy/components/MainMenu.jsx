@@ -1,15 +1,15 @@
 import React from "react";
 import { Link } from "react-router";
 import { NAME } from 'config/config';
-import styles from 'components/MainMenu.scss';
+import defaultStyles from 'components/MainMenu.scss';
 import classnames from 'classnames';
 
-export { styles }
+export const styles = defaultStyles;
 
 export class MainMenu extends React.Component {
 	render() {
 		const logo = this.props.logo || 'https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/placeholder_logo_1.png',
-					styles = this.props.styles || styles;
+					styles = this.props.styles || defaultStyles;
 		return <div className={styles.navigation} role="banner">
 					  <div className={styles.navigationWrapper}>
 					    <Link to="app" className={styles.logo}>

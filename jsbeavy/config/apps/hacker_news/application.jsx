@@ -18,7 +18,7 @@ export default class Application extends React.Component {
                   <MainMenu
                     styles={MainMenuStyles}
                     logo='http://svgporn.com/logos/ycombinator.svg'
-                    MainNavigationTools={<UserMenuWidget />}
+                    navigationTools={<UserMenuWidget />}
                   >
                     {getExtensions('MainMenuItem').map(x=>x.call(this))}
                   </MainMenu>
