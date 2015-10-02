@@ -171,13 +171,6 @@ admin.add_view(AdminModelView(User, db.session,
 #  ----- finally, load all configured modules ---------
 from .setup import *
 
-
-@app.route("/hello")
-@fallbackRender('home.html')
-def hello():
-    return {"title": "home"}
-
-
 replaceHomeEndpoint(app)
 
 # ----- some debug features
