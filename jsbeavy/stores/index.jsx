@@ -2,9 +2,16 @@ import { compose, createStore, applyMiddleware, combineReducers } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import apiMiddleware from '../middleware/api';
 import { getNamedExtensions, getExtensions, addManyExtensions, addExtension, addNamedExtension } from 'config/extensions';
+import createHistory from 'history/lib/createBrowserHistory';
+
+import {
+  routerStateReducer,
+  reduxReactRouter
+} from 'redux-router';
 
 addManyExtensions("storeMiddlewares", [thunkMiddleware, apiMiddleware]);
 
+addNamedExtension("reducers", "router", routerStateReducer)
 addNamedExtension("reducers", "CURRENT_USER", (x=null) => x)
 
 export default function configureStore (initialState) {
@@ -25,11 +32,17 @@ export default function configureStore (initialState) {
     const { devTools, persistState } = require('redux-devtools');
     createStoreWithMiddleware = compose(
         createStoreWithMiddleware,
+        reduxReactRouter({ createHistory }),
         // Provides support for DevTools:
         devTools(),
         // Lets you write ?debug_session=<name> in address bar to persist debug sessions
         persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
       )
+  } else {
+    createStoreWithMiddleware = compose(
+        createStoreWithMiddleware,
+        reduxReactRouter({ createHistory })
+    )
   }
 
   const store = createStoreWithMiddleware(createStore)(

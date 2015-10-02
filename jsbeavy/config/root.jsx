@@ -3,13 +3,13 @@ import { Provider } from 'react-redux';
 import { createDevToolsWindow } from 'utils';
 import { Route, Redirect, DefaultRoute, NotFoundRoute, Router, RoutingContext  } from "react-router";
 
-import createHistory from 'history/lib/createBrowserHistory';
-
 /* eslint-disable no-multi-spaces */
 // Only import from `route-handlers/*`
 import { getExtensions } from "config/extensions";
 import { HOME_URL } from "config/config";
 import setupViews from "views";
+
+import { ReduxRouter } from 'redux-router';
 
 /* eslint-enable */
 
@@ -90,11 +90,11 @@ export default class Root extends React.Component {
         {debugTools}
         <Provider store={this.props.store}>
           {() =>
-              <Router history={createHistory()}>
+              <ReduxRouter>
                 <Route component={this.props.application}>
                   {this.getRoutes()}
                 </Route>
-              </Router>
+              </ReduxRouter>
             }
         </Provider>
       </div>
