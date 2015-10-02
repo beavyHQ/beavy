@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { getNamedExtensions } from "config/extensions";
-import createBrowserHistory from 'history/lib/createBrowserHistory';
 
 // polyfill
 if(!Object.assign)
@@ -33,6 +32,6 @@ if (!__DEBUG__)
 
 const store  = configureStore(initData);
 
-React.render(<Root routerHistory={createBrowserHistory()}
-                   application={Application}
+
+React.render(<Root application={Application}
                    store={store} />, target);

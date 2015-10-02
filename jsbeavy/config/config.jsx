@@ -7,6 +7,7 @@ export default Object.assign({
   'NAME': 'Nullable',
   'FRONTEND': 'minima',
   'USERS_URL': '/u',
+  'HOME_URL': '/hello',
   'ACCOUNT_URL': '/account',
   'SECURITY_REGISTERABLE': true
-}, require("json!grep?MODULES,NAME,ACCOUNT_URL,SECURITY_REGISTERABLE,FRONTEND,USERS_URL!yaml!../../config.yml"))
+}, require("json!grep?MODULES,HOME_URL,NAME,ACCOUNT_URL,SECURITY_REGISTERABLE,FRONTEND,USERS_URL!yaml!../../config.yml"))

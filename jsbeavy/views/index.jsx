@@ -16,6 +16,4 @@ export default function setupViews(Application){
       <Route name="account" path={make_url.account("")}>
         {getExtensions('accountRoutes')}
       </Route>);
-
-  addExtension('routes', <Route component={HomeView} path="*" />);
 }

@@ -1,12 +1,14 @@
 import React        from 'react';
 import { Provider } from 'react-redux';
-import invariant    from 'invariant';
 import { createDevToolsWindow } from 'utils';
-import { Route, DefaultRoute, NotFoundRoute, Router, RoutingContext  } from "react-router";
+import { Route, Redirect, DefaultRoute, NotFoundRoute, Router, RoutingContext  } from "react-router";
+
+import createHistory from 'history/lib/createBrowserHistory';
 
 /* eslint-disable no-multi-spaces */
 // Only import from `route-handlers/*`
 import { getExtensions } from "config/extensions";
+import { HOME_URL } from "config/config";
 import setupViews from "views";
 
 /* eslint-enable */
@@ -19,8 +21,6 @@ export default class Root extends React.Component {
   static propTypes = {
     store          : React.PropTypes.object.isRequired,
     application    : React.PropTypes.func.isRequired,
-    routerHistory  : React.PropTypes.object,
-    routingContext : React.PropTypes.object
   }
 
   constructor () {
@@ -41,23 +41,39 @@ export default class Root extends React.Component {
     }
   }
 
-  renderRouter () {
-    invariant(
-      this.props.routingContext || this.props.routerHistory,
-      '<Root /> needs either a routingContext or routerHistory to render.'
-    );
+  getRoutes(){
+    const routes_by_path = {},
+          remapRoutes = (routes, path='') => {
+            for (let i = routes.length - 1; i >= 0; i--) {
+              addRoute(routes[i], path)
+            };
+          },
+          addRoute = (x, parents="") => {
+            parents = parents.charAt(parents.length - 1) ? parents : parents + '/'
+            let path = x.props.path.charAt(0) == "/" ? x.props.path : parents + x.props.path;
+            // react router creates some weird double-slashes, which are
+            // incompatible with our way of looking at urls
+            // sanitise them!
+            path = path.replace(/(\/\/)/, "/");
+            routes_by_path[path] = x;
+            if (x.props.children){
+              remapRoutes(x.props.children, path)
+            }
+          },
+          routes = getExtensions('routes');
 
-
-
-    if (this.props.routingContext) {
-      return <RoutingContext {...this.props.routingContext} />;
+    remapRoutes(routes);
+    if (routes_by_path[HOME_URL]){
+      const store = routes_by_path[HOME_URL]._store;
+      store.originalProps.path = "/";
+      store.props.path = "/";
+      routes.push(<Redirect from={HOME_URL} to="/" />)
     } else {
-      return <Router history={this.props.routerHistory}>
-                <Route name="app" path="/" component={this.props.application}>
-                  {getExtensions('routes')}
-                </Route>
-              </Router>;
+      // routes.push(<Route component={HomeView} path="*" />);
     }
+
+    return routes;
+
   }
 
   render () {
@@ -73,7 +89,13 @@ export default class Root extends React.Component {
       <div>
         {debugTools}
         <Provider store={this.props.store}>
-          {() => this.renderRouter()}
+          {() =>
+              <Router history={createHistory()}>
+                <Route component={this.props.application}>
+                  {this.getRoutes()}
+                </Route>
+              </Router>
+            }
         </Provider>
       </div>
     );
