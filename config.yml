@@ -1,8 +1,0 @@
-NAME: "Nullable"
-
-FRONTEND: 'minima'
-
-MODULES:
- - likes
- - private_messaging
- - comments

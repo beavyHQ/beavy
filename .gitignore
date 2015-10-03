@@ -5,3 +5,4 @@ __pycache__
 app.db
 dev_config.yml
 build
+config.yml

@@ -1,0 +1,96 @@
+= Configuring your beavy
+
+Beavy is based on the python link:http://flask.pocoo.org/[flask] framework and webpack for the frontend. Both play well with yaml-files.
+
+The main configuration file you want to bother changing is in the root directory, called `config.yml`. While beavy comes with a set of sane defaults for development as well as production, in this file you can overwrites all changes in the flask configuration. It is also the _single point_ that webpack reads compile configuration from. All keys you find it in right now are required and needed. If you want to mess with the defaults or need to change stuff for your development enviroment take a look at the end of this chapter.
+
+== Starting point
+
+You should have copied the latest `config.example.yml` to `config.yml`. As previously mentioned. When you do an update, make sure that all keys of the new `config.example.yml` are present (and set) in your local config.yml. This is probably the single most important key to make sure when you encouter any errors in compiling.
+
+**Attention**: the `config.yml` is per default in your .gitignore file in order to prevent you from accidentially committing it. It is generally adviced to _not_ share this file publicly as it often contains sensitive information like app credentials and cookie secrets. However, if you are running the own-private-branch-strategy, you might want to explicilty add the file to git with `git add -f config.yml`.
+
+== Basic Configuration
+
+In general the `config.example.yml` should come with documentation for each key/value present. If you modify them as described, you should have an easy enough way in and down the rabbit whole. The following we'd like to elaborate on here:
+
+**NAME**
+This is the global, readable name of your app. While beavy will internally often refer to itself, this is basically the brand it will represent to the outside. Very many `Frontend`s use the name in one way or the other to signify the brand to the user. As an example, this would be "Twitter" or "Hacker News".
+
+**FRONTEND**
+This is the Javascript App which will be compiled as the entry point for your beavy app. Apps can be found in `jsbeavy/config/app`. Consisting of Javascript and (S)CSS an App defines the entire frontend behaviour and UI that the webapp provides on the usual API.
+
+It is recommended that you take one of the example apps, make a copy of the folder under a new name and use that as the base to develop your own frontend.
+
+**SECRET_KEY** and **SECURITY_PASSWORD_SALT**
+Both of these needs to be set to random values. We recommend using a link:http://www.miniwebtool.com/django-secret-key-generator/[key generator like this one]. This is very critical for the security of the password you store and how easy your cookies can be decrypted. And you want neither of them to be one easily. So, make sure to add good values here and never share them outside of your production system.
+
+**SECURITY_REGISTERABLE**
+A feature of the link:#Security[Security extension], this allows you configure whether new users are allowed to register with your application. It defaults to `false`.
+
+**Modules**
+Is the list of activated modules for your beavy instance. See the corresponding module documentation to learn more about it and how to proper configure it. Some frontends might also require certain modules to be present. Please refer to the frontend documentation to learn about these dependencies.
+
+
+**HOME_URL**
+By default beavy presents the hello-world-style `/hello` endpoint when you arrive at its main page (at `/`). But you might want a specific stream or module feature to be the starting point instead. You can put the absolute url of that page you want to have at `/` here.
+
+_Note_: This does only work with static urls like `/account/private_messages` but not with dynamic ones. Also, keep in mind any URL prefixes you might have configured. They need to be included.
+
+
+=== URL-Prefixes
+
+As a highly modular system, most modules are actually build as link:[flask blueprint] extensions. This is a specific way which allows flask to package routes and views. On particular cool feature this comes with, is that it allows for easier to be configured URL-prefixes. Which allows you to provide your very own endpoint url names (for example for translations). By default, beavy comes with the following prefixes – modules might define their own, see the corresponding documentation:
+
+
+ - **USERS_URL** (default: `/u`): everything user profile related
+ - **ACCOUNT_URL** (default: `/account`): a users own profile and features (like private_messages)
+ - **SECURITY_URL_PREFIX** (default: '/'): where security features (like '/login') are supposed to be found. #FIXME.
+
+
+== Social Login
+
+Beavy comes shipped in with a adapted version of link:https://github.com/wooyek/flask-social-blueprint[flask-social-blueprint], which allows you quickly to provide social authentication to your users. It has a slightly improved configuration interface: if you omit the full-path of the key, the configurator will prefix your key with `flask_social_blueprint.providers.`, thus allowing you to have much more declerative configuration file.
+
+It currently ships with providers for:
+
+ - Twitter
+ - Facebook
+ - Google
+ - Github
+
+See the blue print docs for further instructions: https://github.com/wooyek/flask-social-blueprint .
+
+
+== Security
+
+As so many other great flask apps, beavy, too, leverages the great link:https://pythonhosted.org/Flask-Security/[Flask-Security]-Blueprint to do much of the heavy lifting for security, authentication. It allows a fast feature set to be configured for your needs, see their documentation for further details. This document only want to directly point to the following:
+
+**SECURITY_CONFIRMABLE**
+Specifies if users are required to confirm their email address when registering a new account. If this value is True, Flask-Security creates an endpoint to handle confirmations and requests to resend confirmation instructions. _In beavy this is `True` per default_.
+
+**SECURITY_TRACKABLE**
+Specifies if Flask-Security should track basic user login statistics. _In beavy this is `True` per default_.
+
+**SECURITY_PASSWORD_HASH**
+Specifies the password hash algorithm to use when encrypting and decrypting passwords. _In beavy this defaults to `bcrypt`_.
+
+=== Rate Limits
+
+Beavy also comes with system-wide IP-Based Connection Rate Limiter, using the great link:https://pypi.python.org/pypi/Flask-Limiter[Flask-Limiter] extension. Please refer to its link:https://flask-limiter.readthedocs.org/en/stable/#configuration[configuration documentation] to understand all options and their implications. In particular we want to point out the following:
+
+**RATELIMIT_ENABLED**
+Overall kill switch for rate limits. Defaults to True, is disabled in development.
+
+**RATELIMIT_GLOBAL**
+A comma (or some other delimiter) separated string that will be used to apply a global limit on all routes. See link:https://flask-limiter.readthedocs.org/en/stable/#ratelimit-string[Rate limit string notation] for details. _In beavy this comes with '200/hour' as a default_.
+
+**RATELIMIT_HEADERS_ENABLED**
+Enables returning Rate-limiting Headers. This defaults to `True` in beavy.
+
+
+== Expert Mode
+
+The defaults for beavy as configured depending on the running environment. Those defaults are set in `beavy/config.yml` prefixed for each environment, while "COMMON" are global defaults.
+
+If you have your own changes you want to only have present in one particular environment, do them here. Be aware that this file is also constantly changed by the beavy upstream.

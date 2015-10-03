@@ -1,0 +1,52 @@
+# What is the name/brand of your app?
+# This will show up as the brand in many popular frontends as well
+# as Emails and the Administration framework
+NAME: "Beavy App"
+
+# Define a hard to guess random key to secure your cookies
+# We recommend you use a key generator like
+#      http://www.miniwebtool.com/django-secret-key-generator/
+# leaving this empty and the app will fail to start
+SECRET_KEY: ""
+
+# You should provide a password salt to generate passwords with
+# this again is just a random string of 5-10 characters long,
+# you can use the same key generator as before
+SECURITY_PASSWORD_SALT: ""
+
+# Which frontend do you want to compile into the UI?
+# frontends are looked up in `jsbeavy/config/apps/`
+# by default, beavy ships with a few examples. See the docs
+FRONTEND: 'minima'
+
+
+# A list of the modules you want to have activated
+# modules are python-modules found in beavy_modules.*
+MODULES:
+ - comments
+ - likes
+ - private_messaging
+
+
+# Which url do you want to be the 'home' screen,
+# the entry point of the app. Please read the
+# docs on configuration
+# HOME_URL: '/hello'
+
+# Uncomment this to enable registrations
+# SECURITY_REGISTERABLE: true
+
+
+# Uncomment this, if you want to provide any social
+# login capabilities. Please consult the docs if you
+# you want to use this
+# --------:
+# SOCIAL_LOGINS:
+#   Twitter:
+#     consumer_key: XYZ
+#     consumer_secret: LONGXYZ
+#   Facebook:
+#     consumer_key: XYZ
+#     consumer_secret: LONGXYZ
+
+
