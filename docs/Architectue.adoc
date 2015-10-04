@@ -1,0 +1,24 @@
+= Beavy Architecture
+
+
+== Overview
+
+Beavy is a multi-lingual project. As an HTTP-Server it is still structured in the classic Client-Server Code. On the server Beavy is build on the link:http://flask.pocoo.org/[Flask] web development framework, running on Python 3.4+. For the website client, Beavy is build using the react library and the redux pattern.
+
+== Server
+
+Beavy is build on Flask (0.10.1) and Python 3.5+, the data is managed by a Postgres 9.4+ . As an asynchronous worker queue, beavy facilitates the popular Celery system, tighly integrated with Flask. All of these component allow for easy scaling from small to huge.
+
+
+== Web Client
+
+The Web Client is build upon the React Library and heavily uses their Component Concept to allow for easy resuability using ES2015 (formerly 'ES6').
+
+=== Build System
+
+The frontend is build with ES2015 (the Version 2015 of EcmaScript) and with the JSX extension for inline dom-annotations. To build the frontend, beavy ships with a setup of webpack configuration files for development (including a hot-reloading development server) and production builds.
+
+
+=== Client Architecture
+
+The data flow in the frontend is managed using the Redux pattern (which is an extension of the famous flux pattern).
