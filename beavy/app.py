@@ -37,9 +37,6 @@ def make_env(app):
     env.from_yaml(os.path.join(BASE_DIR, 'config.yml'))
     env.from_yaml(os.path.join(os.getcwd(), 'config.yml'))
 
-    if env.env == 'DEVELOPMENT':
-        env.from_yaml(os.path.join(os.getcwd(), 'dev_config.yml'))
-
     # update social buttons
     _FLBLPRE = "flask_social_blueprint.providers.{}"
     if not "SOCIAL_BLUEPRINT" in app.config:
