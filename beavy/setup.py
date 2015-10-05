@@ -57,6 +57,7 @@ def generate_capability_maps(obj):
     caps = namedtuple('Cababilities', capabilities_map.keys())
     obj.TypesForCapability = caps(**capabilities_map)
 
+
 def replaceHomeEndpoint(app):
     HOME_URL = app.config["HOME_URL"]
     original_endpoint = None
