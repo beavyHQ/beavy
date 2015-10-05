@@ -12,17 +12,16 @@ class IncludingHyperlinkRelated(HyperlinkRelated):
         super(IncludingHyperlinkRelated, self).__init__(*args, **kwargs)
 
     def add_resource_linkage(self, value):
+        def render(item):
+            attributes = self._extract_attributes(item)
+            type_ = attributes.pop('type', self.type_)
+            return {'type': type_,
+                    'id': get_value_or_raise(self.id_field, item),
+                    'attributes': attributes}
         if self.many:
-            included_data = [
-                {'type': self.type_,
-                 'id': get_value_or_raise(self.id_field, each),
-                 'attributes': self._extract_attributes(each)}
-                for each in value]
+            included_data = [render(each) for each in value]
         else:
-            included_data = {
-                'type': self.type_,
-                'id': get_value_or_raise(self.id_field, value),
-                'attributes': self._extract_attributes(value)}
+            included_data = render(value)
         return included_data
 
     def _extract_attributes(self, value):

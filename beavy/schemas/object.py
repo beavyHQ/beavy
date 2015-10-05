@@ -1,15 +1,20 @@
-from marshmallow import Schema, fields
-from beavy.common.morphing_field import MorphingField
+from marshmallow_jsonapi import Schema, fields
+from beavy.common.morphing_schema import MorphingSchema
+
+from .user import BaseUser
 
 
 class BaseObject(Schema):
+    class Meta:
+        type_ = "object"
+
     id = fields.Integer()
     created_at = fields.DateTime()
-    owner_id = fields.Integer()
+    owner = fields.Nested(BaseUser)
     belongs_to_id = fields.Integer()  # don't leak
-    klass = fields.String(attribute="discriminator")
+    type = fields.String(attribute="discriminator")
 
 
-class ObjectField(MorphingField):
+class ObjectField(MorphingSchema):
     FALLBACK = BaseObject
     registry = {}

@@ -1,5 +1,5 @@
 from marshmallow import Schema, fields
-from beavy.common.morphing_field import MorphingField
+from beavy.common.morphing_schema import MorphingSchema
 
 from .user import BaseUser
 
@@ -11,6 +11,6 @@ class BaseActivity(Schema):
     object_id = fields.Integer()  # don't leak
 
 
-class ActivityField(MorphingField):
+class ActivityField(MorphingSchema):
     FALLBACK = BaseActivity
     registry = {}
