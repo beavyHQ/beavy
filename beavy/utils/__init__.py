@@ -1,11 +1,15 @@
 from werkzeug.wrappers import Response as ResponseBase
-from flask import request, render_template, make_response, json
+from flask import request, render_template, make_response, json, abort
 from logging import getLogger
 from marshmallow import MarshalResult
 
 from functools import wraps
 
 import importlib
+
+
+API_MIMETYPES = ('application/json',
+                 'application/vnd.api+json')
 
 
 def load_modules_and_app(app):
@@ -33,7 +37,17 @@ def load_modules_and_app(app):
         app_subm.init_app(app)
 
 
-def fallbackRender(template, key=None, nativeTypes=('application/json', )):
+def api_only(fn):
+    @wraps(fn)
+    def wrapped(*args, **kwargs):
+        accepted = set(request.accept_mimetypes.values())
+        if not (accepted & API_MIMETYPES) and not request.args.get("json"):
+            return abort(415, "Unsupported Media Type")
+        return fn(*args, **kwargs)
+    return wrapped
+
+
+def fallbackRender(template, key=None, nativeTypes=API_MIMETYPES):
     nativeTypes = set(nativeTypes)
 
     def wrapper(fn):
