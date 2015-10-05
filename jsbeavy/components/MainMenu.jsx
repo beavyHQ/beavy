@@ -12,7 +12,7 @@ export class MainMenu extends React.Component {
 					styles = this.props.styles || defaultStyles;
 		return <div className={styles.navigation} role="banner">
 					  <div className={styles.navigationWrapper}>
-					    <Link to="app" className={styles.logo}>
+					    <Link to="/" className={styles.logo}>
 					      <img src={logo} alt="Logo Image" />
 					      <span className={styles.title}>{this.props.name || NAME}</span>
 					    </Link>
