@@ -8,20 +8,29 @@ from functools import wraps
 import importlib
 
 
-def load_modules(app):
+def load_modules_and_app(app):
     logger = getLogger("beavy.loadModules")
     loaders = []
     for modl in app.config.get("MODULES", []):
         # load module
         logger.debug("Importing Module {}".format(modl))
         subm = importlib.import_module("beavy_modules.{}".format(modl))
-        # call init on module if found
+        # defer call init on module if found
         if hasattr(subm, "init_app"):
             loaders.append((modl, subm.init_app))
+
+    # Load the app
+    app_modl = app.config.get('APP')
+    logger.debug("Importing APP {}".format(app_modl))
+    app_subm = importlib.import_module("beavy_apps.{}".format(app_modl))
 
     for (modl, init_app) in loaders:
         logger.debug("Init Module {}".format(modl))
         init_app(app)
+
+    # call init on app if found
+    if hasattr(app_subm, "init_app"):
+        app_subm.init_app(app)
 
 
 def fallbackRender(template, key=None, nativeTypes=('application/json', )):

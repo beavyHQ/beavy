@@ -42,9 +42,9 @@ module.exports = function(options) {
 		"styl": [cssLoader, "stylus-loader"],
 		"scss|sass": [cssLoader, "sass-loader" +
 			// highest priority: __CUSTOM/styles
-			"?includePaths[]=" + encodeURIComponent(path.resolve(JS_ROOT, "__CUSTOM", "styles")) +
+			"?includePaths[]=" + encodeURIComponent(path.resolve(ROOT, "__CUSTOM", "styles")) +
 			// second: App
-			"&includePaths[]=" + encodeURIComponent(path.resolve(JS_ROOT, "config", "apps", appConfig.FRONTEND, "styles")) +
+			"&includePaths[]=" + encodeURIComponent(path.resolve(ROOT, "beavy_apps", appConfig.APP, "frontend", "styles")) +
 			// third: defaults
 			"&includePaths[]=" + encodeURIComponent(path.resolve(JS_ROOT, "styles"))]
 	};

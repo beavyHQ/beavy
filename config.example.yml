@@ -14,18 +14,19 @@ SECRET_KEY: ""
 # you can use the same key generator as before
 SECURITY_PASSWORD_SALT: ""
 
-# Which frontend do you want to compile into the UI?
-# frontends are looked up in `jsbeavy/config/apps/`
-# by default, beavy ships with a few examples. See the docs
-FRONTEND: 'minima'
-
-
 # A list of the modules you want to have activated
 # modules are python-modules found in beavy_modules.*
 MODULES:
  - comments
  - likes
  - private_messaging
+
+# Which App do you want to load and compile into the UI?
+# Apps are what ties your modules, backend and frontend together.
+# The app is just another beavy-(python)-module but located in
+# `beavy_apps` and loaded _after_ all modules have been.
+# By default, beavy ships with a few examples. See the docs
+APP: 'minima'
 
 
 # Which url do you want to be the 'home' screen,

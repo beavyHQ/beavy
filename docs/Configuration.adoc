@@ -17,19 +17,19 @@ In general the `config.example.yml` should come with documentation for each key/
 **NAME**
 This is the global, readable name of your app. While beavy will internally often refer to itself, this is basically the brand it will represent to the outside. Very many `Frontend`s use the name in one way or the other to signify the brand to the user. As an example, this would be "Twitter" or "Hacker News".
 
-**FRONTEND**
-This is the Javascript App which will be compiled as the entry point for your beavy app. Apps can be found in `jsbeavy/config/app`. Consisting of Javascript and (S)CSS an App defines the entire frontend behaviour and UI that the webapp provides on the usual API.
-
-It is recommended that you take one of the example apps, make a copy of the folder under a new name and use that as the base to develop your own frontend.
-
 **SECRET_KEY** and **SECURITY_PASSWORD_SALT**
 Both of these needs to be set to random values. We recommend using a link:http://www.miniwebtool.com/django-secret-key-generator/[key generator like this one]. This is very critical for the security of the password you store and how easy your cookies can be decrypted. And you want neither of them to be one easily. So, make sure to add good values here and never share them outside of your production system.
 
 **SECURITY_REGISTERABLE**
 A feature of the link:#Security[Security extension], this allows you configure whether new users are allowed to register with your application. It defaults to `false`.
 
-**Modules**
+**MODULES**
 Is the list of activated modules for your beavy instance. See the corresponding module documentation to learn more about it and how to proper configure it. Some frontends might also require certain modules to be present. Please refer to the frontend documentation to learn about these dependencies.
+
+**APP**
+The App is what ties together the entire beavy modules, frontend and backend, provides some last configuration and makes sure all behaves the way you intend to. Similar to modules, they ship both frontend and backend code and are bundled as a Python Module, but other than models an APP *must* provide an UI-Entry point at `frontend/application.jsx` which will be compiled into the frontend and acts as the main outer layer of the React UI.
+
+Apps are looked up in the `beavy_apps`-module. Beavy ships with a few example apps. It is recommended that you take one of the example apps, make a copy of the folder under a new name and use that as the base to develop your own frontend.
 
 
 **HOME_URL**

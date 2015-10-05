@@ -1,5 +1,5 @@
 from .app import app, mail, celery, security
-from .utils import load_modules, url_converters, fallbackRender
+from .utils import load_modules_and_app, url_converters, fallbackRender
 from .schemas.user import CurrentUser
 from collections import namedtuple
 
@@ -9,7 +9,7 @@ app.url_map.converters['model'] = url_converters.ModelConverter
 app.url_map.converters['user'] = url_converters.UserConverter
 
 # LOAD all external modules
-load_modules(app)
+load_modules_and_app(app)
 
 # then load our views:
 from beavy import views

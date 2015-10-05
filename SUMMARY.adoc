@@ -18,9 +18,9 @@
 .. link:beavy_modules/private_messaging/README.adoc[Private Messaging]
 
 . link:docs/Example-Apps.adoc[Example Apps]
-.. link:jsbeavy/config/apps/minima/README.adoc[Minima]
-.. link:jsbeavy/config/apps/hacker_news/README.adoc[Hacker News]
-.. link:jsbeavy/config/apps/twitter/README.adoc[Twitter]
+.. link:beavy_apps/minima/README.adoc[Minima]
+.. link:beavy_apps/hacker_news/README.adoc[Hacker News]
+.. link:beavy_apps/twitter/README.adoc[Twitter]
 
 . link:docs/Development.adoc[Development]
 .. link:docs/Development-Setup.adoc[Setup]
