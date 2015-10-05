@@ -95,6 +95,18 @@ def as_page(query, per_page=30, **kwargs):
     return query.paginate(page, per_page, **kwargs)
 
 
+def get_or_create(session, model, defaults=None, **kwargs):
+    instance = session.query(model).filter_by(**kwargs).first()
+    if instance:
+        return instance, False
+    else:
+        params = dict((k, v) for k, v in kwargs.items())
+        params.update(defaults or {})
+        instance = model(**params)
+        session.add(instance)
+        return instance, True
+
+
 # --- start of Flask-RESTful code ---
 # Copyright (c) 2013, Twilio, Inc.
 # All rights reserved.
