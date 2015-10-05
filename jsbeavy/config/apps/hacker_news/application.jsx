@@ -3,6 +3,9 @@ import { MainMenu, styles as MainMenuStyles } from "components/MainMenu";
 import UserModal from "containers/UserModal";
 import UserMenuWidget from "containers/UserMenuWidget";
 
+import { make_url, getStoreEntity } from 'utils';
+import { Link } from 'react-router';
+
 import { getExtensions } from "config/extensions";
 import styles from "./styles/hn_styles.scss";
 
@@ -20,7 +23,7 @@ export default class Application extends React.Component {
                     logo='http://svgporn.com/logos/ycombinator.svg'
                     navigationTools={<UserMenuWidget />}
                   >
-                    {getExtensions('MainMenuItem').map(x=>x.call(this))}
+                    | <Link to={make_url.account("comments/")}>threads</Link> |
                   </MainMenu>
                   {this.props.children}
                 </div>;
