@@ -1,5 +1,5 @@
 import React from 'react';
-import config from 'config/config';
+import config, { HOME_URL } from 'config/config';
 
 export function createConstants (...constants) {
   return constants.reduce((acc, constant) => {
@@ -19,6 +19,7 @@ function makePrefixUrlMaker(prefix){
     if (url.slice(-1) != '/'){
       url += "/"
     }
+    if (url == HOME_URL) { return '/'}
     return url;
   })
 }
