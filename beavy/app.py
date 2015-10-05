@@ -88,23 +88,6 @@ class BeavyAdminIndexView(AdminIndexView):
 
         return False
 
-
-def replaceHomeEndpoint(app):
-    HOME_URL = app.config["HOME_URL"]
-    original_endpoint = None
-    for rule in app.url_map.iter_rules():
-        if HOME_URL == rule.rule:
-            original_endpoint = rule.endpoint
-            rule.rule = "/"
-            rule.compile()
-            break
-
-    if original_endpoint:
-        app.url_map.add(
-            app.url_rule_class(HOME_URL, alias=True,
-                               endpoint=original_endpoint))
-
-
 # --------------------------- Setting stuff up in order ----------
 
 
@@ -166,9 +149,16 @@ admin.add_view(AdminModelView(User, db.session,
 
 
 #  ----- finally, load all configured modules ---------
-from .setup import *
+from .setup import replaceHomeEndpoint, generate_capability_maps
 
+# and set the home endpoint
 replaceHomeEndpoint(app)
+
+from .models.object import Object
+generate_capability_maps(Object)
+
+from .models.activity import Activity
+generate_capability_maps(Activity)
 
 # ----- some debug features
 

@@ -1,6 +1,7 @@
 from .app import app, mail, celery, security
 from .utils import load_modules, url_converters, fallbackRender
 from .schemas.user import CurrentUser
+from collections import namedtuple
 
 from flask_security import current_user
 
@@ -39,6 +40,37 @@ def send_security_email(msg):
 @security.send_mail_task
 def delay_security_email(msg):
     send_security_email.delay(msg)
+
+
+## ---- generate object capabilities
+def generate_capability_maps(obj):
+    capabilities_map = {
+        # there are a few defaults we always have
+        'listed': [],
+        'searchable': [],
+    }
+    for typ, kls in obj.__mapper__.polymorphic_map.items():
+        if hasattr(kls.class_, 'CAPABILITIES'):
+            for cap in kls.class_.CAPABILITIES:
+                capabilities_map.setdefault(cap, []).append(typ)
+
+    caps = namedtuple('Cababilities', capabilities_map.keys())
+    obj.TypesForCapability = caps(**capabilities_map)
+
+def replaceHomeEndpoint(app):
+    HOME_URL = app.config["HOME_URL"]
+    original_endpoint = None
+    for rule in app.url_map.iter_rules():
+        if HOME_URL == rule.rule:
+            original_endpoint = rule.endpoint
+            rule.rule = "/"
+            rule.compile()
+            break
+
+    if original_endpoint:
+        app.url_map.add(
+            app.url_rule_class(HOME_URL, alias=True,
+                               endpoint=original_endpoint))
 
 
 # default home, blank.
