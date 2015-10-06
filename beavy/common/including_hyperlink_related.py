@@ -9,6 +9,8 @@ class IncludingHyperlinkRelated(HyperlinkRelated):
         if callable(nestedObj):
             nestedObj = nestedObj(many=False)
         self.nestedObj = nestedObj
+        kwargs['type_'] = " "
+        kwargs['include_data'] = True
         super(IncludingHyperlinkRelated, self).__init__(*args, **kwargs)
 
     def add_resource_linkage(self, value):
