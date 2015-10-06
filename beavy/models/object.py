@@ -1,4 +1,6 @@
 from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.orm import contains_eager, aliased
+from enum import Enum, unique
 from sqlalchemy import func
 from beavy.common.access_query import AccessQuery
 
@@ -12,6 +14,21 @@ class Object(db.Model):
     This is the primary base class for all kind of objects
     we know of inside the system
     """
+    @unique
+    class Capabilities(Enum):
+        # This type is to be shown in default lists
+        # like 'top', 'latest' etc
+        listed = 'listed'
+
+        # If the type isn't listed but has `listed_for_activity`
+        # it can show up in lists about activitys, for example
+        # when an object got liked
+        listed_for_activity = 'a_listable'
+
+        # This can be searched for
+        searchable = 'searchable'
+
+
     __tablename__ = "objects"
     query_class = AccessQuery
 
@@ -29,5 +46,6 @@ class Object(db.Model):
     __mapper_args__ = {'polymorphic_on': discriminator}
 
     owner = db.relationship(User, backref=db.backref('objects'))
+
 
 Object.__access_filters = defaultdict(list)

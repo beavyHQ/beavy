@@ -12,6 +12,8 @@ class CommentObject(Object, RenderedTextMixin):
         'polymorphic_identity': COMMENT_ID
     }
 
+    CAPABILITIES = [Object.Capabilities.listed_for_activity]
+
     in_reply_to_id = db.Column(db.Integer, db.ForeignKey("objects.id"),
                                nullable=True)
     # in_reply_to = db.relationship(Object, backref=db.backref('replies'))

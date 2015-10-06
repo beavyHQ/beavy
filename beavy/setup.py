@@ -44,14 +44,11 @@ def delay_security_email(msg):
 
 ## ---- generate object capabilities
 def generate_capability_maps(obj):
-    capabilities_map = {
-        # there are a few defaults we always have
-        'listed': [],
-        'searchable': [],
-    }
+    capabilities_map = dict((x.value, []) for x in obj.Capabilities)
     for typ, kls in obj.__mapper__.polymorphic_map.items():
         if hasattr(kls.class_, 'CAPABILITIES'):
             for cap in kls.class_.CAPABILITIES:
+                cap = getattr(cap, "value", cap)
                 capabilities_map.setdefault(cap, []).append(typ)
 
     caps = namedtuple('Cababilities', capabilities_map.keys())

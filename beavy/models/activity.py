@@ -3,7 +3,8 @@ from sqlalchemy import func
 from beavy.common.access_query import AccessQuery
 from collections import defaultdict
 from beavy.app import db
-
+from enum import Enum, unique
+from .object import Object
 from .user import User
 
 
@@ -11,6 +12,10 @@ class Activity(db.Model):
     """
     We record activities on objects through this
     """
+    @unique
+    class Capabilities(Enum):
+        pass
+
     __tablename__ = "activities"
     query_class = AccessQuery
 
@@ -28,7 +33,14 @@ class Activity(db.Model):
 
     subject = db.relationship(User, backref=db.backref("activities"),
                               foreign_keys=subject_id)
-    object = db.relationship('Object', backref=db.backref("activities"))
+    object = db.relationship(Object, backref=db.backref("activities"))
 
 
 Activity.__access_filters = defaultdict(list)
+
+
+if not hasattr(Object, 'my_activities'):
+    # my activities are reserved for the current_user
+    # and will be loaded only if an object-query with "with_my_activities"
+    # is executed. Otherwise it will be an empty InstrumentedList
+    Object.my_activities = db.relationship(Activity, lazy='noload')
