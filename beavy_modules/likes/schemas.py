@@ -6,6 +6,7 @@ from beavy.schemas.object import ObjectField
 # from marshmallow import Schema, fields
 
 from marshmallow_jsonapi import Schema, fields
+from marshmallow import pre_dump
 
 
 # class BaseLike(Schema):
@@ -16,17 +17,26 @@ from marshmallow_jsonapi import Schema, fields
 
 
 class UserLike(Schema):
+    id = fields.Integer()
     created_at = fields.DateTime()
+
+    TUPLE_KEY = 'Like'
+    REMAP_TUPLE_KEYS = ('Object', )
 
     class Meta:
         type_ = "like"
 
-    object = IncludingHyperlinkRelated(ObjectField(),
-        '/o/{object_id}',
-        url_kwargs={'object_id': '<id>'},
-        many=False, include_data=True,
-        type_='object'
-    )
+    @pre_dump
+    def extract_items(self, item):
+        if isinstance(item, tuple):
+            tup = item
+            item = getattr(item, self.TUPLE_KEY)
+            for key in self.REMAP_TUPLE_KEYS:
+                setattr(item, key.lower(), getattr(tup, key))
+
+        return item
+
+    object = IncludingHyperlinkRelated(ObjectField())
 
 
 

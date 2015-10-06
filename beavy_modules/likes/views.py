@@ -13,14 +13,13 @@ from beavy.app import db
 
 
 def _load_likes(user):
-    cur_like = aliased(Like)
-    return as_page(Object.query
-                         .by_capability(Object.Capabilities.listed,
-                                        Object.Capabilities.listed_for_activity)
-                         .with_my_activities()
-                         .join(Like, Like.object_id == Object.id)
-                         .filter(Like.subject_id == user.id)
-                         .add_entity(Like))
+    return user_likes_paged.dump(as_page(Object.query
+            .by_capability(Object.Capabilities.listed,
+                           Object.Capabilities.listed_for_activity)
+            .with_my_activities()
+            .join(Like, Like.object_id == Object.id)
+            .filter(Like.subject_id == user.id)
+            .add_entity(Like)))
 
     # return user_likes_paged.dump(as_page(
     #     Like.query
