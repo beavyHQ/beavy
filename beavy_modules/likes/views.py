@@ -1,9 +1,9 @@
 from beavy.utils import fallbackRender, as_page, get_or_create, api_only
 from flask.ext.security import login_required, current_user
+from sqlalchemy.orm import contains_eager, aliased
 from beavy.blueprints import (users as users_bp,
                               obj as objects_bp,
                               account as account_bp)
-from sqlalchemy.orm import subqueryload
 
 from beavy.models.object import Object
 from .models import Like
@@ -13,12 +13,21 @@ from beavy.app import db
 
 
 def _load_likes(user):
-    return user_likes_paged.dump(as_page(
-        Like.query
-            .filter(Like.subject_id == user.id)
-            .filter_visible(Like.object_id, Object.id)
-            .options(subqueryload(Like.object)),
-        error_out=False))
+    cur_like = aliased(Like)
+    return as_page(Object.query
+                         .by_capability(Object.Capabilities.listed,
+                                        Object.Capabilities.listed_for_activity)
+                         .with_my_activities()
+                         .join(Like, Like.object_id == Object.id)
+                         .filter(Like.subject_id == user.id)
+                         .add_entity(Like))
+
+    # return user_likes_paged.dump(as_page(
+    #     Like.query
+    #         .filter(Like.subject_id == user.id)
+    #         .filter_visible(Like.object_id, Object.id)
+    #         .join(Like.object),
+    #     error_out=False))
 
 
 @users_bp.route("/<user:user>/likes/")
