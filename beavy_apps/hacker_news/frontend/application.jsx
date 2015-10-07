@@ -8,6 +8,9 @@ import { Link } from 'react-router';
 
 import { getExtensions } from "config/extensions";
 import styles from "./styles/hn_styles.scss";
+import { setupViews } from './setup';
+
+setupViews();
 
 // overwrite behaviour of the logo styles
 Object.assign(MainMenuStyles, {logo: styles.logo, title: styles.title})
@@ -23,7 +26,9 @@ export default class HackerNewsApplication extends React.Component {
                     logo='http://svgporn.com/logos/ycombinator.svg'
                     navigationTools={<UserMenuWidget />}
                   >
-                    | <Link to={make_url.account("comments/")}>threads</Link> |
+                    <Link to={make_url.account("comments/")}>threads</Link>
+                   | <Link to="/submit/">submit</Link>
+
                   </MainMenu>
                   {this.props.children}
                 </div>;
