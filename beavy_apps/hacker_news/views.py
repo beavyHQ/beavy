@@ -6,7 +6,7 @@ from .blueprint import hn_bp
 from .models import Topic, Link
 
 
-@hn_bp.route("/submit", methods=["GET", "POST"])
+@hn_bp.route("/submit/", methods=["GET", "POST"])
 @fallbackRender('hacker_news/submit.html')
 @login_required
 def submit_story():

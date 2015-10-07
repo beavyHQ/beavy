@@ -41,6 +41,7 @@
     "react-router": "^1.0.0-rc1",
     "redux": "^3.0.2",
     "redux-devtools": "^2.1.5",
+    "redux-form": "^2.1.0",
     "redux-logger": "^1.0.6",
     "redux-router": "^1.0.0-beta3",
     "redux-thunk": "^0.1.0",
