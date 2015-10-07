@@ -7,14 +7,14 @@ var StatsPlugin = require("stats-webpack-plugin");
 var loadersByExtension = require("./helpers/loadersByExtension");
 var appConfig = yaml.safeLoad(fs.readFileSync('config.yml'));
 var ROOT = path.join(__dirname, "..");
-var JS_ROOT = path.join(ROOT, "jsbeavy");
+var JS_ROOT = path.join(ROOT, "beavy", "jsbeavy");
 
 
 module.exports = function(options) {
 	var entry = {
 		// main: options.prerender ? "./config/mainPrerenderer" : "./config/mainApp"
 
-    'main': ['./jsbeavy/main.jsx'],
+    'main': ['./beavy/jsbeavy/main.jsx'],
     // 'vendor': ['react']
 		// second: options.prerender ? "./config/secondPrerenderer" : "./config/secondApp"
 	};

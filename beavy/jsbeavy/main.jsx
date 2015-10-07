@@ -14,16 +14,17 @@ import modules from 'config/modules';
 import Root from 'config/root';
 
 // tie it all together
-const Application = require("module-imports?ext=/frontend/application.jsx&path=./beavy_apps/!grep?APP!yaml!../config.yml").default;
+const Application = require("module-imports?ext=/frontend/application.jsx&path=./beavy_apps/!grep?APP!yaml!../../config.yml").default;
 
 const target = document.getElementById('content');
 
 
-if (!__DEBUG__)
+if (!__DEBUG__){
   if (parent !== window) {
     parent.location.reload();
     throw "iFrame inclusion not allowed!"
   }
+}
 
 
 import configureStore from 'stores';

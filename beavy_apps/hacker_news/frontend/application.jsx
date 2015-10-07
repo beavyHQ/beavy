@@ -14,7 +14,7 @@ Object.assign(MainMenuStyles, {logo: styles.logo, title: styles.title})
 
 // insertExtension("MainNavigationTools", 0, () => <UserMenuWidget />)
 
-export default class Application extends React.Component {
+export default class HackerNewsApplication extends React.Component {
     render() {
         return <div className={styles.hackerNews}>
                   <UserModal />

@@ -10,4 +10,4 @@ export default Object.assign({
   'HOME_URL': '/hello',
   'ACCOUNT_URL': '/account',
   'SECURITY_REGISTERABLE': true
-}, require("json!grep?MODULES,HOME_URL,NAME,ACCOUNT_URL,SECURITY_REGISTERABLE,FRONTEND,USERS_URL!yaml!../../config.yml"))
+}, require("json!grep?MODULES,HOME_URL,NAME,ACCOUNT_URL,SECURITY_REGISTERABLE,FRONTEND,USERS_URL!yaml!../../../config.yml"))
