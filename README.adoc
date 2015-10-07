@@ -2,13 +2,13 @@
 
 image:https://badges.gitter.im/Join%20Chat.svg[link="https://gitter.im/beavyHQ/beavy?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"]
 
-**Main Repo**: https://github.com/ligthyear/beavy
+**Main Repo**: https://github.com/beavyHQ/beavy
 
 Beavy is a modular, multi-purpose social community building framework. This is its main source development repository.
 
-Please see the link:https://ligthyear.gitbooks.io/beavy-developer-documentation/content/[Development Documentation] to learn more about the project.
+Please see the link:http://beavy.xyz/[Website] and the link:https://beavyhq.gitbooks.io/beavy-developer-documentation/content/[Development Documentation] to learn more about the project.
 
-image:https://raw.githubusercontent.com/ligthyear/beavy/master/docs/logo/wombat.svg[The wombat is beavy's mascot]
+image:http://beavy.xyz/logos/wombat.svg[The wombat is beavy's mascot]
 
 == License
 This Project is licensed under the Mozilla Public License, v. 2.0. You can find the full license text in the LICENSE file in the main directory or at http://mozilla.org/MPL/2.0/ .
