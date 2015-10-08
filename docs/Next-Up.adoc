@@ -1,0 +1,43 @@
+= What's up next in Development for Beavy?
+
+This files describes the focus of the core on development. Please see the link:./Changelog.adoc[Changelog] to learn about previous releases. At this current phase, the project is under fast development and doesn't have any particular release cycle yet.
+
+Development is separated in three broad classes:
+
+ - immediate: when these things are done, the next mile stone is considered reached. Once done, that entire part will be move into the changelog.
+ - next up: not part of this mile stone but most likely the one after. Once a new milestone is reached, this becomes the new "immediate" and new empty "next up" will be created.
+ - back log: everything that we want to see happening but don't have any focus on for now or the next cycle. Stuff starts by beeing added here! During a cycle might be added to 'next up' by the core team and removed here. If you want to do any of the things listed here, let the core team know and they'll add you as the contributing party for it.
+
+
+The Development believes the following stages are to be met to proof its viability:
+
+* Stage 1: Have a Hacker News clone – the hello world of social networks
+* Stage 2: Run our own community on beavy – Self-Compiled, Self-Hosted and Eat our own Dog-Food
+* Stage 3: Profit.
+
+
+
+== Immediate
+
+*Focus*: Finish Stage 1: Hacker News clone.
+
+ - Lists of 'latests', 'top', etc.
+ - modules:
+  - upvotes
+  - points
+  - fully featured comments
+
+== Next Up
+
+*Focus*: More Test Cases, Develop by Implemeting. Candidates are: TechTalks, Kanon, Twitter, Dreamreaders, Bountygram, Discourse/Flarum.
+
+
+== Back Log
+
+ - Fully mobile-friendly UI
+ - iOS App
+ - email digests
+ - notifications 
+ - Android App
+ - full markdown rendering support
+ - automatic extension of links/link expansion

@@ -29,3 +29,6 @@
 .. link:docs/Development-Module-Development.adoc[New Modules]
 
 . link:docs/Contributing.adoc[Contributing]
+.. link:docs/Contributors.adoc[Contributors]
+.. link:docs/Next-Up.adoc[NextUp.adoc]
+.. link:docs/Changelog.adoc[Changelog]
