@@ -63,14 +63,15 @@ export function format_jsonapi_result(input, key){
 
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
-function callApi(endpoint, key) {
-  return fetch(endpoint, {
+function callApi(endpoint, key, params) {
+
+  return fetch(endpoint, Object.assign({
       credentials: 'same-origin', // keep the cookies for the session!
       headers: { // we always ask for json
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       }
-    })
+    }, params || {}))
     .then(response =>
       response.json().then(json => ({ json, response }))
     ).then(({ json, response }) => {
@@ -95,7 +96,7 @@ export default store => next => action => {
   }
 
   let { endpoint } = callAPI;
-  const { key, types } = callAPI;
+  const { key, types, params } = callAPI;
 
   if (typeof endpoint === 'function') {
     endpoint = endpoint(store.getState());
@@ -123,7 +124,7 @@ export default store => next => action => {
   const [requestType, successType, failureType] = types;
   next(actionWith({ type: requestType }));
 
-  return callApi(endpoint, key).then(
+  return callApi(endpoint, key, params).then(
     response => next(actionWith({
       response,
       type: successType
