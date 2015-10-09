@@ -1,5 +1,6 @@
 import { compose, createStore, applyMiddleware, combineReducers } from 'redux';
 import thunkMiddleware from 'redux-thunk';
+import { reducer as formReducer } from 'redux-form';
 import apiMiddleware from '../middleware/api';
 import { getNamedExtensions, getExtensions, addManyExtensions, addExtension, addNamedExtension } from 'config/extensions';
 import createHistory from 'history/lib/createBrowserHistory';
@@ -13,6 +14,8 @@ addManyExtensions("storeMiddlewares", [thunkMiddleware, apiMiddleware]);
 
 addNamedExtension("reducers", "router", routerStateReducer)
 addNamedExtension("reducers", "CURRENT_USER", (x=null) => x)
+addNamedExtension("reducers", "form", formReducer)
+
 
 export default function configureStore (initialState) {
   let middlewares = getExtensions("storeMiddlewares");
