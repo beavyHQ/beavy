@@ -12,6 +12,7 @@ class Topic(Object, RenderedTextMixin):
     }
 
     title = PayloadProperty('title')
+    text = PayloadProperty('text')
 
     CAPABILITIES = [Object.Capabilities.listed, Object.Capabilities.searchable]
 

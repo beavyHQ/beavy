@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import { connect } from 'react-redux';
 import {connectReduxForm} from 'redux-form';
+import { submitStory } from '../actions';
 
 export class SubmitView extends React.Component {
   static propTypes = {
@@ -10,14 +11,15 @@ export class SubmitView extends React.Component {
   }
 
   saveForm(formData){
-    console.log(formData);
+    console.log(formData, arguments);
+    this.props.dispatch(submitStory(formData));
   }
 
   render () {
     const { fields: {title, url, text},
             handleSubmit, dispatch } = this.props;
     return (
-      <form onSubmit={handleSubmit(this.saveForm)}>
+      <form onSubmit={handleSubmit(this.saveForm.bind(this))}>
         <fieldset>
           <label for="title">title</label>
           <input required id="title" type="text" name="title" {...title} />
@@ -47,14 +49,13 @@ export default connectReduxForm({
                                         // where your form's state will be mounted
   fields: ['title', 'url', 'text'], // a list of all your fields in your form
   validate: (data) => {
-  const errors = {};
+    const errors = {};
     if(!data.title || !data.title.trim()) {
       errors.title = 'You need to pass at least the title';
     }
     if(!data.url && !data.text) {
       errors.url = 'Please pass either a url or a text.';
     }
-    console.log(errors);
     return errors;
   }
 })(SubmitView);
