@@ -33,11 +33,10 @@ class ObjectQuery(AccessQuery):
 
         from .activity import Activity
 
-        my_activities = aliased(Activity)
+        my_activities = aliased(Activity.query.filter(Activity.subject_id == current_user.id
+                  ).cte(name="my_activities"), "my_activities")
 
-        return self.outerjoin(my_activities
-                  ).filter(my_activities.subject_id == current_user.id
-                  ).options(contains_eager(Object.my_activities,
+        return self.outerjoin(my_activities).options(contains_eager(Object.my_activities,
                                            alias=my_activities))
 
 
