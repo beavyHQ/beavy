@@ -1,0 +1,1 @@
+from .latest import latest

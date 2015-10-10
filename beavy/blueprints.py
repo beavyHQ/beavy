@@ -4,6 +4,7 @@ user_bp = Blueprint('users', 'beavy.users')
 account_bp = Blueprint('account', 'beavy.account')
 object_bp = Blueprint('object', 'beavy.object')
 activity_bp = Blueprint('activity', 'beavy.activity')
+lists_bp = Blueprint('lists', 'beavy.lists')
 
 # Deprecated – Legacy support
 users = user_bp
@@ -22,3 +23,5 @@ def setup(app):
                            url_prefix=app.config.get('OBJECT_URL', '/o'))
     app.register_blueprint(activity_bp,
                            url_prefix=app.config.get('ACTIVITY_URL', '/a'))
+    app.register_blueprint(lists_bp,
+                           url_prefix='/')
