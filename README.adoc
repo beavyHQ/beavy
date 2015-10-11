@@ -1,6 +1,6 @@
 = Beavy
 
-image:https://badges.gitter.im/Join%20Chat.svg[link="https://gitter.im/beavyHQ/beavy?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"] image::https://codeclimate.com/github/beavyHQ/beavy/badges/gpa.svg[link="https://codeclimate.com/github/beavyHQ/beavy"]
+image:https://badges.gitter.im/Join%20Chat.svg[link="https://gitter.im/beavyHQ/beavy?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"] image:https://codeclimate.com/github/beavyHQ/beavy/badges/gpa.svg[link="https://codeclimate.com/github/beavyHQ/beavy"]
 
 **Main Repo**: https://github.com/beavyHQ/beavy
 
