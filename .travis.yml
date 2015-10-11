@@ -14,7 +14,7 @@ node_js:
   - "4"
   - "0.12"
 python:
-  - "3.5"
+  - "3.4"
 
 addons:
     code_climate:
