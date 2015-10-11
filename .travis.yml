@@ -1,0 +1,21 @@
+sudo: false
+
+language: python
+
+cache:
+    directories:
+        - $HOME/.cache/pip
+
+before_install:
+  - pip install -r requirements.txt
+  - npm install
+  - npm run build
+node_js:
+  - "4"
+  - "0.12"
+python:
+  - "3.5"
+
+addons:
+    code_climate:
+        repo_token: 267de20fcb1419ff02cfe22e5009111ffc86347f398762cbb700ad56f8279ca6
