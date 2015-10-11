@@ -5,9 +5,12 @@ languages:
 engines:
   eslint:
     enabled: true
+  scss-lint:
+    enabled: true
 ratings:
   paths:
   - "**.py"
+  - "**.scss"
   - "**.js"
   - "**.jsx"
 exclude_paths: []
