@@ -11,7 +11,7 @@ before_install:
   - pip install -r requirements.txt
   - npm config set python /usr/bin/python2.7
   - npm install
-  - npm run build
+  - bash tests/before_install.sh
 node_js:
   - "4"
   - "0.12"
@@ -20,6 +20,7 @@ python:
 
 addons:
   ssh_known_hosts: github.com
+  postgresql: "9.4"
   code_climate:
     repo_token: 267de20fcb1419ff02cfe22e5009111ffc86347f398762cbb700ad56f8279ca6
 
