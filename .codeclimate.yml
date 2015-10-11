@@ -7,6 +7,7 @@ engines:
     enabled: true
 ratings:
   paths:
+  - "**.py"
   - "**.js"
   - "**.jsx"
 exclude_paths: []
