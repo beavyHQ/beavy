@@ -1,0 +1,12 @@
+---
+languages:
+   JavaScript: true
+   Python: true
+engines:
+  eslint:
+    enabled: true
+ratings:
+  paths:
+  - "**.js"
+  - "**.jsx"
+exclude_paths: []
