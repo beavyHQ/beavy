@@ -8,6 +8,7 @@ cache:
 
 before_install:
   - pip install -r requirements.txt
+  - npm config set python /usr/bin/python2.7
   - npm install
   - npm run build
 node_js:
