@@ -1,0 +1,10 @@
+NAME: "Hacker News Test"
+
+MODULES:
+ - comments
+ - likes
+ # - private_messaging
+
+APP: 'hacker_news'
+
+SQLALCHEMY_DATABASE_URI: "postgresql://localhost/test_hacker_news"

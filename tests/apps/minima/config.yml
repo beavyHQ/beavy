@@ -1,0 +1,10 @@
+NAME: "Minima Test"
+
+MODULES:
+ - comments
+ - likes
+ - private_messaging
+
+APP: 'minima'
+
+SQLALCHEMY_DATABASE_URI: "postgresql://localhost/test_minima"
