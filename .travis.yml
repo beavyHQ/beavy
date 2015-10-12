@@ -14,20 +14,38 @@ env:
   matrix:
     - APP=minima
     - APP=hacker_news
+    # --------------------- HERE -------------------
+    # ADD YOUR APP HERE (and outcomments some others)
+    # to make your travis run against your App tests,
+    # like so:
+    # - APP=my_app
+    # --------------------- HERE -------------------
 
 before_install:
+  # NPM-gyp weirdly needs python2.7 (no Python3 support)
+  # so set that before we are running the installs
   - npm config set python /usr/bin/python2.7
   - npm install
 
 before_script:
+  # setup test database
   - psql -c 'create database "beavy-test";' -U postgres
+  # copy our test configuration to main
   - cp -f "beavy_apps/$APP/tests/config.yml" config.yml
+  # building the javascript & js
   - npm run build
+  # and migrate the database – this needs the manifest.json
+  # and can only happen after the npm build!
   - python manager.py db upgrade heads
 
 
 script:
+  # we are starting with running all unit tests
+  - py.test beavy beavy_modules beavy_apps
+
+  # starting up test-server
   - flask --app=main run &
+  # and running behaviour tests against it
   - python manager.py behave_tests
 
 
