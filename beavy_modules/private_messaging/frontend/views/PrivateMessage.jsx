@@ -4,7 +4,7 @@ import { loadPMs } from '../actions';
 import { make_url, getStoreEntity } from 'utils';
 import { Link } from 'react-router';
 import { PRIVATE_MESSAGES } from '../reducers';
-import LoadEditor from 'Components/Editor';
+import LoadEditor from 'components/Editor';
 // import Ago from 'react-ago-component';
 import map from 'lodash/collection/map';
 import InfiniteList from 'components/InfiniteList';
