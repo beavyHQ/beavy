@@ -4,14 +4,14 @@
 from beavy.utils import fallbackRender, as_page
 from beavy.blueprints import account as account_bp
 from beavy.blueprints import users as users_bp
-from flask_security import login_required, current_user
+from flask.ext.security import login_required, current_user
 
 from .models import CommentObject
 from .schemas import comment_paged
 
 
 def _load_threads(user):
-    query = CommentObject.query.filter(CommentObject.owner_id == current_user.id)
+    query = CommentObject.query.filter(CommentObject.owner_id == user.id)
             # .filter_visible(CommentObject.)
     return comment_paged.dump(as_page(query, error_out=False)).data
 
