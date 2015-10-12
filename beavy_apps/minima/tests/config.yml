@@ -7,4 +7,4 @@ MODULES:
 
 APP: 'minima'
 
-SQLALCHEMY_DATABASE_URI: "postgresql://localhost/test_beavy_minima"
+HOME_URL: '/account/comments/'
