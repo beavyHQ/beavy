@@ -32,6 +32,7 @@
     "lodash": "^3.10.1",
     "module-imports": "git+https://github.com/ligthyear/webpack-module-imports.git",
     "node-sass": "^3.3.2",
+    "prosemirror": "git+https://github.com/prosemirror/prosemirror.git",
     "react": "^0.13.3",
     "react-dom": "^0.1.0",
     "react-infinite": "^0.4.1",
