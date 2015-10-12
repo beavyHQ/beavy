@@ -2,21 +2,27 @@ sudo: false
 
 language: python
 
-
-cache:
-    directories:
-        - $HOME/.cache/pip
-
-before_install:
-  - pip install -r requirements.txt
-  - npm config set python /usr/bin/python2.7
-  - npm install
-  - bash tests/before_install.sh
 node_js:
   - "4"
   - "0.12"
 python:
   - "3.5"
+
+
+before_install:
+  - npm config set python /usr/bin/python2.7
+  - npm install
+
+before_script:
+  - bash tests/setup_apps.sh
+
+script:
+  - echo "Done"
+
+
+cache:
+    directories:
+        - $HOME/.cache/pip
 
 addons:
   ssh_known_hosts: github.com
