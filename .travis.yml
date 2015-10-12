@@ -26,7 +26,7 @@ before_script:
   - npm run build
 
 script:
-  - echo "Done"
+  - python manager.py behave_tests
 
 
 cache:
