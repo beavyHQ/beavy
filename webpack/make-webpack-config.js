@@ -3,6 +3,7 @@ var fs = require("fs");
 var yaml = require('js-yaml');
 var webpack = require("webpack");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var ManifestPlugin = require("webpack-manifest-plugin");
 var StatsPlugin = require("stats-webpack-plugin");
 var loadersByExtension = require("./helpers/loadersByExtension");
 var appConfig = yaml.safeLoad(fs.readFileSync('config.yml'));
@@ -107,8 +108,10 @@ module.exports = function(options) {
 		}));
 	}
 	if(options.commonsChunk) {
-		plugins.push(new webpack.optimize.CommonsChunkPlugin("commons", "commons.js" + (options.longTermCaching && !options.prerender ? "?[chunkhash]" : "")));
+		plugins.push(new webpack.optimize.CommonsChunkPlugin("commons", "commons" + (options.longTermCaching && !options.prerender ? "-[chunkhash]" : "") + ".js"));
 	}
+
+	plugins.push(new ManifestPlugin());
 
 	Object.keys(stylesheetLoaders).forEach(function(ext) {
 		var stylesheetLoader = stylesheetLoaders[ext];
@@ -122,7 +125,7 @@ module.exports = function(options) {
 		}
 	});
 	if(options.separateStylesheet && !options.prerender) {
-		plugins.push(new ExtractTextPlugin("[name].css" + (options.longTermCaching ? "?[contenthash]" : "")));
+		plugins.push(new ExtractTextPlugin("[name]" + (options.longTermCaching ? "-[contenthash]" : "") + ".css"));
 	}
 	if(options.minimize && !options.prerender) {
 		plugins.push(

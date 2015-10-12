@@ -1,4 +1,4 @@
-from flask import Flask, session, url_for, redirect
+from flask import Flask, session, url_for, redirect, json
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.script import Manager
 from flask.ext.marshmallow import Marshmallow
@@ -21,10 +21,12 @@ import os
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
+STATIC_FOLDER = os.path.join(BASE_DIR, '..', 'build', 'public')
 
 # The app
-app = Flask(__name__)
+app = Flask(__name__,
+            static_url_path='/assets',
+            static_folder=STATIC_FOLDER)
 
 
 # --------- helpers for setup ----------------------------
@@ -45,6 +47,20 @@ def make_env(app):
             for name, values in app.config.get("SOCIAL_LOGINS").items()])
 
     return env
+
+
+def setup_statics(app):
+    files = dict(main_js="main.js", main_css="main.css");
+    if not app.debug:
+        with open(os.path.join(STATIC_FOLDER, "manifest.json")) as r:
+            manifest = json.load(r)
+
+        files = dict([(key.replace(".", "_"), value)
+                       for (key, value) in manifest.items()])
+
+    @app.context_processor
+    def injnect_manifest():
+        return dict(static_files=files)
 
 
 def make_celery(app):
@@ -151,6 +167,9 @@ admin.add_view(AdminModelView(User, db.session,
 #  ----- finally, load all configured modules ---------
 from .setup import replaceHomeEndpoint, generate_capability_maps
 
+# set up static files loading using the manifest in production
+setup_statics(app)
+
 # and set the home endpoint
 replaceHomeEndpoint(app)
 
@@ -189,5 +208,3 @@ if app.debug:
         pprint(["{} -> {}".format(rule.rule, rule.endpoint)
                 for rule in app.url_map.iter_rules()
                 if rule.endpoint != 'static'])
-
-
