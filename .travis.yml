@@ -27,7 +27,7 @@ before_script:
 
 
 script:
-  - flask --app=main run
+  - flask --app=main run &
   - python manager.py behave_tests
 
 
