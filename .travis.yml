@@ -9,7 +9,7 @@ python:
   - "3.5"
 
 env:
-  globals:
+  global:
     - BEAVY_ENV=TEST
   matrix:
     - APP=minima
