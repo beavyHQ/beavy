@@ -1,4 +1,4 @@
-from sqlalchemy.orm.attributes import flag_modified
+from sqlalchemy.orm.attributes import flag_modified as sa_flag_modified
 
 
 class PayloadProperty(object):
@@ -8,13 +8,14 @@ class PayloadProperty(object):
         self.attribute = attribute
         self.force = force
         self.path = isinstance(path, str) and path.split('.') or path
+        self.flag_modified = sa_flag_modified
 
     def _findBase(self, obj):
         base = getattr(obj, self.attribute)
         if base is None and self.force:
             base = {}
             setattr(obj, self.attribute, base)
-            flag_modified(obj, self.attribute)
+            self.flag_modified(obj, self.attribute)
 
         items = self.path[:]
         while items:
@@ -29,7 +30,7 @@ class PayloadProperty(object):
                     base[cur] = {}
                     base = base[cur]
 
-                flag_modified(obj, self.attribute)
+                self.flag_modified(obj, self.attribute)
                 break
 
         return base
@@ -45,7 +46,7 @@ class PayloadProperty(object):
 
     def __set__(self, obj, value):
         self._findBase(obj)[self.key] = value
-        flag_modified(obj, self.attribute)
+        self.flag_modified(obj, self.attribute)
 
     def __delete__(self, obj):
         raise NotImplemented()
