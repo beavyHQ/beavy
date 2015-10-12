@@ -50,13 +50,13 @@ def make_env(app):
 
 
 def setup_statics(app):
-    files = dict(main_js="main.js", main_css="main.css");
+    files = dict(main_js="main.js", main_css="main.css")
     if not app.debug:
         with open(os.path.join(STATIC_FOLDER, "manifest.json")) as r:
             manifest = json.load(r)
 
         files = dict([(key.replace(".", "_"), value)
-                       for (key, value) in manifest.items()])
+                     for (key, value) in manifest.items()])
 
     @app.context_processor
     def injnect_manifest():
