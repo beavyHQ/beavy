@@ -1,5 +1,6 @@
-import os
 from flask.ext import migrate as ext_migrate
+
+import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -27,6 +28,17 @@ def patched_migrate(fn):
 ext_migrate._get_config = patched_migrate(ext_migrate._get_config)
 
 from beavy.app import app, manager
+
+
+from behave.__main__ import main as behave_main
+
+
+@manager.command
+def behave_tests(frontend=os.environ.get("APP", "minima")):
+    """
+    Run behave tests against a running server
+    """
+    behave_main(["tests/apps/{}/features".format(frontend)])
 
 
 if __name__ == '__main__':
