@@ -9,15 +9,18 @@ python:
   - "3.5"
 
 env:
-  - APP="minima"
-  - APP="hacker_news"
+  globals:
+    - BEAVY_ENV=TEST
+  matrix:
+    - APP=minima
+    - APP=hacker_news
 
 before_install:
   - npm config set python /usr/bin/python2.7
   - npm install
 
 before_script:
-  - psql -c "create database test_beavy_$APP;" -U postgres
+  - psql -c 'create database "beavy-test";' -U postgres
   - cp -f "tests/apps/$APP/config.yml" config.yml
   - python manager.py db upgrade heads
   - npm run build
@@ -29,6 +32,9 @@ script:
 cache:
     directories:
         - $HOME/.cache/pip
+
+services:
+  - redis-server
 
 addons:
   ssh_known_hosts: github.com
