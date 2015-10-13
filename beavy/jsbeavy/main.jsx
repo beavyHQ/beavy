@@ -28,7 +28,7 @@ if (!__DEBUG__){
 
 
 import configureStore from 'stores';
-import { format_jsonapi_result } from 'middleware/api';
+import format_jsonapi_result from 'middleware/format_jsonapi_result';
 let initData = {CURRENT_USER: null}
 
 if (window.PRELOAD && window.PRELOAD.PAYLOAD) initData = format_jsonapi_result(window.PRELOAD.PAYLOAD.data, window.PRELOAD.PAYLOAD.key)
