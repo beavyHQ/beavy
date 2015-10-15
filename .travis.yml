@@ -3,20 +3,15 @@ sudo: false
 language: python
 
 python:
-  - "3.5"
+  - '3.5'
 
 env:
   global:
     - BEAVY_ENV=TEST
+    - secure: 42qbN2sBRUwB8q99XdMJDsr1FelB3fUA8wRjRbH7ZGKRDH6CKHALno/RV2QIzpbJTlwi/6ax5MV3FQTEPN5p726Zj1JiwOun3RW2kRdqCm/xNGyh4B5FxJxyzq0hSIFdJCXihJd1Frm2JltHMkRCadl6VtlmdY9L7N1SRHQoJs0X4wU354LJFpDu2trBZKESUWee73VgdynDwlT6nehwcj42TxyXt9lr3moZUHLIfXvnyMFL7tp1CDMdbAkD4m1hq1UG1jxHQRbHfzTEtem+8oVAi8I3Hrpds4/lnIjP6/LJi8bR3c9rKKykKe1EKZnhYUf/lwD00jdR4g8c1tR3F/kTByFjxGFRfpRUzJXi6dD8Q2JOdu8zVAuIgnZg2Gh+c5z+V3/L27ax1x4sYyiXbi/lQpbE6XSkn4wLWi9Y1TK1kl1N92NkVipLwHz535tcWLwQ9KwzpVUBznGcYw5XQO3sbVcSF4PiEpiET+MjwV5o5MkOfD67FATZo9GlSwKpmSoSsd2JgpjzieRNt+VDyC4liDWco2HA3191DSO2f/q91w3bpwlGRCKP/X78npeIVGCMOzWSnTmPtOLZd3MjC/g/HFb90SG6cjAC1nTkR8RHTAXYBSnUZgr1Gl/8A1I86LSDKhXGoBGHjJTFt0ViAX+Ho9Yn0LCrtrN7SeiuSEs=
   matrix:
     - APP=minima
     - APP=hacker_news
-    # --------------------- HERE -------------------
-    # ADD YOUR APP HERE (and outcomments some others)
-    # to make your travis run against your App tests,
-    # like so:
-    # - APP=my_app
-    # --------------------- HERE -------------------
 
 before_install:
   # use NVM to install latest stable NODE – the predelivered
@@ -29,14 +24,9 @@ before_install:
   - npm install
 
 before_script:
-  # setup test database
   - psql -c 'create database "beavy-test";' -U postgres
-  # copy our test configuration to main
   - cp -f "beavy_apps/$APP/tests/config.yml" config.yml
-  # building the javascript & js
   - npm run build
-  # and migrate the database – this needs the manifest.json
-  # and can only happen after the npm build!
   - python manager.py db upgrade heads
 
 
@@ -45,23 +35,24 @@ script:
   - py.test beavy beavy_modules beavy_apps
   # lets run jstests
   - npm test
-
   # starting up test-server
   - flask --app=main run &
   # and running behaviour tests against it
   - python manager.py behave_tests
 
+after_success:
+  - python scripts/travis_after_all.py && python scripts/auto_pr.py || echo "skipped"
 
 cache:
-    directories:
-        - $HOME/.cache/pip
+  directories:
+    - $HOME/.cache/pip
 
 services:
   - redis-server
 
 addons:
   ssh_known_hosts: github.com
-  postgresql: "9.4"
+  postgresql: '9.4'
   code_climate:
     repo_token: 267de20fcb1419ff02cfe22e5009111ffc86347f398762cbb700ad56f8279ca6
 
@@ -69,6 +60,6 @@ notifications:
   webhooks:
     urls:
       - https://webhooks.gitter.im/e/e72c826c6364f1f79f02
-    on_success: change  # options: [always|never|change] default: always
-    on_failure: always  # options: [always|never|change] default: always
-    on_start: never     # options: [always|never|change] default: always
+    on_success: change
+    on_failure: always
+    on_start: never
