@@ -2,9 +2,6 @@ sudo: false
 
 language: python
 
-node_js:
-  - "4"
-  - "0.12"
 python:
   - "3.5"
 
@@ -22,9 +19,13 @@ env:
     # --------------------- HERE -------------------
 
 before_install:
+  # use NVM to install latest stable NODE – the predelivered
+  # one isn't able to build our es6 modules
+  - nvm install stable
   # NPM-gyp weirdly needs python2.7 (no Python3 support)
   # so set that before we are running the installs
   - npm config set python /usr/bin/python2.7
+  # install all node dependencies
   - npm install
 
 before_script:
@@ -42,6 +43,8 @@ before_script:
 script:
   # we are starting with running all unit tests
   - py.test beavy beavy_modules beavy_apps
+  # lets run jstests
+  - npm test
 
   # starting up test-server
   - flask --app=main run &

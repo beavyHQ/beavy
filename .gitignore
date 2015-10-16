@@ -7,3 +7,4 @@ dev_config.yml
 build
 config.yml
 .cache
+coverage/

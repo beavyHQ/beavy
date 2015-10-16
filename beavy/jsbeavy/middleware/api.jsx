@@ -1,63 +1,6 @@
-import merge from "lodash/object/merge";
-import forEach from "lodash/collection/forEach";
-import map from "lodash/collection/map";
 import 'isomorphic-fetch';
-
 import entites from 'reducers/entities';
-
-// loosely based on the awesome redux real-world example from
-// https://github.com/rackt/redux/blob/master/examples/real-world/middleware/api.js
-
-export function format_jsonapi_result(input, key){
-  const entitiesMap = {},
-        result = {},
-        output = {
-          entities: entitiesMap,
-        },
-        addToMap = (x) =>  {
-          if(!entitiesMap[x.type]) entitiesMap[x.type] = {};
-          entitiesMap[x.type][x.id] = x;
-        },
-        addAttributesToMap = (x) => {
-          if (x.attributes){
-            addToMap(merge({type: x.type, id: x.id},
-                            x.attributes, x.relationships))
-          }
-        },
-        extract_relationships = (data) => {
-          forEach(data.relationships || {}, (n, key) => {
-            if (Array.isArray(n.data)){
-              forEach(n.data, addAttributesToMap)
-            } else {
-              addAttributesToMap(n.data)
-            }
-          });
-        };
-
-  if (input.included){
-    forEach(input.included, addToMap);
-  }
-
-  if (input.meta){ result.meta = input.meta };
-  if (input.links){ result.links = input.links };
-
-  if (input.data) {
-    if (Array.isArray(input.data)) {
-      result.data = [];
-      forEach(input.data, x => {
-        result.data.push({type: x.type, id: x.id});
-        extract_relationships(x);
-        addAttributesToMap(x);
-      });
-    } else {
-      result.data = input.data;
-      addAttributesToMap(input.data);
-      extract_relationships(input.data);
-    }
-  }
-  output[key] = result;
-  return output;
-}
+import format_jsonapi_result from "./format_jsonapi_result";
 
 
 
