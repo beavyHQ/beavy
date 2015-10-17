@@ -22,13 +22,15 @@
 .. link:beavy_apps/hacker_news/README.adoc[Hacker News]
 .. link:beavy_apps/twitter/README.adoc[Twitter]
 
-. link:docs/Development.adoc[Development]
+. link:docs/Development.adoc[Developing your App]
 .. link:docs/Development-Setup.adoc[Setup]
 .. link:docs/Development-Running.adoc[Running]
 .. link:docs/Development-Database-Migrations.adoc[Database Migrations]
 .. link:docs/Development-Module-Development.adoc[New Modules]
+.. link:docs/Development-Testing[Testing your Development]
 
 . link:docs/Contributing.adoc[Contributing]
+.. link:docs/Testing.adoc[Testing in Beavy]
 .. link:docs/Contributors.adoc[Contributors]
 .. link:docs/Next-Up.adoc[NextUp.adoc]
 .. link:docs/Changelog.adoc[Changelog]

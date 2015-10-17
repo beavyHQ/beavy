@@ -1,3 +1,13 @@
 = Developing on and with beavy
 
-Make sure you've understood and internalized the concepts, architecture and structures of beavy before you start development with or on it. Something are a little different than from what the usual development environment and to avoid problems down the line, it is fundamental to have understood those before you start developing.
+Make sure you've understood and internalized the link:Concepts.adoc[concepts], architecture and structures of beavy before you start development with or on it. Something are a little different than from what the usual development environment and to avoid problems down the line, it is fundamental to have understood those before you start developing.
+
+== Fork for the Win
+
+The recommended way to develop your app with beavy is by forking the https://github.com/beavyHQ/beavy[Main Repository], branch off of master (we suggest to prefix the branch with `app-`) and develop your own changes on that branch.
+
+== Downstream integration of upstream changes
+
+Whenever you are at state that you want to integrate upstream changes into your branch, you can now just pull master from upstream, push it into your github fork and make a pull-request to your app-branch.
+
+**Note**: If you switch the default branch of your repo to the app-branch and maintain your beavy as a public fork on github, Beavy even sends your a PR (or updates an existing one) to that branch whenever upstream master build successfully. If you have travis setup for your own up (see link:Development-Testing.adoc[Testing in Development]), the PR will even directly show you whether the upstream changes break anything for you. This allows you to merge upstream changes with just the click of a button whenever it is reasonably safe.

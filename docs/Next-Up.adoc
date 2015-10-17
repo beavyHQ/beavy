@@ -29,7 +29,8 @@ The Development believes the following stages are to be met to proof its viabili
 
 == Next Up
 
-*Focus*: More Test Cases, Develop by Implemeting. Candidates are: TechTalks, Kanon, Twitter, Dreamreaders, Bountygram, Discourse/Flarum.
+*Focus*: More Test Cases, Develop by Implementing.
+Candidates are: TechTalks, Kanon, Twitter, Dreamreaders, Bountygram, Discourse/Flarum.
 
 
 == Back Log
@@ -37,7 +38,7 @@ The Development believes the following stages are to be met to proof its viabili
  - Fully mobile-friendly UI
  - iOS App
  - email digests
- - notifications 
+ - notifications
  - Android App
  - full markdown rendering support
  - automatic extension of links/link expansion
