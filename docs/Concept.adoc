@@ -2,6 +2,7 @@
 
 Once you understood what link:./Idea.adoc[what beavy is], the question becomes on how you model and build that. As the idea document already described, the basic idea is that you _build your social community on top of beavy_. But in order to do that, you should understand some base concepts and principles beavy is build upon, as well as understand link:./Architecture.adoc[some of the technologies used].
 
+
 == Configuration is code for building
 
 As beavy is modeled under the key assumption that you are building an app for yourself (not one to necessarily be distributed to other), configuration considered part of the build process – and doesn't dynamically change during run time. Meaning that whenver you change the `config.yaml` in the main directory _you have to restart the backend app_ and _rebuild the assets_.
@@ -28,12 +29,12 @@ The core of beavy and jsbeavy is a rather small set of basic components all othe
 
 The core also contains the basic framework and mechanismn to load modules, plug their backends together and provide basic functionality (like routing, configuration loading, blueprint management). It also ships the HTML-file, pre-load-json-loading and the jsbeavy frontend modules.
 
-But all other code, among all languages and frameworks is separated in the beavy_modules they belong to. This includes the python flask and worker code, the javascript and react frontend code, scss and css styles as well as database models and migration needed for this module to work. If something is specific to one module – no matter the language it is written in – it belongs into that module. That includes the docmentation.
+But all other code, among all languages and frameworks is separated in the beavy_modules they belong to. This includes the python flask and worker code, the javascript and react frontend code, SCSS and CSS styles as well as database models and migration needed for this module to work. If something is specific to one module – no matter the language it is written in – it belongs into that module. That includes the documentation.
 
 
 == Hook based UI
 
-In order to allow the modules to ship their UI features without having to rely on what the UI exactly looks like, everything in the frontend is shipped as link:./Architecture.adoc[React-Modules in a redux-style infrastrucutre]. While an App might directly import a specific UI component and includes somewhere explicitly, modules by themselves plug into the UI only via hooks. Hooks are essentially managed lists or directories they add themselves info (with a key-name), which either provide a function to be aplied or a component to be rendered. Any part of the UI as well as components of other modules can then query all hooks of a specific name and include the UI components. A component might still provide features to configure those further.
+In order to allow the modules to ship their UI features without having to rely on what the UI exactly looks like, everything in the frontend is shipped as link:./Architecture.adoc[React-Modules in a redux-style infrastructure]. While an App might directly import a specific UI component and includes somewhere explicitly, modules by themselves plug into the UI only via hooks. Hooks are essentially managed lists or directories they add themselves info (with a key-name), which either provide a function to be aplied or a component to be rendered. Any part of the UI as well as components of other modules can then query all hooks of a specific name and include the UI components. A component might still provide features to configure those further.
 
 As an example, this is how the MainMenu is constructred. As a general rule a hook may only be included by one component and use the same parameters for all components included, to have a predictable behaviour of the surroundings. A module can rely on the behaviour of the hook to not change. Should that be the case a new name for the hook should be used instead.
 
@@ -44,3 +45,11 @@ As a result one or many modules may provide feature for more hooks than an UI ne
 
 While the frontend is implemented using React in a Redux-Style, the backend provides all it's data in a link:http://jsonapi.org[JSON-API.org] compliant structured API. All URLs a user can surf to with their browser, provides both an HTML-representation (with preloading) and an JSON-Style  when asked for it (you can try that by just adding '?json=1', it detects Ajax-Request and serves JSON if the Content-Header is detected).
 
+
+== Git-Fork Based Implementation Workflow
+
+Beavy, as so many other web apps, is built in a link:https://en.wikipedia.org/wiki/Continuous_integration[continuous integration] fashion and app implementations based on beavy are expected to have a similar development flow to integrate latest changes. This means that beavy itself doesn't rely on versioning or release cycles but the master branch on the upstream repo is considered to always be clean – learn more about what that means in the link:Contributing.adoc[Contributing] docs.
+
+In order to allow quick and easy integration of latest upstream beavy changes into your implementation, unlike in classic frameworks or libraries, to develop with beavy, you are expected to maintain your own git fork and commit to that when developing your app. Thus allowing you to facilitate git in all its awesomeness when integrating upstream changes.
+
+Beavy encourages that you fork this project, branch from master and start developing your app in that branch. If you then switch the github default branch of that fork to your new branch, beavy will even send you PRs automatically when master changes (and builds successfully) allowing you to integrate all upstream changes with just a click. Learn more about that in the link:Development.adoc[Development] docs.

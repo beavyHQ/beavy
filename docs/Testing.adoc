@@ -1,0 +1,77 @@
+= Testing in Beavy
+
+Whether you want to do test-driven development or not, is up to you. Beavy itself encourages the usage of automatic (useful) tests. Trivial tests are generally considered useless. If a code change makes a previously trivial part, more complex, however, tests which make sure the new functionality works as expected while the old one is still in tact, are very much appreciated.
+
+*Note*: Tests is important, especially to hold each and everyone of us accountable to not break beavy for any developer or user down stream. Thus a breaking build is considered unacceptable and no pull request (PR) should ever be merged until all tests pass. Further more every PR, which adds code is also expected to add tests and asking to have more tests for more complex parts of an app, are a valid request in any PR review.
+
+
+== Entry points
+Beavy comes pre-shipped with three entry points on two levels:
+
+=== py.tests
+
+Python unit tests for the backend. Mostly for specific and complex units of code in core and the modules, which are easy to break. Tests should live in the same folder as the module they are testing, suffixed with "_test.py". See `beavy/common/payload_propery` as an example case. These tests are generally considered to only test that specific module and in doubt mock external component if necessary.
+
+To run these tests run the following command from within your `virtualenv`:
+
+```
+$ py.test beavy beavy_modules beavy_apps
+```
+
+=== Jest
+
+Javascript/React/JSX unit testing with a similar scope as py.tests provides for the backend, these focus on the JS/JSX components and modules. Jest-Tests are grouped inside `__tests__` subfolder of the main entry point for that component and are suffixed with "_test.jsx". One example would be `jsbeavy/__tests__/json_api_formatter_test.jsx` which tests the `jsbeavy/middleware/format_jsonapi_results.jsx`.
+
+The framework used is jest, which automagically mocks everything in question (making development of tests easier). Unfortunately this doesn't play too well with the ES2015 `import ... from `-syntax, so be sure to import the modules using the `require` command like this:
+
+```Javascript
+//  FIXME: IMPORT DOESN'T WORK WITH JEST MOCKING PROPERLY
+// import format_jsonapi_result from '../middleware/format_jsonapi_result';
+const format_jsonapi_result = require('../middleware/format_jsonapi_result');
+```
+
+
+=== Integration Testing with behav(e|ing)
+
+We are running integration test against all officially supported apps and their behaviors on a live system using the python https://pypi.python.org/pypi/behave[behave] and https://pypi.python.org/pypi/behaving[behaving] libraries. Integration tests run a browser without a windows (headless phantom.js session) and execute commands in it. This allows us to define expected behaviors and test the entirety of the system for an end user, aka that they can login when they click the login button. Running against the live test instance means we are testing the entire system from React rendering over flux and ajax down, the python backend down to the postgresql.
+
+Other than unit tests, these tests don't in particular care where something is implemented in the stack, only that is works as expected. Which is great to ensure that we are not breaking expected user behaviour with improvements anywhere in the stack.
+
+Behave allows us to formulate our expectations against the entire web-application in the easily readable http://behave.readthedocs.org/en/latest/philosophy.html#the-gherkin-language[Gherkin] format, while https://github.com/ggozad/behaving[behaving gives us a bunch of helpers for social community testing]. You can learn more about that system in the excellent http://behave.readthedocs.org/en/latest/[behave documentation].
+
+==== Behave tests structure
+
+Behave tests can be found for each app in it's subfolder tests/features. The http://behave.readthedocs.org/en/latest/tutorial.html[behave tutorial] gives a good introduction on how these folders are structured and to be used.
+
+The only remark here is that only app/module specific steps and environment setups should be defined here locally, most steps, helpers and the environment should imported from the growing library in beavy core, in `beavy/testing`.
+
+
+==== Running behave tests
+
+In order to run behave tests, you need to have the server running on `localhost:5000`. Start it with:
+
+```Bash
+$ flask --app=main run
+```
+
+And start the tests via
+```Bash
+$ python manager.py behave_tests
+```
+
+This will automatically look up the app defined in your config.yaml and run the tests supplied for the app (from `beavy_apps/$app/tests/features`).
+
+
+== Automatic builds with Travis
+
+For a PR to be accepted, all tests of Travis must pass successfully. Travis runs everything in the `BEAVY_ENV=testing`-environment. Travis automatically builds for all apps supplied (see .travis.yaml for details) separately. For each app it will:
+
+ - create a beavy-test database
+ - copy the $app/tests/config.yml into the root dir
+ - run a npm build
+ - run the database migrations
+ - run pytests
+ - run jest tests
+ - run behave tests against the running server
+
+And only after all tests have worked against all apps, the build is considered successful.
