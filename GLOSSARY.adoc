@@ -1,0 +1,96 @@
+= Glossary
+
+== Alembic
+
+link:http://alembic.readthedocs.org/en/latest/[Alembic] is an extension to link:#sqlalchemy[SQL Alchemy], which we use to manage link:#database-migration[Database Migrations].
+
+== Backend
+
+See link:#frontend[Frontend].
+
+== Celery
+
+link:http://www.celeryproject.org/[Celery] provides a distributed Task queue system to beavy. This allows beavy to schedule tasks to be done asynchronously, which are then executed on any of the assigned workers.
+
+== CI
+
+Abbreviation of link:#continuos-integration[Continous Integration]
+
+== Continuos Integration
+
+The model of link:https://en.wikipedia.org/wiki/Continuous_integration[continuos integration] is a software development practice and release system. Other than classic software releases, which are long planned and shipped all at once, in web development, where the software running is under the direct control of the developers, developers continuously develop features and push them onto the production system. Yet, many modern web development frameworks and libraries fail to deliver their work downstream in a similar style.
+
+Beavy is build with continuos integration as the expected main practice for both the upstream framework as well any downstream apps. It uses the link:#travis[Travis] build system to offer on-going, tested changes.
+
+== CSS
+
+Abbreviation of link:https://en.wikipedia.org/wiki/Cascading_Style_Sheets[Cascading Style Sheets] – the most common way of defining the styles in web development. Beavy facilitates SCSS to build its CSS for the consumption of the browser.
+
+== Database
+
+The main place an app stores its changing data. Beavy uses link:#postgres[Postgres] as its primary, permanent data storage and link:#redis[Redis] for short-term in-memory storage – for example to manage link:#celery[Celery] tasks.
+
+== Database Migration
+
+A database migration is the description of how to the schema of a database from one state to another. While a web app evolves, so does its database layout. Database migrations help to keep track of these changes and make sure all data is migrated (hence the word) into the new state successful without corruptions or losses.
+
+We use link:#alembic[Alembic] to manage changes to our link:#sql[SQL] database schema.
+
+== DOM
+
+Stands for Document Object Model, and describes the way a browser is modeling the HTML deliver from a server. The DOM is the in-memory representation of what the browser renders and can be altered through the execution of Javascript, which can directly interact with DOM-Objects.
+
+== ES2015
+
+Is the version of 2015 of ECMAScript (ES), also known as Javascript. Among others, this generation – to be fully implemented by browsers by the end of 2015, hence the name – will have `const`, a full existing `class`-type system and fat-arrow-functions. You can learn more about the new features on this great page on link:https://babeljs.io/docs/learn-es2015/[Babel].
+
+== ES6
+
+Synonym for link:#es2015[ES2015]
+
+== Flask
+
+Flask is a micro web-development framework, built in link:#python[Python]. Beavys backend is built using flask and many community extensions. You can link:http://flask.pocoo.org/[learn more about Flask here].
+
+== Frontend
+
+In general in software development the "frontend" refers to the human-facing part of the application, while the code that runs behind that is referred to as "the backend". In web development, everything that runs on the browser is usually referred to as the "frontend", even if that isn't strictly only human-facing code, while everything that runs on the server(s) is considered part of the "backend".
+
+In Beavy this manifests itself in the distinction that everything in Python belongs to the "backend", while the Javascript-Code is for the frontend.
+
+== Git
+
+link:https://en.wikipedia.org/wiki/Git_%28software%29[Git] is a distributed version control system and used to manage revisions of Beavy.
+
+
+== HTTP
+
+== Hook
+
+== hot-reloading
+
+== JSX
+
+== Node
+
+== npm
+
+== Preprocessor
+
+== Postgres
+
+== Python
+
+== React
+
+== Redux
+
+== SCSS
+
+== Server
+
+== SQL
+
+== Travis
+
+== Webpack

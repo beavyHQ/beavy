@@ -1,6 +1,6 @@
 = Database Migrations
 
-All changes to database schema are handeled with the Alembic, wrapped into [flask-migrate]. The modular concept of beavy makes that a little tricky. In order to keep the database clean on those things you want to have only, we are keeping all migrations that belong to their own modules models inside that model. Which means [alembic runs with multiple heads](http://alembic.readthedocs.org/en/latest/branches.html#running-with-multiple-bases) simultanously. That sounds complicated, but really isn't that much. It just means you need to be careful when creating migrations to place them in the right module with the right dependencies.
+All changes to database schema are handled with the Alembic, wrapped into [flask-migrate]. The modular concept of beavy makes that a little tricky. In order to keep the database clean on those things you want to have only, we are keeping all migrations that belong to their own modules models inside that model. Which means [alembic runs with multiple heads](http://alembic.readthedocs.org/en/latest/branches.html#running-with-multiple-bases) simultanously. That sounds complicated, but really isn't that much. It just means you need to be careful when creating migrations to place them in the right module with the right dependencies.
 
 == Creating new database migrations
 

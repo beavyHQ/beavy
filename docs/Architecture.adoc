@@ -12,11 +12,11 @@ Beavy is build on Flask (0.10.1) and Python 3.5+, the data is managed by a Postg
 
 == Web Client
 
-The Web Client is build upon the React Library and heavily uses their Component Concept to allow for easy reusability using ES2015 (formerly 'ES6').
+The Web Client is build upon the React Library and heavily uses their Component Concept to allow for easy reusability using ES2015.
 
 === Build System
 
-The frontend is build with ES2015 (the Version 2015 of EcmaScript) and with the JSX extension for inline dom-annotations. To build the frontend, beavy ships with a setup of webpack configuration files for development (including a hot-reloading development server) and production builds.
+The frontend is build with ES2015 and with the JSX extension for inline DOM annotations. To build the frontend, beavy ships with a setup of webpack configuration files for development (including a hot-reloading development server) and production builds.
 
 
 === Client Architecture
