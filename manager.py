@@ -38,7 +38,7 @@ def behave_tests(frontend=os.environ.get("APP", "minima")):
     """
     Run behave tests against a running server
     """
-    behave_main(["beavy_apps/{}/tests/features".format(frontend)])
+    behave_main(['--no-capture', "beavy_apps/{}/tests/features".format(frontend)])
 
 
 if __name__ == '__main__':
