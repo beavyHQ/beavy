@@ -19,7 +19,7 @@ export class SubmitView extends React.Component {
     const { fields: {title, url, text},
             handleSubmit, dispatch } = this.props;
     return (
-      <form onSubmit={handleSubmit(this.saveForm.bind(this))}>
+      <form name="submit_story_form" onSubmit={handleSubmit(this.saveForm.bind(this))}>
         <fieldset>
           <label for="title">title</label>
           <input required id="title" type="text" name="title" {...title} />
@@ -59,4 +59,3 @@ export default connectReduxForm({
     return errors;
   }
 })(SubmitView);
-
