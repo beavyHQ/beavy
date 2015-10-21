@@ -23,24 +23,6 @@ export default class Root extends React.Component {
     application    : React.PropTypes.func.isRequired,
   }
 
-  constructor () {
-    super();
-  }
-
-  renderDevTools () {
-    const { DevTools, LogMonitor, DebugPanel } = require('redux-devtools/lib/react');
-    if (__DEBUG_NW__) {
-      createDevToolsWindow(this.props.store);
-      return null;
-    } else {
-      return (
-        <DebugPanel top left bottom key='debugPanel'>
-          <DevTools store={this.props.store} monitor={LogMonitor} />
-        </DebugPanel>
-      );
-    }
-  }
-
   getRoutes(){
     const routes_by_path = {},
           remapRoutes = (routes, path='') => {
@@ -80,7 +62,33 @@ export default class Root extends React.Component {
     let debugTools = null;
 
     if (__REDUX_DEV_TOOLS__) {
-      debugTools = this.renderDevTools();
+        const { DevTools, LogMonitor, DebugPanel } = require('redux-devtools/lib/react');
+        if (__DEBUG_NW__) {
+            const win = window.open(
+              null,
+              'redux-devtools', // give it a name so it reuses the same window
+              'menubar=no,location=no,resizable=yes,scrollbars=no,status=no'
+            );
+
+            // reload in case it's reusing the same window with the old content
+            win.location.reload();
+
+            // wait a little bit for it to reload, then render
+            setTimeout(() => {
+              React.render(
+                <DebugPanel top right bottom left >
+                  <DevTools store={this.props.store} monitor={LogMonitor} />
+                </DebugPanel>
+                , win.document.body);
+            }, 10);
+          return;
+        } else {
+          debugTools = (
+            <DebugPanel top left bottom key='debugPanel'>
+              <DevTools store={this.props.store} monitor={LogMonitor} />
+            </DebugPanel>
+          );
+        }
     }
 
     setupViews(this.props.application);

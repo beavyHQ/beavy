@@ -33,27 +33,3 @@ export const make_url = function(cfg){
   }
   return urlMakers;
 }(config);
-
-
-export function createDevToolsWindow (store) {
-  if (!__REDUX_DEV_TOOLS__) return;
-
-  const { DevTools, DebugPanel, LogMonitor } = require('redux-devtools/lib/react');
-  const win = window.open(
-    null,
-    'redux-devtools', // give it a name so it reuses the same window
-    'menubar=no,location=no,resizable=yes,scrollbars=no,status=no'
-  );
-
-  // reload in case it's reusing the same window with the old content
-  win.location.reload();
-
-  // wait a little bit for it to reload, then render
-  setTimeout(() => {
-    React.render(
-      <DebugPanel top right bottom left >
-        <DevTools store={store} monitor={LogMonitor} />
-      </DebugPanel>
-      , win.document.body);
-  }, 10);
-}
