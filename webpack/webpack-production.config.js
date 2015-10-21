@@ -5,7 +5,7 @@ module.exports = require("./make-webpack-config")({
 		minimize: true,
 		devtool: null,
 		// devtool: 'eval-source-map'
-		// devtool: "source-map"
+		devtool: "source-map"
 	});
 	// require("./make-webpack-config")({
 	// 	prerender: true,

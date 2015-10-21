@@ -20,9 +20,9 @@ module.exports = function(options) {
 		// second: options.prerender ? "./config/secondPrerenderer" : "./config/secondApp"
 	};
 	var loaders = {
-		"jsx": options.hotComponents ? ["react-hot-loader", "babel-loader?stage=0"] : "babel-loader?stage=0",
+		"jsx": options.hotComponents ? ["react-hot-loader", "babel-loader?optional[]=runtime&stage=0"] : "babel-loader?optional[]=runtime&stage=0",
 		"js": {
-			loader: "babel-loader?stage=0",
+			loader: "babel-loader?optional[]=runtime&stage=0",
 			include: JS_ROOT
 		},
 		"json": "json-loader",
@@ -72,7 +72,7 @@ module.exports = function(options) {
 		publicPath: publicPath,
 		filename: "[name]" + (options.longTermCaching && !options.prerender ? "-[chunkhash]" : "") + ".js",
 		chunkFilename: (options.devServer ? "[id]" : "[name]") + (options.longTermCaching && !options.prerender ? "-[chunkhash]" : "") + ".js",
-		sourceMapFilename: "debugging/[file].map",
+		sourceMapFilename: "debugging-[file].map",
 		libraryTarget: options.prerender ? "commonjs2" : undefined,
 		pathinfo: options.debug || options.prerender
 	};
@@ -113,6 +113,9 @@ module.exports = function(options) {
 
 	plugins.push(new ManifestPlugin());
 
+  plugins.push(new webpack.ProvidePlugin({
+          'fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch'}));
+
 	Object.keys(stylesheetLoaders).forEach(function(ext) {
 		var stylesheetLoader = stylesheetLoaders[ext];
 		if(Array.isArray(stylesheetLoader)) stylesheetLoader = stylesheetLoader.join("!");
@@ -134,7 +137,7 @@ module.exports = function(options) {
 					warnings: false,
           dead_code: true,
           unused: true,
-          unsafe: true,
+          unsafe: false,
 					global_defs: {
 						DEBUG: false,
 						__DEBUG__: false,
@@ -166,7 +169,7 @@ module.exports = function(options) {
 				{
 					// special behavior for the prosemirror plugin
 				 test: /prosemirror.*js$/,
-				 loader: "babel-loader?stage=0"
+				 loader: "babel-loader?optional[]=runtime&stage=0"
 				}
 			].concat(loadersByExtension(loaders)).concat(loadersByExtension(stylesheetLoaders)).concat(additionalLoaders)
 		},
