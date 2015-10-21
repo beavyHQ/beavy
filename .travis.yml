@@ -22,9 +22,6 @@ before_install:
   - npm config set python /usr/bin/python2.7
   # install all node dependencies
   - npm install
-  # old phantomjs headless browser doesn't support react
-  - npm uninstall -g phantomjs
-  - npm install -g phantomjs2
 
 before_script:
   - psql -c 'create database "beavy-test";' -U postgres
