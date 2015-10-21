@@ -6,18 +6,19 @@ from datetime import datetime
 
 def ensure_personas():
     return {
-        'admin': mixer.blend('beavy.models.user.User',
-                             password=encrypt_password('password'),
-                             active=True,
-                             confirmed_at=datetime.now()),
-        'ben':  mixer.blend('beavy.models.user.User',
+        'malcolm': mixer.blend('beavy.models.user.User',
+                               name="Malcolm Reynolds",
+                               password=encrypt_password('password'),
+                               active=True,
+                               confirmed_at=datetime.now()),
+        'zoe':  mixer.blend('beavy.models.user.User',
+                            name="Zoe Washburne",
                             password=encrypt_password('password'),
                             active=True,
-                            confirmed_at=datetime.now(),
-                            name="ben"),
-        'anouk':  mixer.blend('beavy.models.user.User',
+                            confirmed_at=datetime.now()),
+        'inara':  mixer.blend('beavy.models.user.User',
+                              name="Inara Serra",
                               password=encrypt_password('password'),
                               active=True,
-                              confirmed_at=datetime.now(),
-                              name="anouk")
+                              confirmed_at=datetime.now())
     }
