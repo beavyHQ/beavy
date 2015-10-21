@@ -8,7 +8,7 @@ from behaving.personas.steps import *
 
 @when('I go to HOME')
 def go_to_home(context):
-    context.browser.visit('/')
+    context.browser.visit(context.base_url + '/')
 
 
 @given("I am logged in")
