@@ -8,3 +8,5 @@ build
 config.yml
 .cache
 coverage/
+ghostdriver.log
+.DS_Store
