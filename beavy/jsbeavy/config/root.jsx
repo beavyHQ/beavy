@@ -47,8 +47,14 @@ export default class Root extends React.Component {
     remapRoutes(routes);
     if (routes_by_path[HOME_URL]){
       const store = routes_by_path[HOME_URL]._store;
-      store.originalProps.path = "/";
-      store.props.path = "/";
+      if(store){
+        // already assigned
+        store.originalProps.path = "/";
+        store.props.path = "/";
+      } else {
+        // not yet handeled, let's fake it
+        routes_by_path[HOME_URL].props.path = "/"
+      }
       routes.push(<Redirect from={HOME_URL} to="/" />)
     } else {
       // routes.push(<Route component={HomeView} path="*" />);
