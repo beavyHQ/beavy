@@ -4,5 +4,6 @@ Feature: Text presence
         Given a browser
 
     Scenario: Smoketest for Home Header
-        When I go to HOME
-        Then I should see "Login" within 5 seconds
+        Given "admin" as the persona
+        And I am logged in
+        Then I should see "home" within 2 seconds
