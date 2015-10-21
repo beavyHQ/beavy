@@ -34,7 +34,7 @@ from behave.__main__ import main as behave_main
 
 
 @manager.command
-def behave_tests(frontend=os.environ.get("APP", "minima")):
+def behave_tests(frontend=os.environ.get("APP", app.config.get("APP", "minima"))):
     """
     Run behave tests against a running server
     """
