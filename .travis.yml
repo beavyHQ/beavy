@@ -38,7 +38,7 @@ script:
   # starting up test-server
   - flask --app=main run &
   # and running behaviour tests against it
-  - python manager.py behave_tests
+  - python manager.py behave
 
 after_success:
   - python scripts/travis_after_all.py && python scripts/auto_pr.py || echo "skipped"

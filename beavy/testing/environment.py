@@ -21,7 +21,7 @@ def before_all(context):
     context.default_browser = os.getenv("BEHAVE_DEFAULT_BROWSER", 'phantomjs')
 
     context.default_browser_size = (1280, 1024)
-    context.base_url = os.getenv("BEHAVE_BASE_URL", "http://localhost:5000")
+    context.base_url = os.getenv("BEHAVE_BASE_URL",  "http://localhost:{}".format(app.config.get("DEBUG", False) and "2992" or "5000"))
 
 
     # import mypackage
@@ -57,5 +57,14 @@ def after_step(context, step):
     if BEHAVE_DEBUG_ON_ERROR and step.status == "failed":
         # -- ENTER DEBUGGER: Zoom in on failure location.
         # NOTE: Use IPython debugger, same for pdb (basic python debugger).
-        import ipdb
-        ipdb.post_mortem(step.exc_traceback)
+        try:
+            import ipdb as pdb
+        except ImportError:
+            import pdb
+
+        if getattr(context, "browser", None):
+            from pprint import pprint
+            pprint(context.browser.driver.get_log('browser')[-10:])
+            print("Current Screen: {}".format(context.browser.screenshot()))
+
+        pdb.post_mortem(step.exc_traceback)

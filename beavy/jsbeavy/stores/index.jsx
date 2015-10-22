@@ -22,11 +22,19 @@ export default function configureStore (initialState) {
   if (__DEBUG__) {
     // we concat to make sure we aren't messing with
     // with the extensions list itself but create a copy
-    const createLogger = require('redux-logger');
-    middlewares = middlewares.concat([createLogger({
-      level: 'info',
-      collapsed: true
-    })]);
+    const createLogger = require('redux-logger'),
+          logAttrs = {
+            level: 'info',
+            collapsed: true
+          };
+
+    if(window._phantom) {
+      // in test environment, we need to stringify our
+      // logs to be able to read them
+      logAttrs.transformer = (state) => JSON.stringify(state);
+      logAttrs.actionTransformer = (action) => JSON.stringify(action);
+    }
+    middlewares = middlewares.concat([createLogger(logAttrs)]);
   }
 
   let createStoreWithMiddleware = applyMiddleware.apply(this, middlewares);
