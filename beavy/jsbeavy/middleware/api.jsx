@@ -1,4 +1,4 @@
-import 'isomorphic-fetch';
+// import 'isomorphic-fetch';
 import entites from 'reducers/entities';
 import format_jsonapi_result from "./format_jsonapi_result";
 
