@@ -1,25 +1,34 @@
 import React, {Component, PropTypes} from 'react';
 import { connect } from 'react-redux';
-import {connectReduxForm} from 'redux-form';
+import { pushState } from 'redux-router';
+import { reduxForm} from 'redux-form';
+import { STORY_SUBMIT } from '../consts';
 import { submitStory } from '../actions';
 
 export class SubmitView extends React.Component {
   static propTypes = {
     fields: PropTypes.object.isRequired,
     handleSubmit: PropTypes.func.isRequired,
-    dispatch : React.PropTypes.func
+    isFetching: PropTypes.bool.isRequired,
+    dispatch : React.PropTypes.func.isRequired
+  }
+
+  componentWillReceiveProps(nextProps){
+    if (!nextProps.isFetching && nextProps.success){
+      const incoming = nextProps.response[STORY_SUBMIT].data.id
+      this.props.dispatch(pushState(null, '/')); //item?id=' + incoming));
+    }
   }
 
   saveForm(formData){
-    console.log(formData, arguments);
     this.props.dispatch(submitStory(formData));
   }
 
   render () {
     const { fields: {title, url, text},
-            handleSubmit, dispatch } = this.props;
+            handleSubmit, dispatch, isFetching} = this.props;
     return (
-      <form name="submit_story_form" onSubmit={handleSubmit(this.saveForm.bind(this))}>
+      <form name="submit_story_form" onSubmit={handleSubmit(this.saveForm.bind(this))} disabled={isFetching}>
         <fieldset>
           <label for="title">title</label>
           <input required id="title" type="text" name="title" {...title} />
@@ -31,7 +40,7 @@ export class SubmitView extends React.Component {
           <label for="text">text</label>
           <textarea {...text} />
           {text.error && text.touched && <div>{text.error}</div>}
-          <button type="submit">Submit</button>
+          <button type="submit" disabled={isFetching}>Submit</button>
         </fieldset>
         <p>
           Leave URL blank to submit a question or discussion.  If there is no url, the text (if any) will appear at the top of the thread.
@@ -41,13 +50,14 @@ export class SubmitView extends React.Component {
   }
 }
 
-
-
-// apply connectReduxForm() and include synchronous validation
-export default connectReduxForm({
-  form: 'submit',                      // the name of your form and the key to
-                                        // where your form's state will be mounted
-  fields: ['title', 'url', 'text'], // a list of all your fields in your form
+export default connect(
+  (state, ownProps) => {
+    return { form: state.form,
+             ...state[STORY_SUBMIT]};
+  }
+)(reduxForm({
+  form: 'submit',
+  fields: ['title', 'url', 'text'],
   validate: (data) => {
     const errors = {};
     if(!data.title || !data.title.trim()) {
@@ -58,4 +68,4 @@ export default connectReduxForm({
     }
     return errors;
   }
-})(SubmitView);
+})(SubmitView));
