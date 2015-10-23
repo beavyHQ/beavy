@@ -18,7 +18,7 @@ def before_all(context):
     # When we're running with PhantomJS we need to specify the window size.
     # This is a workaround for an issue where PhantomJS cannot find elements
     # by text - see: https://github.com/angular/protractor/issues/585
-    context.default_browser = os.getenv("BEHAVE_DEFAULT_BROWSER", 'phantomjs')
+    context.default_browser = os.getenv("BEHAVE_DEFAULT_BROWSER", 'firefox')
 
     context.default_browser_size = (1280, 1024)
     context.base_url = os.getenv("BEHAVE_BASE_URL",  "http://localhost:{}".format(app.config.get("DEBUG", False) and "2992" or "5000"))
