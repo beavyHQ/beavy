@@ -10,3 +10,4 @@ config.yml
 coverage/
 ghostdriver.log
 .DS_Store
+.coverage
