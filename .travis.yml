@@ -40,7 +40,12 @@ script:
   # starting up test-server
   - flask --app=main run &
   # and running behaviour tests against it
-  - python manager.py behave
+  - |
+    set -e
+    coverage run -a manager.py runserver -R &
+    FLASK_PID=$!
+    python manager.py behave
+    kill -SIGINT $FLASK_PID
 
 after_success:
   - python scripts/travis_after_all.py && python scripts/auto_pr.py || echo "skipped"
