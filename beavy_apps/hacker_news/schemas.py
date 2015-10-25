@@ -14,6 +14,7 @@ class TopicSchema(Schema):
     owner_id = fields.Integer()
     type = fields.String(attribute="discriminator")
     title = fields.String(attribute='title')
+    slug = fields.String(attribute='slug')
     text = fields.String(attribute='cooked')
 
     class Meta:
@@ -38,6 +39,7 @@ class LinkSchema(Schema):
     owner_id = fields.Integer()
     type = fields.String(attribute="discriminator")
     title = fields.String(attribute='title')
+    slug = fields.String(attribute='slug')
     url = fields.String(attribute='url')
 
     class Meta:

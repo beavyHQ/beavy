@@ -15,8 +15,8 @@ export class SubmitView extends React.Component {
 
   componentWillReceiveProps(nextProps){
     if (!nextProps.isFetching && nextProps.success){
-      const incoming = nextProps.response[STORY_SUBMIT].data.id
-      this.props.dispatch(pushState(null, '/')); //item?id=' + incoming));
+      const incoming = nextProps.response[STORY_SUBMIT].data;
+      this.props.dispatch(pushState(null, '/l/' + incoming.id + "/" + incoming.slug));
     }
   }
 

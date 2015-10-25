@@ -8,6 +8,22 @@ from .models import Topic, Link
 from .schemas import topic as topic_schema, link as link_schema
 
 
+@hn_bp.route("/l/<model:link>/")
+# FIXME: have an actual template
+@fallbackRender('hacker_news/submit.html')
+def show_link(link):
+    return link_schema.dump(link)
+
+
+@hn_bp.route("/t/<model:topic>/")
+# FIXME: have an actual template
+@fallbackRender('hacker_news/submit.html')
+def show_topic(topic):
+    return topic_schema.dump(topic)
+
+
+
+
 @hn_bp.route("/submit/", methods=["GET", "POST"])
 @fallbackRender('hacker_news/submit.html')
 @login_required
