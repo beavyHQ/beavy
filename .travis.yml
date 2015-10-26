@@ -22,8 +22,12 @@ before_install:
   - npm config set python /usr/bin/python2.7
   # install all node dependencies
   - npm install
+  # install coveralls to send coverage stats there
+  - pip install coveralls
 
 before_script:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
   - psql -c 'create database "beavy-test";' -U postgres
   - cp -f "beavy_apps/$APP/tests/config.yml" config.yml
   - npm run build
@@ -32,16 +36,28 @@ before_script:
 
 script:
   # we are starting with running all unit tests
-  - py.test beavy beavy_modules beavy_apps
+  - py.test --cov-config .coveragerc --cov=beavy --cov=beavy_modules --cov=beavy_apps beavy beavy_modules beavy_apps
+  - mv .coverage .coverage.pytest
   # lets run jstests
   - npm test
   # starting up test-server
-  - flask --app=main run &
   # and running behaviour tests against it
-  - python manager.py behave_tests
+  - |
+    #!/bin/bash
+    set -e
+    # -a means we are appending the coverage
+    coverage run -a manager.py runserver -R &
+    python manager.py behave
+    # shutting down gracefully so coverage is written
+    curl http://localhost:5000/__TESTS__/shutdown
+    # give it a few seconds to stop the process
+    sleep 3
 
 after_success:
+  - coverage report -m
+  - coveralls
   - python scripts/travis_after_all.py && python scripts/auto_pr.py || echo "skipped"
+
 
 cache:
   directories:

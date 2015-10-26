@@ -2,8 +2,11 @@ from beavy.models.object import Object
 from beavy.common.rendered_text_mixin import RenderedTextMixin
 from beavy.common.payload_property import PayloadProperty
 
+from slugify import slugify_url
+
 TOPIC_ID = "topic"
 LINK_ID = "link"
+
 
 
 class Topic(Object, RenderedTextMixin):

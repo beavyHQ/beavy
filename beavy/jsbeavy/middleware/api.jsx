@@ -1,4 +1,4 @@
-import 'isomorphic-fetch';
+// import 'isomorphic-fetch';
 import entites from 'reducers/entities';
 import format_jsonapi_result from "./format_jsonapi_result";
 
@@ -28,7 +28,7 @@ function callApi(endpoint, key, params) {
 
 
 // Action key that carries API call info interpreted by this Redux middleware.
-export const CALL_API = Symbol('Call API');
+export const CALL_API = 'Call API';
 
 // A Redux middleware that interprets actions with CALL_API info specified.
 // Performs the call and promises when such actions are dispatched.

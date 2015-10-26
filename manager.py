@@ -1,6 +1,8 @@
+from flask.ext.script import Command, Option
 from flask.ext import migrate as ext_migrate
 
 import os
+import sys
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -31,15 +33,32 @@ from beavy.app import app, manager
 
 
 from behave.__main__ import main as behave_main
+from behave.configuration import options as behave_options
 
+def reformat_options(opts):
+    res = []
+    for args, kwargs in opts:
+        if not args: continue
+        if "config_help" in kwargs:
+            del kwargs['config_help']
+        res.append(Option(*args, **kwargs))
+    return res
 
-@manager.command
-def behave_tests(frontend=os.environ.get("APP", app.config.get("APP", "minima"))):
-    """
-    Run behave tests against a running server
-    """
-    behave_main(['--no-capture', "beavy_apps/{}/tests/features".format(frontend)])
+class Behave(Command):
 
+    def get_options(self):
+        return reformat_options(behave_options)
+
+    def run(self, *args, **kwargs):
+        frontend = os.environ.get("APP", app.config.get("APP", None))
+        if not frontend:
+            print("You need to configure the APP to be used!")
+            exit(1)
+
+        exit(behave_main(sys.argv[2:] + ['--no-capture', "beavy_apps/{}/tests/features".format(frontend)]))
+
+behave = Behave()
+manager.add_command("behave", behave)
 
 if __name__ == '__main__':
     manager.run()
