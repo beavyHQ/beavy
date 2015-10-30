@@ -1,6 +1,6 @@
 from flask.ext.security import login_required
 from beavy.utils import fallbackRender
-from beavy.app import app
+from beavy.app import app, celery
 
 @app.route("/private")
 @login_required

@@ -16,7 +16,7 @@ broker:
 # and the actual servers
 web:
   extends:
-    file: etc/docker-base.yml
+    file: .infrastructure/docker-base.yml
     service: _app
   links:
     - redis
@@ -29,13 +29,13 @@ web:
 
 worker:
   extends:
-    file: etc/docker-base.yml
+    file: .infrastructure/docker-base.yml
     service: _app
   links:
     - redis
     - db
     - broker
-  command: "celery -A main worker -l info"
+  command: "celery -A beavy.app.celery worker -l info"
 
 # --- frontend services
 
@@ -47,10 +47,10 @@ haproxy:
     - BACKEND_PORT=5000
 
 nginx:
-  build: etc/nginx
+  build: .infrastructure/nginx
   ports:
-    - "81:80"
+    - "80:80"
   volumes:
-    - ./assets:/assets
+    - ./var/assets:/assets
   links:
     - haproxy

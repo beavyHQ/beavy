@@ -7,11 +7,22 @@ python:
 
 env:
   global:
+    # ✨ CHANGE THE FOLLOWING TO THE REMOTE SERVER YOU WANT TO BUILD
+    - DEPLOY_SERVER=
+    - DEPLOY_PATH=
+    # ✨ CHANGE THE FOLLOWING TO SLUG OF YOUR REPO AND BRANCH
+    #    TO TRIGGER DEPLOY
+    - DEPLOY_SLUG=beavyHQ/beavy
+    - DEPLOY_BRANCH=master
+    # ✨ END OF CHANGES
     - BEAVY_ENV=TEST
     - secure: 42qbN2sBRUwB8q99XdMJDsr1FelB3fUA8wRjRbH7ZGKRDH6CKHALno/RV2QIzpbJTlwi/6ax5MV3FQTEPN5p726Zj1JiwOun3RW2kRdqCm/xNGyh4B5FxJxyzq0hSIFdJCXihJd1Frm2JltHMkRCadl6VtlmdY9L7N1SRHQoJs0X4wU354LJFpDu2trBZKESUWee73VgdynDwlT6nehwcj42TxyXt9lr3moZUHLIfXvnyMFL7tp1CDMdbAkD4m1hq1UG1jxHQRbHfzTEtem+8oVAi8I3Hrpds4/lnIjP6/LJi8bR3c9rKKykKe1EKZnhYUf/lwD00jdR4g8c1tR3F/kTByFjxGFRfpRUzJXi6dD8Q2JOdu8zVAuIgnZg2Gh+c5z+V3/L27ax1x4sYyiXbi/lQpbE6XSkn4wLWi9Y1TK1kl1N92NkVipLwHz535tcWLwQ9KwzpVUBznGcYw5XQO3sbVcSF4PiEpiET+MjwV5o5MkOfD67FATZo9GlSwKpmSoSsd2JgpjzieRNt+VDyC4liDWco2HA3191DSO2f/q91w3bpwlGRCKP/X78npeIVGCMOzWSnTmPtOLZd3MjC/g/HFb90SG6cjAC1nTkR8RHTAXYBSnUZgr1Gl/8A1I86LSDKhXGoBGHjJTFt0ViAX+Ho9Yn0LCrtrN7SeiuSEs=
   matrix:
+    # ✨ REPLACE THESE WITH THE APP YOU WANT TO BUILD
+    # RECOMMENDED WAY: comment these and add your own after
     - APP=minima
     - APP=hacker_news
+    # - APP=myAwesomeApp
 
 before_install:
   # use NVM to install latest stable NODE – the predelivered
@@ -26,19 +37,22 @@ before_install:
   - pip install coveralls
 
 before_script:
+  # for full frontend behave testing, we are using
+  # firefox, which we need to have xvfb for
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - psql -c 'create database "beavy-test";' -U postgres
-  - cp -f "beavy_apps/$APP/tests/config.yml" config.yml
+  - "[ ! -f config.yml ] && cp -f \"beavy_apps/$APP/tests/config.yml\" config.yml || echo \"config file already found\" "
+  # now make sure we can build the assets
   - npm run build
+  # and upgrade the database from zero
   - python manager.py db upgrade heads
 
 
 script:
   # we are starting with running all unit tests
   - py.test --cov-config .coveragerc --cov=beavy --cov=beavy_modules --cov=beavy_apps beavy beavy_modules beavy_apps
-  - mv .coverage .coverage.pytest
-  # lets run jstests
+  # lets run jstests – currently without reporitng
   - npm test
   # starting up test-server
   # and running behaviour tests against it
@@ -54,9 +68,51 @@ script:
     sleep 3
 
 after_success:
+  # show us the coverage report
   - coverage report -m
+  # send it all to coveralls
   - coveralls
-  - python scripts/travis_after_all.py && python scripts/auto_pr.py || echo "skipped"
+  # decrypt the ssh key
+  # ✨ YOU PROBABLY HAVE TO REPLACE THIS WITH THE COMMAND FOR YOUR
+  #    OWN id_rsa file!
+  # (in "no fail mode: `|| true`)
+  - openssl aes-256-cbc -K $encrypted_14a798302832_key -iv $encrypted_14a798302832_iv -in .infrastructure/travis/beavy_deploy.enc -out .infrastructure/travis/id_rsa -d || true
+
+  # now try to deploy the app, if we are
+  # on the deploy branch and the deploy repo
+  - |
+    #!/bin/bash
+    set -e
+
+    # start ssh agent
+    export DEPLOY_PATH_FULL="$DEPLOY_PATH/$APP"
+    export NEW_TAG="CI_$APP_$TRAVIS_JOB_NUMBER"
+
+    if [ "$TRAVIS_REPO_SLUG" == "$DEPLOY_SLUG" ] && [ "$TRAVIS_BRANCH" == "$DEPLOY_BRANCH" ]; then
+      echo "We are trying to deploy $DEPLOY_SLUG:$DEPLOY_BRANCH"
+      eval "$(ssh-agent -s)"
+
+      chmod 600 .infrastructure/travis/id_rsa
+      ssh-add .infrastructure/travis/id_rsa
+
+      git config push.default simple
+      git config --global user.name "Travis CI"
+      git config --global user.email "travis@beavy.xyz"
+
+      git remote add deploy "$DEPLOY_SERVER:$DEPLOY_PATH_FULL"
+
+      git add -f config.yml var/assets/*
+      git commit -m"Adding config and assets for deploy"
+      git tag $NEW_TAG
+
+      # this will trigger the autodeploy if setup properly
+      git push deploy $NEW_TAG
+
+    else
+      echo "We are not on the target deploy branch. Aborting."
+    fi
+  # this is a special bit for
+  - python .infrastructure/travis/scripts/travis_after_all.py && python .infrastructure/travis/scripts/auto_pr.py || echo "skipped"
 
 
 cache:
@@ -67,7 +123,11 @@ services:
   - redis-server
 
 addons:
-  ssh_known_hosts: github.com
+  ssh_known_hosts:
+    - github.com
+    - 46.101.137.120
+    # ✨ ADD YOUR DEPLOYMENT SERVERNAME/IP HERE:
+    # - myserver.example.org
   postgresql: '9.4'
   code_climate:
     repo_token: 267de20fcb1419ff02cfe22e5009111ffc86347f398762cbb700ad56f8279ca6
