@@ -1,0 +1,56 @@
+# Backend services
+redis:
+  image: "redis:latest"
+  volumes:
+    - ./var/redis:/data
+  command: "redis-server --appendonly yes"
+db:
+  image: "postgres:latest"
+  volumes:
+    - ./var/postgres:/var/lib/postgresql/data
+broker:
+  image: "rabbitmq:latest"
+  volumes:
+    - ./var/rabbitmq:/var/lib/rabbitmq
+
+# and the actual servers
+web:
+  extends:
+    file: etc/docker-base.yml
+    service: _app
+  links:
+    - redis
+    - db
+    - broker
+  expose:
+    - "5000"
+  command: "gunicorn main:app -w 4 -b 5000"
+
+
+worker:
+  extends:
+    file: etc/docker-base.yml
+    service: _app
+  links:
+    - redis
+    - db
+    - broker
+  command: "celery -A main worker -l info"
+
+# --- frontend services
+
+haproxy:
+  image: tutum/haproxy
+  links:
+    - web
+  environment:
+    - BACKEND_PORT=5000
+
+nginx:
+  build: etc/nginx
+  ports:
+    - "81:80"
+  volumes:
+    - ./assets:/assets
+  links:
+    - haproxy
