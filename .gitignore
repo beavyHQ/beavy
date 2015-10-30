@@ -11,3 +11,4 @@ coverage/
 ghostdriver.log
 .DS_Store
 .coverage
+\nvar/*
