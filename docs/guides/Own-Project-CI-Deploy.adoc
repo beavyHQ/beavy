@@ -1,0 +1,220 @@
+= Setting up CI for your own Project-Fork
+
+Note: This guide assumes that your project layout followed the link:our Guide to setup your own project[./Own-Project.adoc]. If that has been a while ago, please revisit the guide and make sure to have a similar setup before continuing.
+
+In this example we will be setting up the "TechTalks" project. Its github slug is `techtalksHQ/beavy`, the main release branch and internal app name are `techtalks`. We will install the app on the server in `/apps/techtalks`, the server name respectively is `techtalks.xyz`.
+
+== Setup Deploy Server
+
+Your deploy server needs to be accessible via SSH from travis. You will need to have `docker` and `docker-compose` installed. We start by logging in and making an initial checkout. If you are not root, make sure to have all docker commands in sudo.
+
+```bash
+# if not existing yet:
+# mkdir /apps
+cd /apps
+# clone app at /apps/techtalks
+git clone https://github.com/techtalkshq/beavy techtalks
+cd techtalks
+# make sure, we are on the right branch
+git checkout techtalks
+# for the initial up, the database directory needs to be completely empty:
+rm var/postgres/.gitkeep
+# for the initial build, we don't have assets yet
+echo "{}" > assets/manifest.json
+# start the initial docker build
+docker-compose up
+```
+
+This will create an initial docker environment for the python process, start the database. If all processes started properly, press `ctr+c` to stop them (and wait for them to stop). Our system is now in place to run. Start it permanently in the background by running:
+
+`docker-compose start`
+
+You can always check on the current running state by doing `docker-compose ps`. It should show you something like this:
+
+```
+Name                      Command               State               Ports
+--------------------------------------------------------------------------------------------
+techtalks_broker_1    /docker-entrypoint.sh rabb ...   Up      25672/tcp, 4369/tcp, 5672/tcp
+techtalks_db_1        /docker-entrypoint.sh postgres   Up      5432/tcp
+techtalks_haproxy_1   python /haproxy/main.py          Up      1936/tcp, 443/tcp, 80/tcp
+techtalks_nginx_1     /bin/sh -c /start                Up      443/tcp, 0.0.0.0:81->80/tcp
+techtalks_redis_1     /entrypoint.sh redis-serve ...   Up      6379/tcp
+techtalks_web_1       gunicorn main:app -w 4 -b 5000   Up      5000/tcp
+techtalks_worker_1    celery -A beavy.app.celery ...   Up
+```
+
+And as long as everything says 'Up', we are all good.
+
+=== Prepare Git Repo Pushing
+
+The last thing we need to do, is setup this repo now, to automatically deploy whenever someone pushes changes to it. For that just install the pre-receive hook by running the following command (within your working directory):
+
+`cp .infrastructure/git/pre-receive .git/hooks/`
+
+
+Now we are all ready to go.
+
+
+=== Understanding the Structure
+While this is installing all python requirements, let's take a few moments to understand the infrastructure we are setting up:
+
+At the moment we are building the main app, with all its python dependencies. Aside from that, as the `docker-compose.yml` file shows, we are setting up one container for Postgres (named `db`), a Redis (named `redis`) and one rabbitmq (named `broker`) and a haproxy and nginx (named `haproxy` and `nginx` respectively).
+
+They are all linked together like this:
+
+```asciiflow
++------------------+               +------------------+
+|                  |  /assets/     |  volume:         |
+|   nginx          +--------------->    ./assets      |
+|                  |               +-----+------------+
++------+-----------+                     |
+       |                            +----+
+       | /*                         |
+       |                            |
+ +-----v-----+           +----------+-+
+ |           |         * |            |          +-----------------+
+ | haproxy   +----------->    web     |          |     broker      |
+ |           |           |            +---------->                 |
+ +-----------+           +---+--+-----+          +--------+--------+
+                             |  |                         |
+                             |  |                         |
+                             |  |                         |*
+         +-------------------+  |                 +----------------+
+         |                      |                 |                |
+         |                      |                 |     worker     |
+  +------+---------+      +-----+------+          +-------+---+----+
+  |                |      |            |                  |   |
+  |   postgres     |      |    redis   |                  |   |
+  |                |      |            +------------------+   |
+  +---+----+-------+      +------------+                      |
+      |    |                                                  |
+      |    +--------------------------------------------------+
+      |
+  +-------------------+
+  |   volume:         |
+  |   var/postgres    |
+  +-------------------+
+```
+
+The app infrastructure consists of three main parts.
+ 1. web serving
+ 2. workers
+ 3. database
+
+==== 1. Web Serving
+
+As a front-facing server, we have an nginx container running, which also serves our static files from `/assets`. If it is an app request, it is automatically handed over to `haproxy`, which is setup as our load balancer to all web-containers. Whenever you scale up web-containers (`docker-compose scale web=5`), haproxy will notice that by itself and scale accordingly.
+
+==== 2. Workers
+
+The second part is the backend worker infrastructure. All long-lasting or continues processes are handled by a range of workers here. For that web (or the queue itself), issues a work request on the broker (rabbitmq), which will inform the corresponding workers about it. Again, we can scale the worker containers independently from the rest of the application as they automatically, register with the broker. Both of these processes (web and worker) are running in the same basic container of our app.
+
+=== 3. Databases
+Beavy has two database in its backend infrastructure, automatically hooked up to the app containers (web and worker). Postgresql holds the permanent state, while redis is used for more frequently changing and temporary state (like caching).
+
+
+== Activate Travis
+Now move over to link:Travis-CI.org[https://travis-ci.org], go through the sign up and activate travis for your repository. You can safely activate travis for Pull-Requests, too. Our setup will only deploy on a designated branch you will define later.
+
+
+== Fixup travis config
+
+The next thing we have to do, is make the changes to the `.travis.yml` to inform travis, when and where to deploy. If you open that file, you'll find a few comments with the ✨ (sparkle) symbol. Those are made for you and should help you understand what you need to change exactly there.
+
+=== Create private key to server
+(Do this from your working machine, within a checkout of the git repo you can commit to.)
+
+The first thing we need to do, is give travis push-access to our repo. For that we need to generate a new private key for ssh and transfer that to the server (don't give any passphrase, change the user respectively, if needed):
+
+```
+ssh-keygen -f id_rsa
+cat id_rsa.pub | ssh root@techtalks.xyz 'cat >> .ssh/authorized_keys'
+```
+
+Now encrypt the key for usage in travis:
+
+```
+mv id_rsa* .infrastructure/travis/
+travis encrypt-file .infrastructure/travis/id_rsa
+```
+
+This will prompt you the next steps you have to follow. Specifically it shows you a on openssl-command you need to copy over the existing command in the `.travis.yml`.
+
+Now destroy the travis_key and add the other files to be committed to the repository:
+
+```
+rm .infrastructure/travis/id_rsa
+git add .infrastructure/travis/id_rsa*
+git add id_rsa.enc
+git add .travis.yml
+```
+
+Finally, we have to update the rest of the `.travis.yml` to make travis aware of all place. Specifically you need to update:
+
+```
+
+env:
+  global:
+    # ✨ CHANGE THE FOLLOWING TO THE REMOTE SERVER YOU WANT TO BUILD
+    - DEPLOY_SERVER="root@techtalks.xyz"
+    - DEPLOY_PATH="/apps/techtalks"
+    # ✨ CHANGE THE FOLLOWING TO SLUG OF YOUR REPO AND BRANCH
+    #    TO TRIGGER DEPLOY
+    - DEPLOY_SLUG=techtalksHQ/beavy
+    - DEPLOY_BRANCH=techtalks
+    # ✨ END OF CHANGES
+    - BEAVY_ENV=TEST
+    - secure:
+      ...
+    matrix:
+      # ✨ REPLACE THESE WITH THE APP YOU WANT TO BUILD
+      # RECOMMENDED WAY: comment these and add your own after
+      # - APP=minima
+      # - APP=hacker_news
+      - APP=techtalks
+```
+
+In the top. And in the addons, add the deploy server:
+
+```
+addons:
+  ssh_known_hosts:
+    - github.com
+    # - 46.101.137.120
+    # ✨ ADD YOUR DEPLOYMENT SERVERNAME/IP HERE:
+    # - myserver.example.org
+    - techtalks.xyz
+```
+
+Now add, commit and push
+
+```
+git add .travis.yml
+git commit -m"Setting up travis"
+git push
+```
+
+If this doesn't automatically trigger a new build,
+
+
+== Troubleshooting
+
+=== No Assets after first build
+
+If you happen to actually take a look at the website before the first travis build, you will see, that it doesn't show up. The reason for that is, that we haven't build the assets (Javascript app) yet. In our environment, we are building those during the testing phase within travis, commit them and send them over git. Thus you can always check out the actual live assets from the production system and can also be sure that all.
+
+To fix this, just make sure travis builds successfully onto the system.
+
+=== Serving on non 80-port
+
+There might be good reason, why do not want to have the app (or better its nginx container) directly serve on port 80. You might have security concerns and want to run the containers non-root, you might have multiple apps or services serving there (which we do for the test case) or need multiple domain support. The easiest way to manage that, is by putting the server on a different port and having a reverse-proxy on the front.
+
+You can easily do that by adding the following line in the `pre-receive`-hook we installed earlier or put that into the build-script of your .travis.yml (don't forget to add and commit `docker-compose.yml` in that case!):
+
+```sed -i 's/"80:80"/"8081:80"/g' docker-compose.yml```
+
+This command replaces port 80 with port 8081 (or any other you put in there). Make sure to do that _after_ the `git reset` in the pre-receive-hook (or it would be overwritten). You can put in there any port you like. Make sure to manually fully stop and restart the nginx-container after you did that – travis won't do that for you at the build (it only restarts web and worker).
+
+=== TSL Support
+
+This setup currently only serves statics and the app itself. The current recommendation is to either work on adding support for it or put a reverse proxy in front and switch the docker container of nginx to a different port as described above. 
