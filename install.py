@@ -21,7 +21,7 @@ if __name__ == '__main__':
     if os.environ.get("BEAVY_ENV", None):
         print("----- Install basic requirements")
         install(os.path.join(BASE_DIR, "beavy", "requirements", "base.txt"))
-        if os.environ("BEAVY_ENV", None) in ["TEST", "DEV", "DEBUG"]:
+        if os.environ.get("BEAVY_ENV", None) in ["TEST", "DEV", "DEBUG"]:
             print("----- Install dev requirements")
             install(os.path.join(BASE_DIR, "beavy", "requirements", "dev.txt"))
     else:

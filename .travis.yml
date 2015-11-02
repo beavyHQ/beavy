@@ -25,6 +25,9 @@ env:
     # - APP=myAwesomeApp
 
 before_install:
+  # if there isn't a config file, pick up the
+  # one used for the testing of the app
+  - "[ ! -f config.yml ] && cp -f \"beavy_apps/$APP/tests/config.yml\" config.yml || echo \"config file already found\" "
   # use NVM to install latest stable NODE – the predelivered
   # one isn't able to build our es6 modules
   - nvm install stable
@@ -33,6 +36,8 @@ before_install:
   - npm config set python /usr/bin/python2.7
   # install all node dependencies
   - npm install
+  # install all python dependencies (requires a config.yml!)
+  - python install.py
   # install coveralls to send coverage stats there
   - pip install coveralls
 
@@ -42,7 +47,6 @@ before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - psql -c 'create database "beavy-test";' -U postgres
-  - "[ ! -f config.yml ] && cp -f \"beavy_apps/$APP/tests/config.yml\" config.yml || echo \"config file already found\" "
   # now make sure we can build the assets
   - npm run build
   # and upgrade the database from zero
