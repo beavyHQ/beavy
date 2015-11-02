@@ -1,0 +1,1 @@
+docker-compose run db createdb -h db -U postgres beavy

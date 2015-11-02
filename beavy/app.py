@@ -21,7 +21,7 @@ import os
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-STATIC_FOLDER = os.path.join(BASE_DIR, '..', 'build', 'public')
+STATIC_FOLDER = os.path.join(BASE_DIR, '..', 'assets')
 
 # The app
 app = Flask(__name__,

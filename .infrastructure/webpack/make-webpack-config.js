@@ -7,7 +7,7 @@ var ManifestPlugin = require("webpack-manifest-plugin");
 var StatsPlugin = require("stats-webpack-plugin");
 var loadersByExtension = require("./helpers/loadersByExtension");
 var appConfig = yaml.safeLoad(fs.readFileSync('config.yml'));
-var ROOT = path.join(__dirname, "..");
+var ROOT = path.join(__dirname, "..", "..");
 var JS_ROOT = path.join(ROOT, "beavy", "jsbeavy");
 
 
@@ -68,7 +68,7 @@ module.exports = function(options) {
 		"http://localhost:2992/assets/" :
 		"/assets/";
 	var output = {
-		path: path.join(ROOT, "build", options.prerender ? "prerender" : "public"),
+		path: path.join(ROOT, "assets"),
 		publicPath: publicPath,
 		filename: "[name]" + (options.longTermCaching && !options.prerender ? "-[chunkhash]" : "") + ".js",
 		chunkFilename: (options.devServer ? "[id]" : "[name]") + (options.longTermCaching && !options.prerender ? "-[chunkhash]" : "") + ".js",

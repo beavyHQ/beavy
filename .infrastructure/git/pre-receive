@@ -1,0 +1,26 @@
+#!/bin/bash
+
+set -e
+read oldrev newrev refname
+
+export GIT_DIR="$(cd $(dirname $(dirname $0));pwd)"
+echo "GIT DIR: $GIT_DIR"
+echo echo "----------- checking out $newrev ($refname)"
+# switch to the working directory
+# as docker-composes uses the dir-name as the project
+# name ... https://github.com/docker/compose/issues/745
+cd $GIT_DIR
+cd ..
+
+git checkout -f $newrev
+git reset --hard $newrev
+
+echo "----------- building web and worker"
+docker-compose build web worker
+echo "----------- stopping web and worker"
+docker-compose stop web worker
+echo "----------- migrating database"
+docker-compose run web python manager.py db upgrade heads
+echo "----------- starting all services"
+docker-compose start
+echo "----------- ALL GOOD and ready to roll -----------"
