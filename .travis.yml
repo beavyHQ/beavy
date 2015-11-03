@@ -25,6 +25,9 @@ env:
     # - APP=myAwesomeApp
 
 before_install:
+  # if there isn't a config file, pick up the
+  # one used for the testing of the app
+  - "[ ! -f config.yml ] && cp -f \"beavy_apps/$APP/tests/config.yml\" config.yml || echo \"config file already found\" "
   # use NVM to install latest stable NODE – the predelivered
   # one isn't able to build our es6 modules
   - nvm install stable
@@ -33,6 +36,8 @@ before_install:
   - npm config set python /usr/bin/python2.7
   # install all node dependencies
   - npm install
+  # install all python dependencies (requires a config.yml!)
+  - python install.py
   # install coveralls to send coverage stats there
   - pip install coveralls
 
@@ -42,7 +47,6 @@ before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - psql -c 'create database "beavy-test";' -U postgres
-  - "[ ! -f config.yml ] && cp -f \"beavy_apps/$APP/tests/config.yml\" config.yml || echo \"config file already found\" "
   # now make sure we can build the assets
   - npm run build
   # and upgrade the database from zero
@@ -88,25 +92,27 @@ after_success:
     export DEPLOY_PATH_FULL="$DEPLOY_PATH/$APP"
     export NEW_TAG="CI_$APP_$TRAVIS_JOB_NUMBER"
 
-    if [ "$TRAVIS_REPO_SLUG" == "$DEPLOY_SLUG" ] && [ "$TRAVIS_BRANCH" == "$DEPLOY_BRANCH" ]; then
-      echo "We are trying to deploy $DEPLOY_SLUG:$DEPLOY_BRANCH"
-      eval "$(ssh-agent -s)"
+    if [ "$TRAVIS_PULL_REQUEST" == "false" ] &&
+       [ "$TRAVIS_REPO_SLUG" == "$DEPLOY_SLUG" ] &&
+       [ "$TRAVIS_BRANCH" == "$DEPLOY_BRANCH" ]; then
+        echo "We are trying to deploy $DEPLOY_SLUG:$DEPLOY_BRANCH"
+        eval "$(ssh-agent -s)"
 
-      chmod 600 .infrastructure/travis/id_rsa
-      ssh-add .infrastructure/travis/id_rsa
+        chmod 600 .infrastructure/travis/id_rsa
+        ssh-add .infrastructure/travis/id_rsa
 
-      git config push.default simple
-      git config --global user.name "Travis CI"
-      git config --global user.email "travis@beavy.xyz"
+        git config push.default simple
+        git config --global user.name "Travis CI"
+        git config --global user.email "travis@beavy.xyz"
 
-      git remote add deploy "$DEPLOY_SERVER:$DEPLOY_PATH_FULL"
+        git remote add deploy "$DEPLOY_SERVER:$DEPLOY_PATH_FULL"
 
-      git add -f config.yml var/assets/*
-      git commit -m"Adding config and assets for deploy"
-      git tag $NEW_TAG
+        git add -f config.yml var/assets/*
+        git commit -m"Adding config and assets for deploy"
+        git tag $NEW_TAG
 
-      # this will trigger the autodeploy if setup properly
-      git push deploy $NEW_TAG
+        # this will trigger the autodeploy if setup properly
+        git push deploy $NEW_TAG
 
     else
       echo "We are not on the target deploy branch. Aborting."

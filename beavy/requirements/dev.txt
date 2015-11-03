@@ -1,0 +1,12 @@
+behave==1.2.5
+behaving==1.4.1
+coverage==4.0.1
+ipdb==0.8.1
+ipython==4.0.0
+ipython-genutils==0.1.0
+pytest==2.8.2
+pytest-cov==2.2.0
+pytest-flask==0.10.0
+pytest-mock==0.8.1
+selenium==2.48.0
+splinter==0.7.3
