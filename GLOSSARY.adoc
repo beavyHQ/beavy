@@ -8,6 +8,28 @@ link:http://alembic.readthedocs.org/en/latest/[Alembic] is an extension to link:
 
 See link:#frontend[Frontend].
 
+== Beavy App
+
+The source code of beavy is split into three parts: link:#beavy-core[Core], link:#beavy-modules[Modules] and link:#beavy-app[Apps].
+
+An App is where it all comes together. It acts as the main entry points and configures the various modules to work the way the app is supposed to work. Moreover an App usual defines the work- and userflows, the main as well as customisations in the design. While modules are build to be as independent as possible, the app is what ties those together tightly. Usually, the App is what you want to focus on most to build your work on top of beavy.
+
+== Beavy Core
+
+The source code of beavy is split into three parts: link:#beavy-core[Core], link:#beavy-modules[Modules] and link:#beavy-app[Apps].
+
+Beavy core (to be found in `/beavy`) holds the main Javascript app, model, controller and app code, basically everything that all apps have in common, no matter which modules are activated. Stuff available in core, all modules can expect to always have available (strong linking encouraged). On top, core also delivers some utility and helper functions, often used as well as testing facilities.
+
+
+== Beavy Module
+
+The source code of beavy is split into three parts: link:#beavy-core[Core], link:#beavy-modules[Modules] and link:#beavy-app[Apps].
+
+A Module is an independent (social) feature, which depending on the App might be or not be activated (some are also optional for some apps). A module contains all Javascript, Backend and Database code needed to run. As such they normally define the entire behaviour and user flow of the feature in question.
+
+Often they also contain helper functions for testing from apps.
+
+
 == Celery
 
 link:http://www.celeryproject.org/[Celery] provides a distributed Task queue system to beavy. This allows beavy to schedule tasks to be done asynchronously, which are then executed on any of the assigned workers.
@@ -50,7 +72,7 @@ Synonym for link:#es2015[ES2015]
 
 == Flask
 
-Flask is a micro web-development framework, built in link:#python[Python]. Beavys backend is built using flask and many community extensions. You can link:http://flask.pocoo.org/[learn more about Flask here].
+link:http://flask.pocoo.org/[Flask] is a micro web-development framework, built in link:#python[Python]. Beavys backend is built using flask and many community extensions. You can learn more about link:http://flask.pocoo.org/[Flask on their website] and this link:http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world[Mega Tutorial].
 
 == Frontend
 
@@ -62,10 +84,15 @@ In Beavy this manifests itself in the distinction that everything in Python belo
 
 link:https://en.wikipedia.org/wiki/Git_%28software%29[Git] is a distributed version control system and used to manage revisions of Beavy.
 
-
 == HTTP
 
+link:https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol[Hypertext Transport Protocol] is the protocol through which the browser and server (beavy) communicate. Whenever the User clicks on the website, the Javascript frontend react by fetching information from the server via HTTP and renders the new content accordingly. If you want to learn more about http, there is a link:https://github.com/Hackership/http-fun[great HTTP-Tutorial on the hackership github]
+
 == Hook
+
+A hook is an entry point of louse coupling. Usually referred to by it's name does it allow one part of the application to register callbacks and features there for other parts of the application to reuse, without each one having to know from each other prior.
+
+We use a lot of hooks in the frontend to allow loose coupling of various link:#beavy-module[beavy modules].
 
 == hot-reloading
 
