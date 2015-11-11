@@ -16,6 +16,12 @@ COMMON: &common
   # to 15minutes
   CACHE_DEFAULT_TIMEOUT: 900
 
+  RATELIMITS:
+    # custom rate limits:
+    # full.path.module.view : "RATE LIMIT"
+    # see https://flask-limiter.readthedocs.org/en/stable/#rate-limit-string-notation
+    beavy.views.lists.latest.latest: "1/second"
+
 DEVELOPMENT: &development
   <<: *common
   DEBUG: True
@@ -45,5 +51,7 @@ PRODUCTION: &production
   CELERY_RESULT_BACKEND: 'rpc://'
   CELERY_RESULT_PERSISTENT: False
   SQLALCHEMY_DATABASE_URI: "postgresql://postgres@db/beavy"
+  RATELIMIT_STORAGE_URL: redis://localhost:6379/2
+  RATELIMIT_STRATEGY: moving-window
   CACHE_TYPE: redis
   CACHE_REDIS_URL: redis://localhost:6379/2
