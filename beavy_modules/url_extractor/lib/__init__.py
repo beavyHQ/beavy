@@ -4,7 +4,7 @@ from .fetching import lassie, pyembed
 
 @cache.memoize()
 def extract_info(url):
-    content = lassie.fetch(url)
+    return lassie.fetch(url)
 
 @cache.memoize()
 def extract_oembed(url, **kwargs):
