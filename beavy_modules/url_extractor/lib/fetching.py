@@ -1,7 +1,4 @@
-
 from pyembed.core import PyEmbed
-
-from beavy.app import cache
 
 from lassie import Lassie
 import re
@@ -52,12 +49,3 @@ lassie.request_opts = {
         'User-Agent': 'facebookexternalhit/1.1'
     }
 }
-
-@cache.memoize()
-def extract_info(url):
-    return lassie.fetch(url)
-
-
-@cache.memoize()
-def extract_oembed(url, **kwargs):
-    return pyembed.embed(url, **kwargs)
