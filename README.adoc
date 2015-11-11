@@ -1,6 +1,7 @@
 = Beavy
 
-image:https://badges.gitter.im/Join%20Chat.svg[link="https://gitter.im/beavyHQ/beavy?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"] image:https://travis-ci.org/beavyHQ/beavy.svg?branch=master[link="https://travis-ci.org/beavyHQ/beavy"] image:https://codeclimate.com/github/beavyHQ/beavy/badges/gpa.svg[link="https://codeclimate.com/github/beavyHQ/beavy"] image:https://coveralls.io/repos/beavyHQ/beavy/badge.svg?branch=master&service=github[link="https://coveralls.io/github/beavyHQ/beavy?branch=master"] image:https://badge.waffle.io/beavyHQ/beavy.png?label=ready&title=Ready[link="https://waffle.io/beavyHQ/beavy"]
+
+image:https://img.shields.io/travis/beavyHQ/beavy.svg?style=flat-square[link="https://travis-ci.org/beavyHQ/beavy"] image:https://img.shields.io/codeclimate/github/beavyHQ/beavy.svg?style=flat-square[link="https://codeclimate.com/github/beavyHQ/beavy"] image:https://img.shields.io/coveralls/beavyHQ/beavy.svg?style=flat-square[link="https://coveralls.io/github/beavyHQ/beavy?branch=master"] image:https://img.shields.io/badge/waffle-Contribute-4078c0.svg?style=flat-square[link="https://waffle.io/beavyHQ/beavy"] image:https://img.shields.io/badge/gitter-Chat-ff69b4.svg?style=flat-square[link="https://gitter.im/beavyHQ/beavy?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"]  image:https://img.shields.io/badge/twitter-Follow-8E5990.svg?style=flat-square[link="https://www.twitter.com/beavyHQ]
 
 **Main Repo**: https://github.com/beavyHQ/beavy
 
