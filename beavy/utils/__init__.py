@@ -45,7 +45,19 @@ def api_only(fn):
         accepted = set(request.accept_mimetypes.values())
         if not (accepted & API_MIMETYPES) and not request.args.get("json"):
             return abort(415, "Unsupported Media Type")
-        return fn(*args, **kwargs)
+
+        resp = fn(*args, **kwargs)
+        if not isinstance(resp, ResponseBase):
+            data, code, headers = unpack(resp)
+            # we've found one, return json
+            if isinstance(data, MarshalResult):
+                data = data.data
+            resp = make_response(json.dumps(data), code)
+
+            if headers:
+                resp.headers.update(headers)
+            resp.headers["Content-Type"] = 'application/json'
+        return resp
     return wrapped
 
 
