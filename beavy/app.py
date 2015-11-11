@@ -5,6 +5,7 @@ from flask.ext.marshmallow import Marshmallow
 from flask.ext.migrate import Migrate, MigrateCommand
 from flask.ext.security import Security, SQLAlchemyUserDatastore, current_user
 from flask.ext.security.utils import encrypt_password
+from flask.ext.cache import Cache
 from flask_mail import Mail
 from flask_limiter import Limiter
 from flask_admin import Admin, AdminIndexView
@@ -134,6 +135,9 @@ mail = Mail(app)
 
 # limit access to the app
 limiter = Limiter(app)
+
+# add caching support
+cache = Cache(app)
 
 
 #  ------ Database setup is done after here ----------

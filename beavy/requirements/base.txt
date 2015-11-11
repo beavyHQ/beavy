@@ -35,6 +35,7 @@ Flask-Security==1.7.4
 flask-social-blueprint==0.7
 Flask-SQLAlchemy==2.0
 Flask-WTF==0.12
+Flask-Cache==0.13.1
 future==0.15.2
 gnureadline==6.3.3
 google-api-python-client==1.4.2

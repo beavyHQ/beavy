@@ -9,6 +9,12 @@ COMMON: &common
   RATELIMIT_GLOBAL: "200/hour"
   HOME_URL: '/hello'
 
+  # CACHE STUFF
+  CACHE_TYPE: "null"
+  CACHE_NO_NULL_WARNING: False
+  # we set a default timeout for the entire caching
+  # to 15minutes
+  CACHE_DEFAULT_TIMEOUT: 900
 
 DEVELOPMENT: &development
   <<: *common
@@ -37,5 +43,7 @@ PRODUCTION: &production
   <<: *common
   CELERY_BROKER_URL: amqp://guest:guest@broker:5672//
   CELERY_RESULT_BACKEND: 'rpc://'
-  CELERY_RESULT_PERSISTENT: False  
+  CELERY_RESULT_PERSISTENT: False
   SQLALCHEMY_DATABASE_URI: "postgresql://postgres@db/beavy"
+  CACHE_TYPE: redis
+  CACHE_REDIS_URL: redis://localhost:6379/2
