@@ -26,7 +26,7 @@ class ModelConverter(BaseConverter):
         except ValueError:
             pass
 
-        if not getattr(cls, "__LOOKUP_ATTRS__"):
+        if not getattr(cls, "__LOOKUP_ATTRS__", False):
             abort(404)
 
         return cls.query.filter(or_(*[getattr(cls, key) == value
