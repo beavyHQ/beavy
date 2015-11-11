@@ -1,5 +1,5 @@
 lassie==0.6.2
-pyoembed==0.1.1
+pyembed==1.3.0
 requests==2.8.1
 six==1.10.0
 beautifulsoup4==4.4.1
