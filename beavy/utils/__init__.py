@@ -43,7 +43,8 @@ def api_only(fn):
     @wraps(fn)
     def wrapped(*args, **kwargs):
         accepted = set(request.accept_mimetypes.values())
-        if not (accepted & API_MIMETYPES) and not request.args.get("json"):
+        explicit = not( not request.args.get("json", False))
+        if not (accepted & API_MIMETYPES) and not explicit:
             return abort(415, "Unsupported Media Type")
 
         resp = fn(*args, **kwargs)
@@ -52,7 +53,8 @@ def api_only(fn):
             # we've found one, return json
             if isinstance(data, MarshalResult):
                 data = data.data
-            resp = make_response(json.dumps(data), code)
+            resp = make_response(json.dumps(data,
+                    indent=explicit and 4 or 0), code)
 
             if headers:
                 resp.headers.update(headers)
@@ -73,11 +75,13 @@ def fallbackRender(template, key=None):
             data, code, headers = unpack(resp)
 
             accepted = set(request.accept_mimetypes.values())
-            if len(accepted & API_MIMETYPES) or request.args.get("json"):
+            explicit = not (not request.args.get("json", False))
+            if len(accepted & API_MIMETYPES) or explicit:
                 # we've found one, return json
                 if isinstance(data, MarshalResult):
                     data = data.data
-                resp = make_response(json.dumps(data), code)
+                resp = make_response(json.dumps(data,
+                        indent=explicit and 4 or 0), code)
                 ct = 'application/json'
             else:
                 resp = make_response(render_template(template,
