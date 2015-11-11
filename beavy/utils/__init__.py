@@ -8,8 +8,10 @@ from functools import wraps
 import importlib
 
 
-API_MIMETYPES = ('application/json',
-                 'application/vnd.api+json')
+API_MIMETYPES = set((
+                    'application/json',
+                    'application/vnd.api+json'
+                    ))
 
 
 def load_modules_and_app(app):
@@ -47,8 +49,7 @@ def api_only(fn):
     return wrapped
 
 
-def fallbackRender(template, key=None, nativeTypes=API_MIMETYPES):
-    nativeTypes = set(nativeTypes)
+def fallbackRender(template, key=None):
 
     def wrapper(fn):
         @wraps(fn)
@@ -60,7 +61,7 @@ def fallbackRender(template, key=None, nativeTypes=API_MIMETYPES):
             data, code, headers = unpack(resp)
 
             accepted = set(request.accept_mimetypes.values())
-            if len(accepted & nativeTypes) or request.args.get("json"):
+            if len(accepted & API_MIMETYPES) or request.args.get("json"):
                 # we've found one, return json
                 if isinstance(data, MarshalResult):
                     data = data.data
