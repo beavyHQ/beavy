@@ -1,0 +1,14 @@
+= Beavy Url Extractor
+
+A backend (worker) module extracting information from URLs given.
+
+Extracts information using
+
+ - link:https://lassie.readthedocs.org/en/latest/[Lassie]
+ - link:https://github.com/rafaelmartins/pyoembed[PyOEmbed]
+ 
+== Configuration
+
+Add ` url_extractor ` to your list of modules in the `$ROOT/config.yaml`
+
+== Usage
