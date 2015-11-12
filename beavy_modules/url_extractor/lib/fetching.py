@@ -272,8 +272,8 @@ class PostProcessingLassie(Lassie):
         return data
 
 # this is what is exported
-lassie = PostProcessingLassie()
-lassie.request_opts = {
+extractor = PostProcessingLassie()
+extractor.request_opts = {
     'headers':{
         # tell Lassie to tell others it is facebook
         'User-Agent': 'facebookexternalhit/1.1'

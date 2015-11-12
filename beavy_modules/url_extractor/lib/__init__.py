@@ -1,7 +1,7 @@
 
 from beavy.app import cache
-from .fetching import lassie
+from .fetching import extractor
 
 @cache.memoize()
 def extract_info(url):
-    return lassie.fetch(url)
+    return extractor.fetch(url)
