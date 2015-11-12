@@ -49,6 +49,11 @@ FILTER_MAPS['meta']['open_graph']['map'].update({
     "book:release_date": "release_date",
 })
 
+FILTER_MAPS['meta']['generic']['pattern'] =  re.compile(r"^(description|keywords|title|generator)")
+FILTER_MAPS['meta']['generic']['map']['generator'] = 'generator'
+
+
+
 def _matches(data, **kwargs):
     for key, match in kwargs.items():
         try:
@@ -156,6 +161,81 @@ class ArticleMetaExtractor:
                 data["genre"] = genre.get("content")
 
 
+class MediaWikiExtractor:
+    def __call__(self, soup, data, url=None):
+        if not _matches(data, generator=lambda x: x.lower().startswith("mediawiki")) or data.get("type", False):
+            return
+        for iD, key in ( ('firstHeading', 'title'),
+                         ('siteSub', 'site_name')):
+            if data.get(key, False):
+                continue
+
+            obj = soup.find(id=iD)
+            if obj:
+                data[key] = obj.string
+
+        content = soup.find(id="mw-content-text")
+        if content:
+            data["type"] = 'article:wiki'
+
+            # find the first image:
+            first_image = content.find("img")
+            if first_image:
+                data["images"].append({
+                    "src": first_image.get("src"),
+                    "type": "contentImage"
+                })
+
+            first_para = content.find("p")
+            if first_para:
+                data["description"] = first_para.text
+
+class BloggerExtractor:
+
+    def __call__(self, soup, data, url=None):
+        if not _matches(data, generator="blogger") or data.get("description", False):
+            return
+
+        blog_content = soup.find('div', class_="post-content")
+        if blog_content:
+            # bingo
+            for img in blog_content.find_all("img", limit=3):
+                data['images'].append({
+                    "src": img.get("src"),
+                    "type": "contentImage"
+                })
+
+            data['description'] = blog_content.text[:500]
+            data["type"] = "article:blog"
+
+class SimpleInfoFallbackExtractor:
+
+    def __call__(self, soup, data, url=None):
+        if data.get("description", False):
+            return
+
+        for query in [
+                    dict(id="content"),
+                    dict(role="content"),
+                    dict(role="main"),
+                    dict(id="main"),
+                    dict(class_="content"),
+                    dict(class_="main"),
+                    dict(id="page"),
+                    dict(class_="page")]:
+            box = soup.find(**query)
+            if box:
+                paragraphs = [x for x in map(lambda x: x.text, box.find_all(["div", "p"], limit=5)) if x and len(x) > 50]
+                if paragraphs:
+                    data['description'] = paragraphs[0]
+                    for img in box.find_all("img", limit=3):
+                        data['images'].append({
+                            "src": img.get("src"),
+                            "type": "contentImage"
+                        })
+                    # first found: stop the loop!
+                    break
+
 class PostProcessingLassie(Lassie):
 
     POST_PROCESSORS = [
@@ -163,13 +243,21 @@ class PostProcessingLassie(Lassie):
         AlternateFinder(),
         OEmbedExtractor(), # OEmbed only works after Alternate!
 
+
         # Mid specific:
+        # Fetches for e.g. WikiPedia Content
+        MediaWikiExtractor(),
         # Newspapers (like NYTimes):
         ArticleMetaExtractor(),
+        # Blogger Style
+        BloggerExtractor(),
 
         # Specific Platforms:
         AmazonISBNFinder(),
-        SoundcloudInfoExtractor()
+        SoundcloudInfoExtractor(),
+
+        # If we don't find anything, extract from content
+        SimpleInfoFallbackExtractor()
     ]
 
     def _filter_meta_data(self, source, soup, data, url=None):
