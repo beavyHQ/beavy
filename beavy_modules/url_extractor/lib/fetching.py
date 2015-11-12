@@ -1,5 +1,3 @@
-from pyembed.core import PyEmbed
-
 from lassie.core import Lassie
 from lassie.compat import str
 
@@ -50,9 +48,6 @@ FILTER_MAPS['meta']['open_graph']['map'].update({
     "book:isbn": "isbn",
     "book:release_date": "release_date",
 })
-
-# general configuration
-pyembed = PyEmbed()
 
 def _matches(data, **kwargs):
     for key, match in kwargs.items():
@@ -188,6 +183,7 @@ class PostProcessingLassie(Lassie):
 
         return data
 
+# this is what is exported
 lassie = PostProcessingLassie()
 lassie.request_opts = {
     'headers':{
