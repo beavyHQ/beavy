@@ -1,6 +1,5 @@
 import React from "react";
 import { Modal } from "components/Modal";
-import config from 'config/config';
 import { closeModal } from 'actions/user_modal';
 import { USER_MODAL } from 'reducers/user_modal';
 import { connect } from 'react-redux';

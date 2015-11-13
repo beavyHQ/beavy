@@ -6,7 +6,6 @@ import { Route, Redirect, DefaultRoute, NotFoundRoute, Router, RoutingContext  }
 /* eslint-disable no-multi-spaces */
 // Only import from `route-handlers/*`
 import { getExtensions } from "config/extensions";
-import { HOME_URL } from "config/config";
 import setupViews from "views";
 
 import { ReduxRouter } from 'redux-router';
@@ -45,17 +44,17 @@ export default class Root extends React.Component {
           routes = getExtensions('routes');
 
     remapRoutes(routes);
-    if (routes_by_path[HOME_URL]){
-      const store = routes_by_path[HOME_URL]._store;
+    if (routes_by_path[__CONFIG__HOME_URL]){
+      const store = routes_by_path[__CONFIG__HOME_URL]._store;
       if(store){
         // already assigned
         store.originalProps.path = "/";
         store.props.path = "/";
       } else {
         // not yet handeled, let's fake it
-        routes_by_path[HOME_URL].props.path = "/"
+        routes_by_path[__CONFIG__HOME_URL].props.path = "/"
       }
-      routes.push(<Redirect from={HOME_URL} to="/" />)
+      routes.push(<Redirect from={__CONFIG__HOME_URL} to="/" />)
     } else {
       // routes.push(<Route component={HomeView} path="*" />);
     }

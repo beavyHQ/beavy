@@ -8,13 +8,11 @@ if(!Object.assign)
 
 require("styles/main.scss")
 
-import config from "config/config";
 import modules from 'config/modules';
-
 import Root from 'config/root';
 
 // tie it all together
-const Application = require("module-imports?ext=/frontend/application.jsx&path=./beavy_apps/!grep?APP!yaml!../../config.yml").default;
+const Application = require("../../beavy_apps/" + __CONFIG__APP + "/frontend/application.jsx").default;
 
 const target = document.getElementById('content');
 

@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router";
-import { NAME } from 'config/config';
 import defaultStyles from 'components/MainMenu.scss';
 import classnames from 'classnames';
 
@@ -14,7 +13,7 @@ export class MainMenu extends React.Component {
 					  <div className={styles.navigationWrapper}>
 					    <Link to="/" className={styles.logo}>
 					      <img src={logo} alt="Logo Image" />
-					      <span className={styles.title}>{this.props.name || NAME}</span>
+					      <span className={styles.title}>{this.props.name || __CONFIG__NAME}</span>
 					    </Link>
 					    <a href="" className={styles.navigationMenuButton}>MENU</a>
 					    <nav role="navigation">
