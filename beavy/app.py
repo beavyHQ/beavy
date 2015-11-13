@@ -5,8 +5,10 @@ from flask.ext.marshmallow import Marshmallow
 from flask.ext.migrate import Migrate, MigrateCommand
 from flask.ext.security import Security, SQLAlchemyUserDatastore, current_user
 from flask.ext.security.utils import encrypt_password
+from flask.ext.cache import Cache
 from flask_mail import Mail
 from flask_limiter import Limiter
+from flask_limiter.util import get_ipaddr
 from flask_admin import Admin, AdminIndexView
 
 from flask_social_blueprint.core import SocialBlueprint as SocialBp
@@ -104,6 +106,10 @@ class BeavyAdminIndexView(AdminIndexView):
 
         return False
 
+def _limiter_key():
+    if current_user.is_authenticated():
+        return "u_{}".format(current_user.id)
+    return "ip_{}".format(get_ipaddr())
 # --------------------------- Setting stuff up in order ----------
 
 
@@ -133,7 +139,13 @@ babel = Babel(app)
 mail = Mail(app)
 
 # limit access to the app
-limiter = Limiter(app)
+limiter = Limiter(app, key_func=_limiter_key)
+# configure logging for limiter
+for handler in app.logger.handlers:
+    limiter.logger.addHandler(handler)
+
+# add caching support
+cache = Cache(app)
 
 
 #  ------ Database setup is done after here ----------

@@ -1,0 +1,5 @@
+lassie==0.6.2
+requests==2.8.1
+six==1.10.0
+beautifulsoup4==4.4.1
+html5lib==1.0b3

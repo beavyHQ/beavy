@@ -57,8 +57,25 @@ class Behave(Command):
 
         exit(behave_main(sys.argv[2:] + ['--no-capture', "beavy_apps/{}/tests/features".format(frontend)]))
 
-behave = Behave()
-manager.add_command("behave", behave)
+
+manager.add_command("behave", Behave())
+
+class PyTest(Command):
+    def run(self):
+        import pytest
+
+        arguments = ["--cov-config", ".coveragerc", "--cov=beavy", "beavy"]
+
+        for module in app.config.get("MODULES", []):
+            arguments.append("--cov=beavy_modules/{}".format(module))
+            arguments.append("beavy_modules/{}".format(module))
+
+        arguments.append("--cov=beavy_apps/{}".format(app.config["APP"]))
+        arguments.append("beavy_apps/{}".format(app.config["APP"]))
+
+        exit(pytest.main(arguments))
+
+manager.add_command("pytest", PyTest())
 
 if __name__ == '__main__':
     manager.run()

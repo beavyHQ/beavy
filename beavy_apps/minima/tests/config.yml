@@ -4,6 +4,7 @@ MODULES:
  - comments
  - likes
  - private_messaging
+ - url_extractor
 
 APP: 'minima'
 

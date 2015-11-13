@@ -8,8 +8,10 @@ from functools import wraps
 import importlib
 
 
-API_MIMETYPES = ('application/json',
-                 'application/vnd.api+json')
+API_MIMETYPES = set((
+                    'application/json',
+                    'application/vnd.api+json'
+                    ))
 
 
 def load_modules_and_app(app):
@@ -41,14 +43,27 @@ def api_only(fn):
     @wraps(fn)
     def wrapped(*args, **kwargs):
         accepted = set(request.accept_mimetypes.values())
-        if not (accepted & API_MIMETYPES) and not request.args.get("json"):
+        explicit = not( not request.args.get("json", False))
+        if not (accepted & API_MIMETYPES) and not explicit:
             return abort(415, "Unsupported Media Type")
-        return fn(*args, **kwargs)
+
+        resp = fn(*args, **kwargs)
+        if not isinstance(resp, ResponseBase):
+            data, code, headers = unpack(resp)
+            # we've found one, return json
+            if isinstance(data, MarshalResult):
+                data = data.data
+            resp = make_response(json.dumps(data,
+                    indent=explicit and 4 or 0), code)
+
+            if headers:
+                resp.headers.update(headers)
+            resp.headers["Content-Type"] = 'application/json'
+        return resp
     return wrapped
 
 
-def fallbackRender(template, key=None, nativeTypes=API_MIMETYPES):
-    nativeTypes = set(nativeTypes)
+def fallbackRender(template, key=None):
 
     def wrapper(fn):
         @wraps(fn)
@@ -60,11 +75,13 @@ def fallbackRender(template, key=None, nativeTypes=API_MIMETYPES):
             data, code, headers = unpack(resp)
 
             accepted = set(request.accept_mimetypes.values())
-            if len(accepted & nativeTypes) or request.args.get("json"):
+            explicit = not (not request.args.get("json", False))
+            if len(accepted & API_MIMETYPES) or explicit:
                 # we've found one, return json
                 if isinstance(data, MarshalResult):
                     data = data.data
-                resp = make_response(json.dumps(data), code)
+                resp = make_response(json.dumps(data,
+                        indent=explicit and 4 or 0), code)
                 ct = 'application/json'
             else:
                 resp = make_response(render_template(template,
