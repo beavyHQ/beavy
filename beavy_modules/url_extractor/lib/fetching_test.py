@@ -15,6 +15,15 @@ class StartsWith:
     def __eq__(self, other):
         return other.startswith(self.str)
 
+class Present:
+    def __init__(self, type_=None):
+        self._type = type_
+    def __eq__(self, other):
+        if self._type:
+            return isinstance(other, self._type)
+        return other is not None
+
+
 @pytest.mark.slow
 @pytest.mark.external
 def test_blogger_example():
@@ -521,7 +530,7 @@ def test_youtube_example():
             "Operating System (Software Genre)",
             "cognitive bias"
         ],
-        "locale": "de_DE",
+        "locale": Present(str), # Locale depends on origin of request ...
         "oembed": {
             "author_name": "O'Reilly",
             "author_url": "https://www.youtube.com/user/OreillyMedia",
