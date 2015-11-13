@@ -190,6 +190,17 @@ class MediaWikiExtractor:
             if first_para:
                 data["description"] = first_para.text
 
+
+class YoutubeExtractor:
+
+    def __call__(self, soup, data, url=None):
+        if not _matches(data, type="video", site_name="YouTube"):
+            return
+
+        baseContent = soup.find(id="eow-description")
+        if baseContent:
+            data['full_description'] = baseContent.text
+
 class BloggerExtractor:
 
     def __call__(self, soup, data, url=None):
@@ -255,6 +266,7 @@ class PostProcessingLassie(Lassie):
         # Specific Platforms:
         AmazonISBNFinder(),
         SoundcloudInfoExtractor(),
+        YoutubeExtractor(),
 
         # If we don't find anything, extract from content
         SimpleInfoFallbackExtractor()

@@ -243,6 +243,30 @@ def test_soundcloud_song_example():
         "videos": []
     }
 
+
+@pytest.mark.slow
+@pytest.mark.external
+def test_slidesCom_example():
+    assert extractor.fetch("http://slides.com/benjaminkampmann/component-oriented-ux/") == {
+        "alternates": {},
+        "description": "Understanding UI as reusable components and building it in a modular way are the new black in web development. But how exactly do you apply these latest technologies while still allowing overall themes and customization as we are used to? In this case study, we will look under the hood of beavy to understand how it uses CSS Modules and React to marry having highly complex, reusable UI-components and ensuring they can be completely customized at the same time. And what that means for the overall design process. --- This talk has been presented at UpFront #62, Nov 10th 2015, Berlin: http://www.meetup.com/up-front-ug/events/226053994/",
+        "images": [
+            {
+                "src": "https://s3.amazonaws.com/media-p.slid.es/thumbnails/secure/69e3a7/decks.jpg",
+                "type": "og:image"
+            },
+            {
+                "src": "https://s3.amazonaws.com/media-p.slid.es/thumbnails/secure/69e3a7/decks.jpg",
+                "type": "twitter:image"
+            }
+        ],
+        "site_name": "Slides",
+        "title": "Component-Oriented UX For The Win\u2026 But How? by Benjamin Kampmann",
+        "type": "article",
+        "url": "http://slides.com/benjaminkampmann/component-oriented-ux",
+        "videos": []
+    }
+
 @pytest.mark.slow
 @pytest.mark.external
 def test_nytimes_example():
@@ -266,9 +290,9 @@ def test_nytimes_example():
         "keywords": [
             "Music",
             "Rap and Hip-Hop",
-            "Le1f",
             "Riot Boi (Album Title)",
-            "Discrimination"
+            "Discrimination",
+            "Diouf  Khalif (Le1f) (1989- )"
         ],
         "locale": "en_US",
         "publisher": "The New York Times",
@@ -311,7 +335,7 @@ def test_zeitDe_example():
         ],
         "locale": "de_DE",
         "site_name": "ZEIT ONLINE",
-        "title": "Radikal ist in Polen zum Mainstream geworden",
+        "title": "Unabh\u00e4ngigkeitstag: Radikal ist in Polen zum Mainstream geworden |\u00a0ZEIT ONLINE",
         "type": "article",
         "url": "http://www.zeit.de/politik/ausland/2015-11/polen-unabhaengigkeit-marsch-nationalisten",
         "videos": []
@@ -456,6 +480,7 @@ def test_youtube_example():
         "author_name": "O'Reilly",
         "author_url": "https://www.youtube.com/user/OreillyMedia",
         "description": "From the 2015 Velocity Conference in New York: I\u2019m going to talk about cognitive bias in operations land. I will go through two examples. The first example i...",
+        "full_description": "From the 2015 Velocity Conference in New York: I\u2019m going to talk about cognitive bias in operations land. I will go through two examples.The first example is how cognitive biases can help us miss the next great thing. In this case, I will show how we could have almost missed the Docker revolution. I\u2019ll use this example to draw parallels and build up a transition to my second point.The second example is the meat of the talk. In this example I\u2019ll reflect on how blindly rejecting ideas from others unlike yourself is the biggest diversity/integration issue in tech and society.The talk will end with bold assertions about why we are in the tech industry. I will fall short of proposing a solution, but will leave with tech\u2019s problems are society\u2019s problems, and we have to think bigger in our search for solutions.About Bryan Liles (DigitalOcean):Bryan Liles works on strategic initiatives for DigitalOcean. In layman\u2019s terms, this means he writes OSS for DigitalOcean and others. He helps communities move their software to the public cloud, and gets to speak at conferences on topics ranging from Machine Learning to how build the next generation of developers. When not thinking about code, Bryan races cars in straight lines and around turns and builds robots and devicesWatch more from Velocity NYC 2015: https://goo.gl/PZAqiYVisit the Velocity website: http://velocityconf.com/Don't miss an upload! Subscribe! http://goo.gl/szEauhStay Connected to O'Reilly Media by Email - http://goo.gl/YZSWbOFollow O'Reilly Media:http://plus.google.com/+oreillymediahttps://www.facebook.com/OReillyhttps://twitter.com/OReillyMedia",
         "images": [
             {
                 "src": "https://i.ytimg.com/vi/SQ5wYZqHQGo/hqdefault.jpg",
