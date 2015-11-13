@@ -1,9 +1,9 @@
+/*global __CONFIG__SECURITY_REGISTERABLE */
 import React from 'react'
 import { Link } from 'react-router'
 import { make_url } from 'utils'
 import { connect } from 'react-redux'
 import { getExtensions } from 'config/extensions'
-import config from 'config/config'
 import {openLogin, openRegister} from 'actions/user_modal'
 import mmStyles from 'components/MainMenu.scss'
 import classnames from 'classnames'
@@ -21,15 +21,15 @@ export class UserMenuWidget extends React.Component {
   }
 
   renderLoggedOut () {
-    if (config.SECURITY_REGISTERABLE) {
+    if (__CONFIG__SECURITY_REGISTERABLE) {
       return <li className={mmStyles.navLink}>
-                  <button onClick={(e) => this.props.dispatch(openLogin())}>
-                    Login
-                  </button>
-                  <button onClick={(e) => this.props.dispatch(openRegister())}>
-                    Sign up
-                  </button>
-               </li>
+                <button onClick={(e) => this.props.dispatch(openLogin())}>
+                  Login
+                </button>
+                <button onClick={(e) => this.props.dispatch(openRegister())}>
+                  Sign up
+                </button>
+             </li>
     } else {
       return <li className={mmStyles.navLink}>
                 <button onClick={(e) => this.props.dispatch(openLogin())}>

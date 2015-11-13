@@ -7,7 +7,10 @@ COMMON: &common
   SECURITY_PASSWORD_HASH: "bcrypt"
   RATELIMIT_HEADERS_ENABLED: True
   RATELIMIT_GLOBAL: "200/hour"
-  HOME_URL: '/hello'
+  URLS:
+    HOME: /hello
+    USERS: /u
+    ACCOUNT: /account
 
   # CACHE STUFF
   CACHE_TYPE: "null"

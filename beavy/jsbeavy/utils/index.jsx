@@ -1,4 +1,4 @@
-import config, { HOME_URL } from 'config/config'
+/* global __CONFIG__HOME_URL, __CONFIG__URLS */
 
 export function createConstants (...constants) {
   return constants.reduce((acc, constant) => {
@@ -12,13 +12,15 @@ export function getStoreEntity (state, item) {
 }
 
 function makePrefixUrlMaker (prefix) {
-  if (prefix.slice(-1) !== '/') prefix += '/'
+  if (prefix.slice(-1) !== '/') {
+    prefix += '/'
+  }
   return function makeUrl (inp) {
     let url = prefix + inp
     if (url.slice(-1) !== '/') {
       url += '/'
     }
-    if (url === HOME_URL) { return '/' }
+    if (url === __CONFIG__HOME_URL) { return '/' }
     return url
   }
 }
@@ -26,9 +28,9 @@ function makePrefixUrlMaker (prefix) {
 export const make_url = (function (cfg) {
   const urlMakers = {}
   for (var key in cfg) {
-    if (cfg.hasOwnProperty(key) && key.slice(-4) === '_URL') {
-      urlMakers[key.slice(0, -4).toLowerCase()] = makePrefixUrlMaker(cfg[key])
+    if (cfg.hasOwnProperty(key)) {
+      urlMakers[key.toLowerCase()] = makePrefixUrlMaker(cfg[key])
     }
   }
   return urlMakers
-})(config)
+})(__CONFIG__URLS)
