@@ -7,7 +7,8 @@
     "test": "BABEL_JEST_STAGE=0 ./node_modules/jest-cli/bin/jest.js --coverage jsbeavy beavy_modules/ beavy_apps",
     "dev-server": "webpack-dev-server --config .infrastructure/webpack/webpack-dev-server.config.js --progress --colors --port 2992 --inline",
     "hot-dev-server": "webpack-dev-server --config .infrastructure/webpack/webpack-hot-dev-server.config.js --hot --progress --colors --port 2992 --inline",
-    "build": "webpack --config .infrastructure/webpack/webpack-production.config.js --progress --profile --colors"
+    "build": "webpack --config .infrastructure/webpack/webpack-production.config.js --progress --profile --colors",
+    "vagrant": "webpack-dev-server --config .infrastructure/webpack/webpack-hot-dev-server.config.js --hot --progress --colors --host 0.0.0.0 --port 2992 --inline"
   },
   "author": "Benjamin Kampmann <ben@create-build-execute.com>",
   "license": "MIT",
