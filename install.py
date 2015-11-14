@@ -6,7 +6,10 @@ if __name__ == '__main__':
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
     def install(fn):
-        pip.main(["install", "-r", fn])
+        ERR = pip.main(["install", "-r", fn])
+        if ERR:
+            print ("INSTALL FAILED. CHECK ABOVE")
+            exit(ERR)
 
     try:
         import yaml
