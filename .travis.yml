@@ -124,6 +124,7 @@ after_success:
 cache:
   directories:
     - $HOME/.cache/pip
+    - node_modules
 
 services:
   - redis-server
