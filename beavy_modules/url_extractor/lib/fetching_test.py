@@ -23,6 +23,15 @@ class Present:
             return isinstance(other, self._type)
         return other is not None
 
+class HasItems:
+    def __init__(self, items=[]):
+        self.items = items
+
+    def __eq__(self, other):
+        for it in self.items:
+            if not it in other:
+                return False
+        return True
 
 @pytest.mark.slow
 @pytest.mark.external
@@ -406,13 +415,7 @@ def test_flickr_image_example():
 @pytest.mark.external
 def test_tedCom_example():
     assert extractor.fetch("http://www.ted.com/talks/andreas_ekstrom_the_moral_bias_behind_your_search_results") == {
-        "alternates": {
-            "application/json+oembed": "http://www.ted.com/services/v1/oembed.json?url=http%3A%2F%2Fwww.ted.com%2Ftalks%2Fandreas_ekstrom_the_moral_bias_behind_your_search_results",
-            "application/xml+oembed": "http://www.ted.com/services/v1/oembed.xml?url=http%3A%2F%2Fwww.ted.com%2Ftalks%2Fandreas_ekstrom_the_moral_bias_behind_your_search_results",
-            "en": "http://www.ted.com/talks/andreas_ekstrom_the_moral_bias_behind_your_search_results?language=en",
-            "pt-br": "http://www.ted.com/talks/andreas_ekstrom_the_moral_bias_behind_your_search_results?language=pt-br",
-            "x-default": "http://www.ted.com/talks/andreas_ekstrom_the_moral_bias_behind_your_search_results"
-        },
+        "alternates": HasItems(["application/json+oembed","application/xml+oembed", "x-default", "en"]),
         "author_name": "Andreas Ekstr\u00f6m",
         "author_url": "http://www.ted.com/speakers/andreas_ekstrom",
         "description": "Search engines have become our most trusted sources of information and arbiters of truth. But can we ever get an unbiased search result? Swedish author and journalist Andreas Ekstr\u00f6m argues that such a thing is a philosophical impossibility. In this thoughtful talk, he calls on us to strengthen the bonds between technology and the humanities, and he reminds us that behind every algorithm is a set of personal beliefs that no code can ever completely eradicate.",
