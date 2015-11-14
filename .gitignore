@@ -12,3 +12,6 @@ ghostdriver.log
 .DS_Store
 .coverage
 var/*
+Vagrantfile
+start.sh
+.vagrant
