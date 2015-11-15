@@ -4,9 +4,11 @@ if __name__ == '__main__':
     import os
 
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    FILES = []
 
-    def install(fn):
-        pip.main(["install", "-r", fn])
+    def collect(fn):
+        FILES.append("-r")
+        FILES.append(fn)
 
     try:
         import yaml
@@ -19,17 +21,20 @@ if __name__ == '__main__':
 
 
     if os.environ.get("BEAVY_ENV", None):
-        print("----- Install basic requirements")
-        install(os.path.join(BASE_DIR, "beavy", "requirements", "base.txt"))
+        print("----- Adding basic requirements")
+        collect(os.path.join(BASE_DIR, "beavy", "requirements", "base.txt"))
         if os.environ.get("BEAVY_ENV", None) in ["TEST", "DEV", "DEBUG"]:
-            print("----- Install dev requirements")
-            install(os.path.join(BASE_DIR, "beavy", "requirements", "dev.txt"))
+            print("----- Adding dev requirements")
+            collect(os.path.join(BASE_DIR, "beavy", "requirements", "dev.txt"))
     else:
-        install(os.path.join(BASE_DIR, "beavy", "requirements", "base.txt"))
-        install(os.path.join(BASE_DIR, "beavy", "requirements", "dev.txt"))
+        print("----- Adding dev requirements")
+        collect(os.path.join(BASE_DIR, "beavy", "requirements", "base.txt"))
+        collect(os.path.join(BASE_DIR, "beavy", "requirements", "dev.txt"))
 
     for module in config["MODULES"]:
         filename = os.path.join(BASE_DIR, "beavy_modules", module, "requirements.txt")
         if os.path.exists(filename):
-            print("----- Installing Requirements for {}".format(module))
-            install(filename)
+            print("----- Adding Requirements for {}".format(module))
+            collect(filename)
+
+    exit(pip.main(["install"] + FILES))
