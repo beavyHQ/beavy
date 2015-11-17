@@ -197,9 +197,6 @@ module.exports = function(options) {
 				color: true,
 				exclude: excludeFromStats
 			}
-		},
-		watchOptions: {
-			poll: 250
 		}
 	};
 };
