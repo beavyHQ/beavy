@@ -305,13 +305,10 @@ def test_nytimes_example():
                 "type": "favicon"
             }
         ],
-        "keywords": [
+        "keywords": HasItems([
             "Music",
-            "Rap and Hip-Hop",
-            "Riot Boi (Album Title)",
-            "Discrimination",
-            "Diouf  Khalif (Le1f) (1989- )"
-        ],
+            "Rap and Hip-Hop"
+        ]),
         "locale": "en_US",
         "publisher": "The New York Times",
         "section": "Music",
