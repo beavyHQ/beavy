@@ -6,7 +6,7 @@ var config = require("./make-webpack-config")({
   // redux_dev_tools: true,
   debug: true,
   watchOptions: {
-    poll: 250
+    poll: 2000
   },
 });
 console.log(JSON.stringify(config, null, 2));
