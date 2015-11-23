@@ -32,7 +32,7 @@ APP: 'minima'
 # Which url do you want to be the 'home' screen,
 # the entry point of the app. Please read the
 # docs on configuration
-# HOME_URL: '/hello'
+HOME_URL: '/hello'
 
 # Uncomment this to enable registrations
 # SECURITY_REGISTERABLE: true

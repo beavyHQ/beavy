@@ -8,6 +8,10 @@ import HomeView from 'views/HomeView';
 
 export default function setupViews(Application){
   addExtension('routes',
+      <Route name="hello" path="/" component={HomeView}>
+      </Route>);
+
+  addExtension('routes',
       <Route name="user" path={make_url.users("/:userId/")} component={UserView}>
         {getExtensions('userRoutes')}
       </Route>);

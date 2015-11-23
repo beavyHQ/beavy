@@ -28,12 +28,11 @@ export class HomeView extends React.Component {
   render () {
     return (
       <div className='container text-center'>
-        <h1>Welcome to the React Redux Starter Kit</h1>
-        <h2>Sample Counter: {this.props.counter}</h2>
-        <button className='btn btn-default'
-                onClick={::this._increment}>
-          Increment
-        </button>
+        <img src="http://beavy.xyz/logos/logo.svg" alt="beavy logo" width="150" />
+        <h1>Wecome to Beavy!</h1>
+        <p>
+        Please take a look at the <a href="https://beavyhq.gitbooks.io/beavy-documentation/content/" target="_blank">documentation</a>.
+        </p>
       </div>
     );
   }
