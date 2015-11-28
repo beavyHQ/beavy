@@ -23,7 +23,8 @@
 .. link:beavy_apps/twitter/README.adoc[Twitter]
 
 . link:docs/Development.adoc[Developing your App]
-.. link:docs/Development-Setup.adoc[Setup]
+.. link:docs/Development-Vagrant.adoc[Vagrant Setup]
+.. link:docs/Development-App-Setup.adoc[App Setup]
 .. link:docs/Development-Running.adoc[Running]
 .. link:docs/Development-Database-Migrations.adoc[Database Migrations]
 .. link:docs/Development-Module-Development.adoc[New Modules]
