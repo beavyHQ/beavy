@@ -22,9 +22,9 @@ From within your vagrant type `./start.sh` to start the beavy processes.
 This will open a tmux splitted window session. On the top is a default
 shell for you to use (on vagrant of course).
 
-On the bottom left, you have first npm update and install all dependencies, then start webpack to compile the javascript files and automatically reload and compile them on change.
+On the bottom left, `npm install` has been run to install all the dependencies, followed by webpack to compile all the javascript files and watch for changes. So when you make changes to a javascript file, webpack will automatically reload and compile the changes here.
 
-On the bottom left, the session first installs all dependencies (depending on the modules you have configured), then run any migrations and start the flask process.
+On the bottom left, the session first installs all dependencies (depending on the modules you have configured), then runs any migrations and starts the flask process.
 
 Once both of them are up and running (`webpack: bundle is now VALID`), redirect your browser to:
 
