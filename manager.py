@@ -1,8 +1,9 @@
 from flask.ext.script import Command, Option
 from flask.ext import migrate as ext_migrate
 
-import os
 import sys
+import os
+import re
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -86,6 +87,14 @@ def create_app(name):
     given the @name.
     """
     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+    if not re.match("^[a-z][a-z0-9]{2,24}$", name):
+        print("Sorry, the app name has to be a lower-cased 3-25 character long string only containing letters, numbers and underscore and starting with a letter!")
+        print("RegEx: ^[a-z][a-z0-9]{2,24}$ ")
+        exit(1)
+
+
+
     APP_DIR = os.path.join(ROOT_DIR, "beavy_apps", name)
 
     if os.path.exists(APP_DIR):
