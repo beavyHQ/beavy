@@ -1,0 +1,18 @@
+= Vagrant setup
+
+We are using a vagrant box to provide a quick development environment
+for you to get started with. You will need
+
+ - [Vagrant](https://www.vagrantup.com/) >= 5.1.10
+ - [VirtualBox](https://www.virtualbox.org/) >= 4.3
+
+To setup the vagrant virtual machine, from beavy root run:
+
+```
+vagrant up --provision
+```
+
+When run for the first time, this might take a while as vagrant
+has to download the latest version of the virtual box image. Once
+this is done and everything has been set up, you should see a big
+green message welcoming you and asking you to run `start.sh`. **Before you link:Development-Running.adoc[can do that], make sure you properly link:Development-App-Setup.adoc[set up your own app]!**

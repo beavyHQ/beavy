@@ -11,3 +11,7 @@ The recommended way to develop your app with beavy is by forking the https://git
 Whenever you are at state that you want to integrate upstream changes into your branch, you can now just pull master from upstream, push it into your github fork and make a pull-request to your app-branch.
 
 **Note**: If you switch the default branch of your repo to the app-branch and maintain your beavy as a public fork on github, Beavy even sends your a PR (or updates an existing one) to that branch whenever upstream master build successfully. If you have travis setup for your own up (see link:Development-Testing.adoc[Testing in Development]), the PR will even directly show you whether the upstream changes break anything for you. This allows you to merge upstream changes with just the click of a button whenever it is reasonably safe.
+
+== Let's get started.
+
+While you are setting up the link:Development-Vagrant.adoc[Vagrant], take a look at how to link:Development-App-Setup.adoc[start up your own app].

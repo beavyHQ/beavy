@@ -1,0 +1,33 @@
+== Start your first App
+
+Once your vagrant is up (run `vagrant up` if it is not), log into your virtual machine via `vagrant ssh` and run the following to create a setup for your own app (replace `$APP` with the name of your app):
+
+```
+python manager.py create_app $APP
+```
+
+This will create a directory with your app name in `beavy_apps` with the few minimal set of files you need to get started.
+
+=== Configure your app
+
+If you haven't yet, copy the `config.example.yml` in the root directory to `config.yml` and configure it accordingly.
+
+Open the `config.yml` and set the newly created app for the value of `APP: `. Save your file.
+
+
+=== Start your app in vagrant
+
+From within your vagrant type `./start.sh` to start the beavy processes.
+
+This will open a tmux splitted window session. On the top is a default
+shell for you to use (on vagrant of course).
+
+On the bottom left, `npm install` has been run to install all the dependencies, followed by webpack to compile all the javascript files and watch for changes. So when you make changes to a javascript file, webpack will automatically reload and compile the changes here.
+
+On the bottom left, the session first installs all dependencies (depending on the modules you have configured), then runs any migrations and starts the flask process.
+
+Once both of them are up and running (`webpack: bundle is now VALID`), redirect your browser to:
+
+```http://localhost:2992/```
+
+**Congratulations**, you've just started your first beavy social community!
