@@ -51,7 +51,7 @@ PRODUCTION: &production
   CELERY_RESULT_BACKEND: 'rpc://'
   CELERY_RESULT_PERSISTENT: False
   SQLALCHEMY_DATABASE_URI: "postgresql://postgres@db/beavy"
-  RATELIMIT_STORAGE_URL: redis://localhost:6379/2
+  RATELIMIT_STORAGE_URL: redis://redis:6379/2
   RATELIMIT_STRATEGY: moving-window
   CACHE_TYPE: redis
-  CACHE_REDIS_URL: redis://localhost:6379/2
+  CACHE_REDIS_URL: redis://redis:6379/2
