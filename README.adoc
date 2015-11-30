@@ -11,5 +11,14 @@ Please see the link:http://beavy.xyz/[Website] and the link:https://beavyhq.gitb
 
 image:http://beavy.xyz/logos/logo.svg[Beavy Logo]
 
+== Code of Conduct
+
+image:https://img.shields.io/badge/Code_of_Conduct-Contributor_Covenant-green.svg?style=flat-square[link="http://contributor-covenant.org/"]
+
+This project is managed under an adapted link:http://contributor-covenant.org/[Contributer Convenant] Code of Conduct, applicable to everyone involved in the project (including core committers, maintainers and sponsors) in all forms of online and offline communication (public and private) as well as for all affiliated events and meetings.
+
+link:./CODE_OF_CONDUCT.adoc[Read the full Code of Conduct here].
+
+
 == License
 This Project is licensed under the Mozilla Public License, v. 2.0. You can find the full license text in the LICENSE file in the main directory or at http://mozilla.org/MPL/2.0/ .
