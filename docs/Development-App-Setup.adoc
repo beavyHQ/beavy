@@ -31,3 +31,12 @@ Once both of them are up and running (`webpack: bundle is now VALID`), redirect 
 ```http://localhost:2992/```
 
 **Congratulations**, you've just started your first beavy social community!
+
+==== [[running-tests-on-vagrant]]Running tests
+
+You can run all tests in the vagrant system now. When running <<./Testing.adoc#running-behave-tests, Behave Tests>> however make sure to run the command inside `xvfb-run` like so:
+
+
+```Bash
+$ xvfb-run python manager.py behave
+```
