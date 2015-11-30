@@ -13,5 +13,4 @@ ghostdriver.log
 .coverage
 var/*
 Vagrantfile
-start.sh
 .vagrant
