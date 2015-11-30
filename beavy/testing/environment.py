@@ -5,8 +5,10 @@ from beavy.app import app
 from .database import ensure_personas, mixer
 from pprint import pprint
 
-import os
 import logging
+import json
+import os
+
 
 log = logging.Logger(__name__)
 
@@ -61,9 +63,27 @@ def after_scenario(context, scenario):
     if getattr(context, "browser", None):
         has_warnings = False
         for entry in context.browser.driver.get_log('browser'):
-            if entry["level"] in ["WARNING", "ERROR"]:
-                has_warnings = True
-                log.warning("Browser {level}: {timestamp}: {message}".format(**entry))
+
+            if entry["level"] not in ["WARNING", "ERROR"]:
+                continue
+
+            try:
+                msg = json.loads(entry["message"])["message"]
+            except (ValueError, KeyError):
+                pass
+            else:
+                # in chrome we can extract much more info!
+                if msg["level"] in ["warn", "error"] and msg.get("source") == "console-api":
+                    entry = dict(level=msg["level"],
+                                 timestamp=entry["timestamp"],
+                                 message=msg["text"])
+                else:
+                    continue
+
+
+            has_warnings = True
+
+            log.warning("Browser {level}: {timestamp}: {message}".format(**entry))
 
         if BEHAVE_ERROR_ON_BROWSER_WARNINGS and has_warnings:
             print("Exciting – Browser Warnings/Errors!")
