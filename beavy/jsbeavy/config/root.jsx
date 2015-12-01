@@ -20,7 +20,7 @@ export default class Root extends React.Component {
   // is provided by the server and provides a full router state.
   static propTypes = {
     store          : React.PropTypes.object.isRequired,
-    application    : React.PropTypes.node.isRequired,
+    application    : React.PropTypes.func.isRequired,
   }
 
   getRoutes(){
