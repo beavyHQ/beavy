@@ -4,7 +4,7 @@
   "description": "beavy frontend",
   "main": "index.js",
   "scripts": {
-    "test": "BABEL_JEST_STAGE=0 ./node_modules/jest-cli/bin/jest.js --coverage jsbeavy beavy_modules/ beavy_apps",
+    "test": "jest --coverage jsbeavy beavy_modules/ beavy_apps",
     "dev-server": "webpack-dev-server --config .infrastructure/webpack/webpack-dev-server.config.js --progress --colors --port 2992 --inline",
     "hot-dev-server": "webpack-dev-server --config .infrastructure/webpack/webpack-hot-dev-server.config.js --hot --progress --colors --port 2992 --inline",
     "build": "webpack --config .infrastructure/webpack/webpack-production.config.js --progress --profile --colors",
@@ -15,7 +15,6 @@
   "dependencies": {
     "async": "^1.5.0",
     "babel": "^6.2.1",
-    "babel-jest": "^6.0.1",
     "babel-core": "^6.2.1",
     "babel-loader": "^6.2.0",
     "babel-preset-es2015": "^6.1.18",
@@ -36,8 +35,6 @@
     "insert-css": "^0.2.0",
     "invariant": "^2.2.0",
     "isomorphic-fetch": "^2.2.0",
-    "jest-cli": "^0.5.10",
-    "jest-webpack": "^0.2.1",
     "js-yaml": "^3.4.6",
     "json-loader": "^0.5.4",
     "lodash": "^3.10.1",
@@ -84,6 +81,9 @@
     ]
   },
   "devDependencies": {
-    "babel-cli": "^6.2.0"
+    "babel-cli": "^6.2.0",
+    "jest-cli": "^0.5.10",
+    "jest-webpack": "^0.2.1",
+    "babel-jest": "^6.0.1"
   }
 }

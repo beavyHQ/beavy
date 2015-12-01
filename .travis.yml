@@ -35,7 +35,7 @@ before_install:
   # so set that before we are running the installs
   - npm config set python /usr/bin/python2.7
   # install all node dependencies
-  - npm install
+  - npm install --all
   # install all python dependencies (requires a config.yml!)
   - python install.py
   # install coveralls to send coverage stats there
