@@ -19,6 +19,7 @@ MESSAGE
 INSTALL = <<-INSTALL
 sudo apt-get update
 sudo apt-get install -y  postgresql-9.4 postgresql-client-9.4 postgresql-server-dev-9.4 redis-server python3 python3-pip python3-virtualenv virtualenv nodejs npm zsh git tmux libffi-dev libncurses5-dev xvfb  chromedriver chromium-browser
+
 INSTALL
 
 # Provising on the system and user level
@@ -32,6 +33,9 @@ sudo -u postgres createdb -O vagrant beavy-dev
 sudo ln -s /usr/bin/nodejs /usr/bin/node
 sudo ln -s /usr/bin/chromium /usr/bin/chrome
 sudo ln -s /usr/lib/chromium/chromedriver /usr/bin/chromedriver
+
+# make sure npm is up to date
+sudo npm install -g npm
 
 # set user bash to zsh
 sudo chsh -s /bin/zsh vagrant
