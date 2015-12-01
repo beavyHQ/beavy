@@ -13,7 +13,7 @@ import os
 log = logging.Logger(__name__)
 
 BEHAVE_DEBUG_ON_ERROR = not os.getenv("CI", False)
-BEHAVE_ERROR_ON_BROWSER_WARNINGS = False # os.getenv("BEHAVE_ERROR_ON_BROWSER_WARNINGS", not BEHAVE_DEBUG_ON_ERROR)
+BEHAVE_ERROR_ON_BROWSER_WARNINGS = os.getenv("BEHAVE_ERROR_ON_BROWSER_WARNINGS", not BEHAVE_DEBUG_ON_ERROR)
 
 def before_all(context):
 
