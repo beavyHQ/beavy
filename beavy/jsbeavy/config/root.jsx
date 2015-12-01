@@ -20,7 +20,7 @@ export default class Root extends React.Component {
   // is provided by the server and provides a full router state.
   static propTypes = {
     store          : React.PropTypes.object.isRequired,
-    application    : React.PropTypes.func.isRequired,
+    application    : React.PropTypes.node.isRequired,
   }
 
   getRoutes(){
@@ -103,13 +103,11 @@ export default class Root extends React.Component {
       <div>
         {debugTools}
         <Provider store={this.props.store}>
-          {() =>
-              <ReduxRouter>
-                <Route component={this.props.application}>
-                  {this.getRoutes()}
-                </Route>
-              </ReduxRouter>
-            }
+          <ReduxRouter>
+            <Route component={this.props.application}>
+              {this.getRoutes()}
+            </Route>
+          </ReduxRouter>
         </Provider>
       </div>
     );
