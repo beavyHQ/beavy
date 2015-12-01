@@ -5,30 +5,19 @@ import { reduxForm} from 'redux-form';
 import { STORY_SUBMIT } from '../consts';
 import { submitStory } from '../actions';
 
-export class SubmitView extends React.Component {
+
+class SubmitForm extends React.Component {
   static propTypes = {
-    fields: PropTypes.object.isRequired,
     handleSubmit: PropTypes.func.isRequired,
-    isFetching: PropTypes.bool.isRequired,
-    dispatch : React.PropTypes.func.isRequired
-  }
-
-  componentWillReceiveProps(nextProps){
-    if (!nextProps.isFetching && nextProps.success){
-      const incoming = nextProps.response[STORY_SUBMIT].data;
-      this.props.dispatch(pushState(null, '/l/' + incoming.id + "/" + incoming.slug));
-    }
-  }
-
-  saveForm(formData){
-    this.props.dispatch(submitStory(formData));
+    fields: PropTypes.object.isRequired,
+    isFetching: PropTypes.bool.isRequired
   }
 
   render () {
     const { fields: {title, url, text},
             handleSubmit, dispatch, isFetching} = this.props;
     return (
-      <form name="submit_story_form" onSubmit={handleSubmit(this.saveForm.bind(this))} disabled={isFetching}>
+      <form name="submit_story_form" onSubmit={handleSubmit(this.props.onSaveForm)} disabled={isFetching}>
         <fieldset>
           <label for="title">title</label>
           <input required id="title" type="text" name="title" {...title} />
@@ -50,12 +39,7 @@ export class SubmitView extends React.Component {
   }
 }
 
-export default connect(
-  (state, ownProps) => {
-    return { form: state.form,
-             ...state[STORY_SUBMIT]};
-  }
-)(reduxForm({
+SubmitForm = reduxForm({
   form: 'submit',
   fields: ['title', 'url', 'text'],
   validate: (data) => {
@@ -68,4 +52,34 @@ export default connect(
     }
     return errors;
   }
-})(SubmitView));
+})(SubmitForm)
+
+export class SubmitView extends React.Component {
+  static propTypes = {
+    isFetching: PropTypes.bool.isRequired,
+    dispatch : React.PropTypes.func.isRequired
+  }
+
+  handleSaveForm(formData){
+    this.props.dispatch(submitStory(formData));
+  }
+
+  componentWillReceiveProps(nextProps){
+    if (!nextProps.isFetching && nextProps.success){
+      const incoming = nextProps.response[STORY_SUBMIT].data;
+      this.props.dispatch(pushState(null, '/l/' + incoming.id + "/" + incoming.slug));
+    }
+  }
+
+  render(){
+    return <SubmitForm
+              isFetching={this.props.isFetching}
+              onSaveForm={this.handleSaveForm.bind(this)} />
+  }
+}
+
+export default connect(
+  (state, ownProps) => {
+    return { ...state[STORY_SUBMIT]};
+  }
+)(SubmitView);
