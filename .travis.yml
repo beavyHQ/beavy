@@ -46,6 +46,10 @@ before_script:
   # firefox, which we need to have xvfb for
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
+  - wget https://chromedriver.storage.googleapis.com/2.12/chromedriver_linux64.zip
+  - unzip chromedriver_linux64.zip
+  - chmod +x chromedriver
+  - export PATH=$PATH:$PWD
   - psql -c 'create database "beavy-test";' -U postgres
   # now make sure we can build the assets
   - npm run build
@@ -138,6 +142,11 @@ addons:
   postgresql: '9.4'
   code_climate:
     repo_token: 267de20fcb1419ff02cfe22e5009111ffc86347f398762cbb700ad56f8279ca6
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
 
 notifications:
   webhooks:

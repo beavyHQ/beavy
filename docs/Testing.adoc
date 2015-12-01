@@ -46,7 +46,8 @@ Behave tests can be found for each app in it's subfolder tests/features. The htt
 The only remark here is that only app/module specific steps and environment setups should be defined here locally, most steps, helpers and the environment should imported from the growing library in beavy core, in `beavy/testing`.
 
 
-==== Running behave tests
+
+==== [[running-behave-tests]]Running behave tests
 
 In order to run behave tests, you need to have the server running on `localhost:5000`. Start it with:
 
@@ -56,10 +57,10 @@ $ flask --app=main run
 
 And start the tests via
 ```Bash
-$ python manager.py behave_tests
+$ python manager.py behave
 ```
 
-This will automatically look up the app defined in your config.yaml and run the tests supplied for the app (from `beavy_apps/$app/tests/features`).
+This will automatically look up the app defined in your config.yaml and run the tests supplied for the app (from `beavy_apps/$app/tests/features`). If you are running tests within Vagrant, please make sure to prefix it with `xvfb-run` <<<<./Development-App-Setup.adoc#running-tests-on-vagrant,as described here>>.
 
 
 == Automatic builds with Travis
