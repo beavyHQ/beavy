@@ -17,8 +17,8 @@ addNamedExtension("reducers", STORY_SUBMIT, simpleSubmit({
 
 export function setupViews(Application){
   addExtension('routes',
-      <Route name="submit" path="/submit/" component={SubmitView} />);
+      <Route key="submit" name="submit" path="/submit/" component={SubmitView} />);
 
   addExtension('routes',
-            <Route name="link" path="/l/:linkId/(:slug)" component={LinkView} />);
+            <Route key="link" name="link" path="/l/:linkId/(:slug)" component={LinkView} />);
 }

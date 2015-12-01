@@ -12,11 +12,9 @@ import CommentView from './views/Comment';
 // });
 
 addExtension("userNavigationItems", (function() {
-    return <Link to={make_url.account("comments/")}>My Comments</Link>;
+    return <Link key="my-comments" to={make_url.account("comments/")}>My Comments</Link>;
   }));
 addExtension("accountRoutes",
-  <Route path="comments/" component={CommentsView} /> );
+  <Route key="comments" path="comments/" component={CommentsView} /> );
 addExtension("accountRoutes",
-  <Route path="comments/:commentId/" component={CommentView} /> );
-
-
+  <Route key="comment" path="comments/:commentId/" component={CommentView} /> );
