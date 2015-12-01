@@ -2,7 +2,7 @@
 jest.autoMockOff();
 //  FIXME: IMPORT DOESN'T WORK WITH JEST MOCKING PROPERLY
 // import format_jsonapi_result from '../middleware/format_jsonapi_result';
-const format_jsonapi_result = require('../middleware/format_jsonapi_result');
+const format_jsonapi_result = require('../middleware/format_jsonapi_result').default;
 
 describe('format_jsonapi_result', function(){
 
