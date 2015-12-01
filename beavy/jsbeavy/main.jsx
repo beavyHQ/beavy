@@ -1,5 +1,6 @@
 
 import React from 'react';
+import ReactDom from 'react-dom';
 import { getNamedExtensions } from "config/extensions";
 
 // polyfill
@@ -38,5 +39,5 @@ if (window.PRELOAD.CURRENT_USER) initData.CURRENT_USER = window.PRELOAD.CURRENT_
 const store  = configureStore(initData);
 
 
-React.render(<Root application={Application}
+ReactDom.render(<Root application={Application}
                    store={store} />, target);
