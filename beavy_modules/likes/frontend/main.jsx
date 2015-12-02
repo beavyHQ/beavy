@@ -22,6 +22,6 @@ class MenuItem extends React.Component {
 
 const ConnectedMenuItem = connect()(MenuItem);
 
-addExtension("MainMenuItem", () => <ConnectedMenuItem />);
-addExtension("userMenu", (function() {return <Link to={make_url.users(this.props.userId + "/likes/")}> Likes </Link>;}));
-addExtension("userRoutes", <Route path="likes/" component={UserLikesView} /> );
+addExtension("MainMenuItem", () => <ConnectedMenuItem key="connecteMenuItem"/>);
+addExtension("userMenu", (function() {return <Link key="likes" to={make_url.users(this.props.userId + "/likes/")}> Likes </Link>;}));
+addExtension("userRoutes", <Route key="likes" path="likes/" component={UserLikesView} /> );

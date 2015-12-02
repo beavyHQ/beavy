@@ -201,11 +201,11 @@ def test_meetup_com_event_example():
 def test_soundcloud_song_example():
     assert extractor.fetch("https://soundcloud.com/bassmelodie/bassmelodie-wintermelancholie") == {
         "alternates": {
-            "android-app": "android-app://com.soundcloud.android/soundcloud/sounds:181196205",
-            "ios-app": "ios-app://336353151/soundcloud/sounds:181196205",
-            "only screen and (max-width: 640px)": "https://m.soundcloud.com/bassmelodie/bassmelodie-wintermelancholie",
-            "text/json+oembed": "https://soundcloud.com/oembed?url=https%3A%2F%2Fsoundcloud.com%2Fbassmelodie%2Fbassmelodie-wintermelancholie&format=json",
-            "text/xml+oembed": "https://soundcloud.com/oembed?url=https%3A%2F%2Fsoundcloud.com%2Fbassmelodie%2Fbassmelodie-wintermelancholie&format=xml"
+            "android-app": StartsWith("android-app://com.soundcloud.android/"),
+            "ios-app": StartsWith("ios-app://"),
+            "only screen and (max-width: 640px)": StartsWith("https://m.soundcloud.com/"),
+            "text/json+oembed": StartsWith("https://soundcloud.com/oembed?"),
+            "text/xml+oembed": StartsWith("https://soundcloud.com/oembed")
         },
         "author_name": "Bassmelodie",
         "author_url": "https://soundcloud.com/bassmelodie",

@@ -1,5 +1,6 @@
 
 import React from 'react';
+import ReactDom from 'react-dom';
 import { getNamedExtensions } from "config/extensions";
 
 // polyfill
@@ -14,7 +15,7 @@ import modules from 'config/modules';
 import Root from 'config/root';
 
 // tie it all together
-const Application = require("module-imports?ext=/frontend/application.jsx&path=./beavy_apps/!grep?APP!yaml!../../config.yml").default;
+const Application = require("module-imports?ext=/frontend/application.jsx&path=./beavy_apps/!grep?APP!yaml!../../config.yml")["default"]["default"];
 
 const target = document.getElementById('content');
 
@@ -38,5 +39,5 @@ if (window.PRELOAD.CURRENT_USER) initData.CURRENT_USER = window.PRELOAD.CURRENT_
 const store  = configureStore(initData);
 
 
-React.render(<Root application={Application}
+ReactDom.render(<Root application={Application}
                    store={store} />, target);

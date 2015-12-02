@@ -103,13 +103,11 @@ export default class Root extends React.Component {
       <div>
         {debugTools}
         <Provider store={this.props.store}>
-          {() =>
-              <ReduxRouter>
-                <Route component={this.props.application}>
-                  {this.getRoutes()}
-                </Route>
-              </ReduxRouter>
-            }
+          <ReduxRouter>
+            <Route component={this.props.application}>
+              {this.getRoutes()}
+            </Route>
+          </ReduxRouter>
         </Provider>
       </div>
     );

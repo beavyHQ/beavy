@@ -18,7 +18,8 @@ MESSAGE
 # The list of packages we want to install
 INSTALL = <<-INSTALL
 sudo apt-get update
-sudo apt-get install -y  postgresql-9.4 postgresql-client-9.4 postgresql-server-dev-9.4 redis-server python3 python3-pip python3-virtualenv virtualenv nodejs npm zsh git tmux libffi-dev libncurses5-dev xvfb  chromedriver chromium-browser
+sudo apt-get install -y postgresql-9.4 postgresql-client-9.4 postgresql-server-dev-9.4 redis-server python3 python3-pip python3-virtualenv virtualenv nodejs npm zsh git tmux libffi-dev libncurses5-dev xvfb chromedriver chromium-browser build-essential libssl-dev curl git-core
+
 INSTALL
 
 # Provising on the system and user level
@@ -29,9 +30,18 @@ sudo -u postgres createuser vagrant
 sudo -u postgres createdb -O vagrant beavy-dev
 
 # make sure node is accessible
-sudo ln -s /usr/bin/nodejs /usr/bin/node
 sudo ln -s /usr/bin/chromium /usr/bin/chrome
 sudo ln -s /usr/lib/chromium/chromedriver /usr/bin/chromedriver
+
+# install latest node
+git clone git://github.com/creationix/nvm.git ~/.nvm
+. ~/.nvm/nvm.sh
+echo "\n. ~/.nvm/nvm.sh" >> .zshrc
+nvm install stable
+nvm alias default stable
+
+# make sure npm is up to date
+sudo npm install -g npm
 
 # set user bash to zsh
 sudo chsh -s /bin/zsh vagrant

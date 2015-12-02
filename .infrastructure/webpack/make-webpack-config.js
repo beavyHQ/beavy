@@ -20,9 +20,9 @@ module.exports = function(options) {
 		// second: options.prerender ? "./config/secondPrerenderer" : "./config/secondApp"
 	};
 	var loaders = {
-		"jsx": options.hotComponents ? ["react-hot-loader", "babel-loader?optional[]=runtime&stage=0"] : "babel-loader?optional[]=runtime&stage=0",
+		"jsx": "babel",
 		"js": {
-			loader: "babel-loader?optional[]=runtime&stage=0",
+			loader: "babel",
 			include: JS_ROOT
 		},
 		"json": "json-loader",
@@ -166,10 +166,10 @@ module.exports = function(options) {
 		target: options.prerender ? "node" : "web",
 		module: {
 			loaders: [
-				{
-					// special behavior for the prosemirror plugin
-				 test: /prosemirror.*js$/,
-				 loader: "babel-loader?optional[]=runtime&stage=0"
+				{ // for prosemirror
+					include: /prosemirror/,
+					test: /\.jsx?$/,
+					loader: 'babel'
 				}
 			].concat(loadersByExtension(loaders)).concat(loadersByExtension(stylesheetLoaders)).concat(additionalLoaders)
 		},

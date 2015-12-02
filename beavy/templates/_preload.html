@@ -19,10 +19,10 @@
     </script>
 {% endblock %}
 
-{% block bodytags %} id="content" {% endblock %}
-
 {% block body %}
+  <div id="content">
     {% block content %}
     {% endblock %}
+  </div>
     <script type="text/javascript" src="/assets/{{ static_files.main_js }}"></script>
 {% endblock %}
