@@ -22,6 +22,13 @@ if (!__DEBUG__) {
     parent.location.reload()
     throw 'iFrame inclusion not allowed!'
   }
+} else {
+  // Do some health checks to give the Developer hints
+  // what is going wrong.
+  if (!Application) {
+    alert('The application is misconfigured. Exiting!')
+    throw 'Application is misconfigured'
+  }
 }
 
 import configureStore from 'stores'
