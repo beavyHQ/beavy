@@ -32,7 +32,11 @@ APP: 'minima'
 # Which url do you want to be the 'home' screen,
 # the entry point of the app. Please read the
 # docs on configuration
-HOME_URL: '/hello'
+URLS:
+  HOME: '/hello'
+# You can also replace any other blueprint entry point here,
+# like this:
+#  USERS: '/nutzer'
 
 # Uncomment this to enable registrations
 # SECURITY_REGISTERABLE: true
@@ -49,5 +53,3 @@ HOME_URL: '/hello'
 #   Facebook:
 #     consumer_key: XYZ
 #     consumer_secret: LONGXYZ
-
-
