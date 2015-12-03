@@ -2,7 +2,9 @@ var path = require('path')
 var fs = require('fs')
 var merge = require('lodash/object/merge')
 var transform = require('lodash/object/transform')
+var partial = require('lodash/function/partial')
 var isBoolean = require('lodash/lang/isBoolean')
+var isObject = require('lodash/lang/isObject')
 var yaml = require('js-yaml')
 var webpack = require('webpack')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
@@ -17,6 +19,18 @@ var appConfig = merge({},
 	yaml.safeLoad(fs.readFileSync('beavy/config.yml'))[BEAVY_ENV],
 	yaml.safeLoad(fs.readFileSync('config.yml'))
 )
+
+function deepTransform (prefix, result, value, key) {
+  if (isObject(value)) {
+    transform(value,
+              partial(deepTransform, prefix + '_' + key),
+              result)
+  }
+  if (!isBoolean(value)) {
+    value = JSON.stringify(value)
+  }
+  result[prefix + '_' + key] = value
+}
 
 module.exports = function (options) {
   var entry = {
@@ -82,10 +96,8 @@ module.exports = function (options) {
       __REDUX_DEV_TOOLS__: !!options.redux_dev_tools,
       __DEBUG_NW__: !!options.redux_dev_tools
     },
-    transform(appConfig, function (result, value, key) {
-      if (!isBoolean(value)) value = JSON.stringify(value)
-      result['__CONFIG__' + key] = value
-    })))
+    transform(appConfig, partial(deepTransform, '__CONFIG_'))
+  ))
   ]
   if (options.prerender) {
     plugins.push(new StatsPlugin('stats.prerender.json', {
