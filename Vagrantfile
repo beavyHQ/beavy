@@ -18,14 +18,14 @@ MESSAGE
 # The list of packages we want to install
 INSTALL = <<-INSTALL
 sudo apt-get update
-sudo apt-get install -y postgresql-9.4 postgresql-client-9.4 postgresql-server-dev-9.4 redis-server python3 python3-pip python3-virtualenv virtualenv nodejs npm zsh git tmux libffi-dev libncurses5-dev xvfb chromedriver chromium-browser build-essential libssl-dev curl git-core
+sudo apt-get install -y postgresql-9.4 postgresql-client-9.4 postgresql-server-dev-9.4 redis-server python3 python3-pip python3-virtualenv virtualenv nodejs npm zsh git tmux libffi-dev libncurses5-dev xvfb chromedriver chromium build-essential libssl-dev curl git-core
 
 INSTALL
 
 # Provising on the system and user level
 SETUP = <<-SETUP
 
-#prepare database
+# prepare database
 sudo -u postgres createuser vagrant
 sudo -u postgres createdb -O vagrant beavy-dev
 
@@ -56,8 +56,11 @@ Vagrant.configure(2) do |config|
   config.vm.post_up_message = MESSAGE
 
   config.vm.network "forwarded_port", guest: 2992, host: 2992
+  config.vm.network "private_network", ip: "10.1.1.10"
 
-  config.vm.synced_folder ".infrastructure/vagrant", "/root/", create: true, group: "www-data", owner: "www-data"
+  # tuned options for best webpack watch performance, see
+  # https://blog.inovex.de/doh-my-vagrant-nfs-is-slow/
+  config.vm.synced_folder ".", "/vagrant",  type: 'nfs', mount_options: ['rw', 'vers=3', 'tcp', 'fsc' ,'actimeo=1']
 
   config.vm.provision "shell", inline: INSTALL
   config.vm.provision "shell", inline: SETUP
