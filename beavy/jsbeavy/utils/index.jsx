@@ -1,4 +1,4 @@
-/* global __CONFIG__HOME_URL, __CONFIG__URLS */
+/* global __CONFIG__URLS_HOME, __CONFIG__URLS */
 
 export function createConstants (...constants) {
   return constants.reduce((acc, constant) => {
@@ -20,7 +20,7 @@ function makePrefixUrlMaker (prefix) {
     if (url.slice(-1) !== '/') {
       url += '/'
     }
-    if (url === __CONFIG__HOME_URL) { return '/' }
+    if (url === __CONFIG__URLS_HOME) { return '/' }
     return url
   }
 }

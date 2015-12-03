@@ -1,4 +1,4 @@
-/*global __DEBUG_NW__, __REDUX_DEV_TOOLS__, __CONFIG__HOME_URL */
+/*global __DEBUG_NW__, __REDUX_DEV_TOOLS__, __CONFIG__URLS_HOME */
 import React from 'react'
 import { Provider } from 'react-redux'
 import { Route, Redirect } from 'react-router'
@@ -42,17 +42,17 @@ export default class Root extends React.Component {
     const routes = getExtensions('routes')
 
     remapRoutes(routes)
-    if (routes_by_path[__CONFIG__HOME_URL]) {
-      const store = routes_by_path[__CONFIG__HOME_URL]._store
+    if (routes_by_path[__CONFIG__URLS_HOME]) {
+      const store = routes_by_path[__CONFIG__URLS_HOME]._store
       if (store) {
         // already assigned
         store.originalProps.path = '/'
         store.props.path = '/'
       } else {
         // not yet handeled, let's fake it
-        routes_by_path[__CONFIG__HOME_URL].props.path = '/'
+        routes_by_path[__CONFIG__URLS_HOME].props.path = '/'
       }
-      routes.push(<Redirect from={__CONFIG__HOME_URL} to='/' />)
+      routes.push(<Redirect from={__CONFIG__URLS_HOME} to='/' />)
     } else {
       // routes.push(<Route component={HomeView} path='*' />);
     }
