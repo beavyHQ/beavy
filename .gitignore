@@ -15,3 +15,4 @@ var/*
 Vagrantfile
 start.sh
 .vagrant
+npm-debug.log
