@@ -2,16 +2,36 @@
 # vi: set ft=ruby :
 
 MESSAGE = <<-MESSAGE
-WELCOME to Beavy Development.
+WELCOME to
 
-Please log in into the develop system with
+      ######   #######     #     #     #  #     #
+      #     #  #          # #    #     #   #   #
+      #     #  #         #   #   #     #    # #
+      ######   #####    #     #  #     #     #
+      #     #  #        #######   #   #      #
+      #     #  #        #     #    # #       #
+      ######   #######  #     #     #        #
 
-  vagrant ssh
+  #----------------------------------------------------#
+  #                                                    #
+  #  If you need any help, feel free to chat us up at  #
+  #                                                    #
+  #      https://gitter.im/beavyHQ/beavy               #
+  #                                                    #
+  #----------------------------------------------------#
 
-And start all processes in a tmux session by typing:
+You can now log into your development enviroment via
 
-  ./start.sh
+    vagrant ssh
 
+and in there start all processes in a tmux session via
+
+    ./start.sh
+
+
+----
+Glad to have you on board, champ!
+    Have fun!
 
 MESSAGE
 
