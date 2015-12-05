@@ -56,7 +56,7 @@ sudo ln -s /usr/lib/chromium/chromedriver /usr/bin/chromedriver
 # install latest node
 git clone git://github.com/creationix/nvm.git ~/.nvm
 . ~/.nvm/nvm.sh
-echo "\n. ~/.nvm/nvm.sh" >> .zshrc
+
 nvm install stable
 nvm alias default stable
 
