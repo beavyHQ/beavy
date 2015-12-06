@@ -53,10 +53,11 @@ sudo -u postgres createdb -O vagrant beavy-dev
 sudo ln -s /usr/bin/chromium /usr/bin/chrome
 sudo ln -s /usr/lib/chromium/chromedriver /usr/bin/chromedriver
 
-# install latest node
-git clone git://github.com/creationix/nvm.git ~/.nvm
-. ~/.nvm/nvm.sh
+# install latest nvm to vagrant
+git clone git://github.com/creationix/nvm.git /home/vagrant/.nvm
+. /home/vagrant/.nvm/nvm.sh
 
+# install latest stable node
 nvm install stable
 nvm alias default stable
 
