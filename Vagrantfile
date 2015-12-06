@@ -49,7 +49,11 @@ SETUP = <<-SETUP
 sudo -u postgres createuser vagrant
 sudo -u postgres createdb -O vagrant beavy-dev
 
-# make sure node is accessible
+# fix postgres config
+sudo cp /vagrant/.infrastructure/vagrant/pg_hba.conf /etc/postgresql/9.4/main/pg_hba.conf
+sudo /etc/init.d/postgresql reload
+
+# make sure chrome & chromedriver are accessible
 sudo ln -s /usr/bin/chromium /usr/bin/chrome
 sudo ln -s /usr/lib/chromium/chromedriver /usr/bin/chromedriver
 
@@ -66,10 +70,10 @@ sudo npm install -g npm
 
 # set user bash to zsh
 sudo chsh -s /bin/zsh vagrant
+
 # create the virualenv for vagrant
 sudo -u vagrant virtualenv -p python3 /home/vagrant/venv
-sudo cp /vagrant/.infrastructure/vagrant/pg_hba.conf /etc/postgresql/9.4/main/pg_hba.conf
-sudo /etc/init.d/postgresql reload
+
 SETUP
 
 Vagrant.configure(2) do |config|
