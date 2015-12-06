@@ -76,6 +76,7 @@ script:
     sleep 3
   # let's make sure the styles are okay, too
   - npm run style-check
+  - flake8 $(python manager.py paths) *.py
 
 after_success:
   # show us the coverage report
