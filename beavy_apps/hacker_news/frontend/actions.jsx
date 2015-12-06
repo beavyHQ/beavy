@@ -1,6 +1,5 @@
 
 import { CALL_API } from 'middleware/api'
-import { make_url } from 'utils'
 import { STORY_SUBMIT, STORY_SUBMIT_REQUEST, STORY_SUBMIT_SUCCESS, STORY_SUBMIT_FAILURE } from './consts'
 
 function submit_story (payload) {
