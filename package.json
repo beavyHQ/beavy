@@ -4,6 +4,7 @@
   "description": "beavy frontend",
   "scripts": {
     "style-check": "eslint beavy/jsbeavy/**/**.jsx beavy_modules/**/**.jsx beavy_apps/**/**.jsx .infrastructure/webpack/**/**.js",
+    "fix-style": "eslint --fix beavy/jsbeavy/**/**.jsx beavy_modules/**/**.jsx beavy_apps/**/**.jsx .infrastructure/webpack/**/**.js",
     "test": "jest --coverage jsbeavy beavy_modules/ beavy_apps",
     "dev-server": "webpack-dev-server --config .infrastructure/webpack/webpack-dev-server.config.js --progress --colors --port 2992 --inline",
     "hot-dev-server": "webpack-dev-server --config .infrastructure/webpack/webpack-hot-dev-server.config.js --hot --progress --colors --port 2992 --inline",
