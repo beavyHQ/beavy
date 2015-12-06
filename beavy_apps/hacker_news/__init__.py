@@ -3,8 +3,8 @@ from beavy.app import admin, db
 
 from .models import Link, Topic
 from .blueprint import hn_bp
-from .models import *
-from .views import *
+from .models import *  # noqa
+from .views import *  # noqa
 
 
 def init_app(app):

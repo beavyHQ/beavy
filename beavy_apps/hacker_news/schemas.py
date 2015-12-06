@@ -21,11 +21,10 @@ class TopicSchema(Schema):
         type_ = TOPIC_ID  # Required
 
     author = IncludingHyperlinkRelated(BaseUser,
-        '/users/{user_id}',
-        url_kwargs={'user_id': '<owner_id>'},
-        many=False, include_data=True,
-        type_='user'
-    )
+                                       '/users/{user_id}',
+                                       url_kwargs={'user_id': '<owner_id>'},
+                                       many=False, include_data=True,
+                                       type_='user')
 
 topic = TopicSchema()
 topic_paged = makePaginationSchema(TopicSchema)()
@@ -46,12 +45,10 @@ class LinkSchema(Schema):
         type_ = LINK_ID  # Required
 
     author = IncludingHyperlinkRelated(BaseUser,
-        '/users/{user_id}',
-        url_kwargs={'user_id': '<owner_id>'},
-        many=False, include_data=True,
-        type_='user'
-    )
-
+                                       '/users/{user_id}',
+                                       url_kwargs={'user_id': '<owner_id>'},
+                                       many=False, include_data=True,
+                                       type_='user')
 
 
 link = LinkSchema()
