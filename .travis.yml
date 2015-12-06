@@ -74,6 +74,8 @@ script:
     curl http://localhost:5000/__TESTS__/shutdown
     # give it a few seconds to stop the process
     sleep 3
+  # let's make sure the styles are okay, too
+  - npm run style-check
 
 after_success:
   # show us the coverage report
