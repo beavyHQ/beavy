@@ -1,3 +1,4 @@
+# flake8: noqa
 from behave import *
 from behaving.web.steps import *
 from behaving.sms.steps import *

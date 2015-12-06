@@ -1,4 +1,3 @@
-
 from mixer.backend.flask import mixer
 from flask.ext.security.utils import encrypt_password
 from datetime import datetime

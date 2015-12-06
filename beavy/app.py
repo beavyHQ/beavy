@@ -43,7 +43,7 @@ def make_env(app):
 
     # update social buttons
     _FLBLPRE = "flask_social_blueprint.providers.{}"
-    if not "SOCIAL_BLUEPRINT" in app.config:
+    if "SOCIAL_BLUEPRINT" not in app.config:
         app.config["SOCIAL_BLUEPRINT"] = dict([
             ("." in name and name or _FLBLPRE.format(name), values)
             for name, values in app.config.get("SOCIAL_LOGINS").items()])
@@ -105,6 +105,7 @@ class BeavyAdminIndexView(AdminIndexView):
             return True
 
         return False
+
 
 def _limiter_key():
     if current_user.is_authenticated():
@@ -199,19 +200,21 @@ if app.debug:
     def ensure_users():
         from datetime import datetime
         admin_role = user_datastore.find_or_create_role('admin')
+        pw = encrypt_password("password")
 
         if not user_datastore.find_user(email="user@example.org"):
             user_datastore.create_user(email="user@example.org",
                                        confirmed_at=datetime.now(),
                                        active=True,
-                                       password=encrypt_password("password"))
+                                       password=pw)
 
         if not user_datastore.find_user(email="admin@example.org"):
             user_datastore.add_role_to_user(
                 user_datastore.create_user(email="admin@example.org",
                                            confirmed_at=datetime.now(),
                                            active=True,
-                                           password=encrypt_password("password")), admin_role)
+                                           password=pw),
+                admin_role)
 
         user_datastore.commit()
 

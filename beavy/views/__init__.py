@@ -1,8 +1,8 @@
 from flask import request
 from beavy.app import app
-from .users import *
 
-from .lists import *
+from .users import *   # flake8: noqa
+from .lists import *   # flake8: noqa
 
 
 if app.config.get("TESTING"):

@@ -31,4 +31,3 @@ def test_deeper(mocker):
     t.header_o = "oh. header"
     assert t.payload == {'content': {'header': {"other": 'oh. header'}}}
     TestObject.header_o.flag_modified.assert_called_with(t, "payload")
-

@@ -1,6 +1,5 @@
-from flask import abort, redirect, url_for
+from flask import abort, redirect, url_for, request
 from flask_admin.contrib.sqla import ModelView
-from beavy.common.payload_property import PayloadProperty
 from sqlalchemy import func
 from flask_security import current_user
 
@@ -19,7 +18,8 @@ class AdminModelView(ModelView):
 
     def _handle_view(self, name, **kwargs):
         """
-        Override builtin _handle_view in order to redirect users when a view is not accessible.
+        Override builtin _handle_view in order to redirect users when a
+        view is not accessible.
         """
         if not self.is_accessible():
             if current_user.is_authenticated():
@@ -28,7 +28,6 @@ class AdminModelView(ModelView):
             else:
                 # login
                 return redirect(url_for('security.login', next=request.url))
-
 
     def get_count_query(self):
         """
@@ -40,7 +39,8 @@ class AdminModelView(ModelView):
             See commit ``#45a2723`` for details.
         """
         if 'polymorphic_identity' in self.model.__mapper_args__:
-            return self.session.query(func.count('*')).select_from(self.model.query.selectable)
+            return self.session.query(func.count('*')).select_from(
+                self.model.query.selectable)
 
         return self.session.query(func.count('*')).select_from(self.model)
 
