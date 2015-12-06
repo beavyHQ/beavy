@@ -16,3 +16,16 @@ When run for the first time, this might take a while as vagrant
 has to download the latest version of the virtual box image. Once
 this is done and everything has been set up, you should see a big
 green message welcoming you and asking you to run `start.sh`. **Before you link:Development-Running.adoc[can do that], make sure you properly link:Development-App-Setup.adoc[set up your own app]!**
+
+
+== Troubleshooting
+
+=== Hangs when installing vbGuest
+
+If your `vagrant up --provision` hangs at
+```
+Copy iso file /Applications/VirtualBox.app/Contents/MacOS/VBoxGuestAdditions.iso into the box /tmp/VBoxGuestAdditions.iso
+```
+
+This is due to the `vbguest` plugin – which interferes with the jessie64 image provided. Please kill the process (`CTRL`+`C`, `pkill vagrant`), stop the system (`vagrant halt -f`), **uninstall vbguest** (`vagrant plugin uninstall vagrant-vbguest`)** and restart provisioning. You might encounter an error message at the beginning warning you that the guest-tools aren't up to date,
+but you can ignore that!
