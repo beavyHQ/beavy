@@ -14,16 +14,14 @@ class PrivateMessageSchema(Schema):
     title = fields.String()
     type = fields.String(attribute="discriminator")
 
-
     class Meta:
         type_ = 'private_message'  # Required
 
     participants = IncludingHyperlinkRelated(BaseUser,
-        '/users/{user_id}',
-        url_kwargs={'user_id': '<id>'},
-        many=True, include_data=True,
-        type_='user'
-    )
+                                             '/users/{user_id}',
+                                             url_kwargs={'user_id': '<id>'},
+                                             many=True, include_data=True,
+                                             type_='user')
 
 
 pm = PrivateMessageSchema()

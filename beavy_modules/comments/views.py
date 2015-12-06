@@ -12,7 +12,7 @@ from .schemas import comment_paged
 
 def _load_threads(user):
     query = CommentObject.query.filter(CommentObject.owner_id == user.id)
-            # .filter_visible(CommentObject.)
+# .filter_visible(CommentObject.)
     return comment_paged.dump(as_page(query, error_out=False)).data
 
 
@@ -27,4 +27,3 @@ def account_comment():
 @fallbackRender('user_comments.html')
 def user_comments(user):
     return _load_threads(user)
-

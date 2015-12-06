@@ -1,6 +1,5 @@
 from beavy.utils import fallbackRender, as_page, get_or_create, api_only
 from flask.ext.security import login_required, current_user
-from sqlalchemy.orm import contains_eager, aliased
 from beavy.blueprints import (users as users_bp,
                               obj as objects_bp,
                               account as account_bp)
@@ -13,7 +12,7 @@ from beavy.app import db
 
 
 def _load_likes(user):
-    return user_likes_paged.dump(as_page(Object.query
+    return user_likes_paged.dump(as_page(Object.query   # noqa
             .by_capability(Object.Capabilities.listed,
                            Object.Capabilities.listed_for_activity)
             .with_my_activities()
@@ -38,7 +37,7 @@ def user_likes(user):
 @account_bp.route("/likes/")
 @login_required
 @fallbackRender('user_likes.html')
-def user_likes():
+def account_likes():
     return _load_likes(current_user)
 
 
@@ -71,4 +70,3 @@ def unlike_object(obj):
                                            object_id=obj.id))
     db.session.commit()
     return {"liked": False}
-

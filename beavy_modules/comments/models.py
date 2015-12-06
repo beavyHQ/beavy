@@ -26,5 +26,3 @@ def filter_comments_for_view(cls, method):
                 cls.owner_id == current_user.id)
 
 Object.__access_filters['view'].append(filter_comments_for_view)
-
-

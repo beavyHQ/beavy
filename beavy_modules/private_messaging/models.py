@@ -1,8 +1,6 @@
 from beavy.models.object import Object
 from beavy.models.object import User
 from beavy.common.payload_property import PayloadProperty
-from flask_security.core import current_user
-from sqlalchemy.sql import and_
 from beavy.utils.url_converters import ModelConverter
 
 from beavy.app import db

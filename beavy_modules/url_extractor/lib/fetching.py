@@ -1,6 +1,4 @@
 from lassie.core import Lassie
-from lassie.compat import str
-
 import requests
 import re
 
@@ -8,7 +6,10 @@ import re
 # configure it so that it is.
 
 from lassie.filters import FILTER_MAPS
-FILTER_MAPS['meta']['open_graph']['pattern'] = re.compile(r"^(og:|author:|article:|music:|video:|book:)", re.I)
+
+FILTER_MAPS['meta']['open_graph']['pattern'] = re.compile(
+    r"^(og:|author:|article:|music:|video:|book:)", re.I)
+
 FILTER_MAPS['meta']['open_graph']['map'].update({
     # general
     "og:type": "type",
@@ -49,9 +50,10 @@ FILTER_MAPS['meta']['open_graph']['map'].update({
     "book:release_date": "release_date",
 })
 
-FILTER_MAPS['meta']['generic']['pattern'] =  re.compile(r"^(description|keywords|title|generator)")
-FILTER_MAPS['meta']['generic']['map']['generator'] = 'generator'
 
+FILTER_MAPS['meta']['generic']['pattern'] = re.compile(
+    r"^(description|keywords|title|generator)")
+FILTER_MAPS['meta']['generic']['map']['generator'] = 'generator'
 
 
 def _matches(data, **kwargs):
@@ -72,13 +74,14 @@ def _matches(data, **kwargs):
                     return False
     return True
 
+
 class AmazonISBNFinder:
 
     def __call__(self, soup, data, url=None):
         if not _matches(data,
-            type='book',
-            site_name=lambda x: x.lower().startswith("amazon")
-        ): return
+                        type='book',
+                        site_name=lambda x: x.lower().startswith("amazon")
+                        ): return
         # amazon hides the ISBN inside the keywords
         # title + 1 => publisher
         # title + 2 => ISBN
@@ -96,17 +99,26 @@ class AmazonISBNFinder:
             # not found. ignored.
             pass
 
+
 class AlternateFinder:
     def __call__(self, soup, data, url=None):
-        map = lambda link: (link.get("type") or link.get("media") or link.get("hreflang") or link.get("href").split("://", 1)[0] , link.get("href"))
+        map = lambda link: (link.get("type") or
+                            link.get("media") or
+                            link.get("hreflang") or
+                            link.get("href").split("://", 1)[0],
+                            link.get("href"))
         data["alternates"] = target = {}
 
         for name in ("alternate", "alternative"):
-            target.update(dict([ map(link)
-                for link in soup.find_all('link', {'rel': name}) ]))
+            target.update(dict([map(link)
+                                for link in soup.find_all('link',
+                                                          {'rel': name})]))
+
 
 class OEmbedExtractor:
-    REMAP = ["author_name", "author_url", "licence", "licence_url", "url", "title", "type"]
+
+    REMAP = ["author_name", "author_url", "licence",
+             "licence_url", "url", "title", "type"]
 
     def __call__(self, soup, data, url=None):
         try:
@@ -114,7 +126,7 @@ class OEmbedExtractor:
         except KeyError:
             # inofficial link
             try:
-                link  = data["alternates"]["text/json+oembed"]
+                link = data["alternates"]["text/json+oembed"]
             except KeyError:
                 return
 
@@ -126,16 +138,23 @@ class OEmbedExtractor:
             if not data.get(key, False):
                 data[key] = data["oembed"][key]
 
+
 class SoundcloudInfoExtractor:
+
     MATCHER = re.compile(r"^soundcloud:")
+
     def __call__(self, soup, data, url=None):
         if not _matches(data, type="soundcloud:sound", site_name="SoundCloud"):
             return
 
-        data["soundcloud"] = dict([ (m.get("property")[11:], m.get("content"))
-            for m in soup.find_all('meta', {'property': self.MATCHER}) ])
+        data["soundcloud"] = dict([(m.get("property")[11:], m.get("content"))
+                                   for m in soup.find_all('meta',
+                                                          {'property':
+                                                           self.MATCHER})])
+
 
 class ArticleMetaExtractor:
+
     def __call__(self, soup, data, url=None):
         if not _matches(data, type="article"):
             return
@@ -153,8 +172,6 @@ class ArticleMetaExtractor:
             elif "copyright" in data:
                 data["publisher"] = data["copyright"]
 
-
-
         if not data.get("genre", False):
             genre = soup.find("meta", {'itemprop': "genre"})
             if genre:
@@ -163,10 +180,13 @@ class ArticleMetaExtractor:
 
 class MediaWikiExtractor:
     def __call__(self, soup, data, url=None):
-        if not _matches(data, generator=lambda x: x.lower().startswith("mediawiki")) or data.get("type", False):
+        if not _matches(data,
+                        generator=lambda x: x.lower().startswith("mediawiki")
+                        ) or data.get("type", False):
             return
-        for iD, key in ( ('firstHeading', 'title'),
-                         ('siteSub', 'site_name')):
+
+        for iD, key in (('firstHeading', 'title'),
+                        ('siteSub', 'site_name')):
             if data.get(key, False):
                 continue
 
@@ -201,10 +221,12 @@ class YoutubeExtractor:
         if baseContent:
             data['full_description'] = baseContent.text
 
+
 class BloggerExtractor:
 
     def __call__(self, soup, data, url=None):
-        if not _matches(data, generator="blogger") or data.get("description", False):
+        if not _matches(data, generator="blogger") or\
+           data.get("description", False):
             return
 
         blog_content = soup.find('div', class_="post-content")
@@ -219,24 +241,27 @@ class BloggerExtractor:
             data['description'] = blog_content.text[:500]
             data["type"] = "article:blog"
 
+
 class SimpleInfoFallbackExtractor:
 
     def __call__(self, soup, data, url=None):
         if data.get("description", False):
             return
 
-        for query in [
-                    dict(id="content"),
-                    dict(role="content"),
-                    dict(role="main"),
-                    dict(id="main"),
-                    dict(class_="content"),
-                    dict(class_="main"),
-                    dict(id="page"),
-                    dict(class_="page")]:
+        for query in [dict(id="content"),
+                      dict(role="content"),
+                      dict(role="main"),
+                      dict(id="main"),
+                      dict(class_="content"),
+                      dict(class_="main"),
+                      dict(id="page"),
+                      dict(class_="page")]:
             box = soup.find(**query)
             if box:
-                paragraphs = [x for x in map(lambda x: x.text, box.find_all(["div", "p"], limit=5)) if x and len(x) > 50]
+                paragraphs = [x for x in map(lambda x: x.text,
+                                             box.find_all(["div", "p"],
+                                                          limit=5))
+                              if x and len(x) > 50]
                 if paragraphs:
                     data['description'] = paragraphs[0]
                     for img in box.find_all("img", limit=3):
@@ -247,12 +272,13 @@ class SimpleInfoFallbackExtractor:
                     # first found: stop the loop!
                     break
 
+
 class PostProcessingLassie(Lassie):
 
     POST_PROCESSORS = [
         # Generic Finders
         AlternateFinder(),
-        OEmbedExtractor(), # OEmbed only works after Alternate!
+        OEmbedExtractor(),  # OEmbed only works after Alternate!
 
 
         # Mid specific:
@@ -273,7 +299,10 @@ class PostProcessingLassie(Lassie):
     ]
 
     def _filter_meta_data(self, source, soup, data, url=None):
-        super(PostProcessingLassie, self)._filter_meta_data(source, soup, data, url=url)
+        super(PostProcessingLassie, self)._filter_meta_data(source,
+                                                            soup,
+                                                            data,
+                                                            url=url)
 
         if source == "generic":
             # we are in the last generic parsing,
@@ -285,9 +314,5 @@ class PostProcessingLassie(Lassie):
 
 # this is what is exported
 extractor = PostProcessingLassie()
-extractor.request_opts = {
-    'headers':{
-        # tell Lassie to tell others it is facebook
-        'User-Agent': 'facebookexternalhit/1.1'
-    }
-}
+# tell Lassie to tell others it is facebook
+extractor.request_opts = {'headers': {'User-Agent': 'facebookexternalhit/1.1'}}

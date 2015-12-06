@@ -1,7 +1,7 @@
 from beavy.app import admin, db
 from beavy.common.admin_model_view import AdminPolyModelView
 from .models import CommentObject
-from .views import *
+from .views import *   # noqa
 
 
 def init_app(app):
