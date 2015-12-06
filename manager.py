@@ -45,6 +45,17 @@ def reformat_options(opts):
         res.append(Option(*args, **kwargs))
     return res
 
+def get_all_beavy_paths(fn):
+    fn("beavy")
+
+    for module in app.config.get("MODULES", []):
+        fn("beavy_modules/{}".format(module))
+
+    return fn("beavy_apps/{}".format(app.config["APP"]))
+
+
+
+
 class Behave(Command):
 
     def get_options(self):
@@ -67,17 +78,24 @@ class PyTest(Command):
 
         arguments = ["--cov-config", ".coveragerc", "--cov=beavy", "beavy"]
 
-        for module in app.config.get("MODULES", []):
-            arguments.append("--cov=beavy_modules/{}".format(module))
-            arguments.append("beavy_modules/{}".format(module))
+        def add_path(x):
+            arguments.append("--cov={}".format(x))
+            arguments.append(x)
 
-        arguments.append("--cov=beavy_apps/{}".format(app.config["APP"]))
-        arguments.append("beavy_apps/{}".format(app.config["APP"]))
+        get_all_beavy_paths(add_path)
 
         exit(pytest.main(arguments))
 
 manager.add_command("pytest", PyTest())
 
+
+class GetPaths(Command):
+    def run(self):
+        results = []
+        get_all_beavy_paths(results.append)
+        print(" ".join(results))
+
+manager.add_command("paths", GetPaths())
 
 # Setup app
 @manager.command
