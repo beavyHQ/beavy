@@ -1,29 +1,31 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { loadPMs } from '../actions';
-import { make_url, getStoreEntity } from 'utils';
-import { Link } from 'react-router';
-import { PRIVATE_MESSAGES } from '../reducers';
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import { loadPMs } from '../actions'
+import { make_url, getStoreEntity } from 'utils'
+import { Link } from 'react-router'
+import { PRIVATE_MESSAGES } from '../reducers'
 // import Ago from 'react-ago-component';
-import map from 'lodash/collection/map';
-import InfiniteList from 'components/InfiniteList';
+import map from 'lodash/collection/map'
+import InfiniteList from 'components/InfiniteList'
 
+class SimpleListItem extends Component {
 
-class SimpleListItem extends Component{
+  static propTypes = {
+    // collection: PropTypes.object.isRequired,
+    entry: PropTypes.shape({
+      type: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      created_at: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired
+    }),
+    participants: PropTypes.array
+  }
 
-  // static propTypes = {
-  //   // collection: PropTypes.object.isRequired,
-  //   item: PropTypes.shape({
-  //     type: PropTypes.string.isRequired,
-  //     id: PropTypes.number.isRequired,
-  //   })
-  // }
-
-  render(){
+  render () {
     // return <div>{this.props.item.type}, {this.props.item.id}</div>
 
     // const entry = this.props.collection[this.props.item.id];
-    return <Link to={make_url.account("private_messages/" + this.props.entry.id)}>
+    return <Link to={make_url.account('private_messages/' + this.props.entry.id)}>
           <div>
             <span>{this.props.entry.created_at}</span>
             <h2>{this.props.entry.title}</h2>
@@ -34,17 +36,17 @@ class SimpleListItem extends Component{
 }
 
 const PMListItem = connect(
-  function(state, ownProps){
-    const entry = getStoreEntity(state, ownProps.item),
-          participants = map(entry.participants.data, x=> getStoreEntity(state, x));
+  function (state, ownProps) {
+    const entry = getStoreEntity(state, ownProps.item)
+    const participants = map(entry.participants.data, x => getStoreEntity(state, x))
     return {entry: entry, participants: participants}
   }
 )(SimpleListItem)
 
-function checkUserPMs(props){
-  const {private_messages} = props;
-  if (private_messages && private_messages.meta) return true;
-  props.dispatch(loadPMs());
+function checkUserPMs (props) {
+  const {private_messages} = props
+  if (private_messages && private_messages.meta) return true
+  props.dispatch(loadPMs())
 }
 
 class PrivateMessagesView extends Component {
@@ -54,22 +56,22 @@ class PrivateMessagesView extends Component {
     private_messages: PropTypes.object
   }
 
-  componentWillMount(){
-    checkUserPMs(this.props);
+  componentWillMount () {
+    checkUserPMs(this.props)
   }
 
-  componentWillReceiveProps(nextProps) {
-    checkUserPMs(nextProps);
+  componentWillReceiveProps (nextProps) {
+    checkUserPMs(nextProps)
   }
 
-  loadMore(){
-    this.props.dispatch(loadPMs(this.props.private_messages.meta.next_num));
+  loadMore () {
+    this.props.dispatch(loadPMs(this.props.private_messages.meta.next_num))
   }
 
-  render() {
-    const { private_messages } = this.props;
+  render () {
+    const { private_messages } = this.props
     if (!private_messages || !private_messages.meta) {
-      return <h1><i>Loading private messages...</i></h1>;
+      return <h1><i>Loading private messages...</i></h1>
     }
     return (
       <div>
@@ -80,22 +82,22 @@ class PrivateMessagesView extends Component {
           minimalItemHeight={24}
           isFetching={private_messages.isFetching}
           >
-          {private_messages.data.map(x=>
+          {private_messages.data.map(x =>
               <PMListItem item={x} />
             )}
         </InfiniteList>
       </div>
-    );
+    )
   }
 }
 
-function mapStateToProps(state, ownProps) {
-  let private_messages = state[PRIVATE_MESSAGES];
-  if (!private_messages || !private_messages.meta){ private_messages = null}
+function mapStateToProps (state, ownProps) {
+  let private_messages = state[PRIVATE_MESSAGES]
+  if (!private_messages || !private_messages.meta) { private_messages = null }
 
-  return { private_messages };
+  return { private_messages }
 }
 
 export default connect(
   mapStateToProps
-)(PrivateMessagesView);
+)(PrivateMessagesView)

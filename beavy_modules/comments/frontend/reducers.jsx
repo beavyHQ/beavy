@@ -8,5 +8,5 @@ export const COMMENTS = 'comments'
 
 addNamedExtension('reducers', COMMENTS, paginate({
   mapActionToKey: x => COMMENTS,
-  types: [ COMMENTS_REQUEST, COMMENTS_SUCCESS, COMMENTS_FAILURE]
+  types: [ COMMENTS_REQUEST, COMMENTS_SUCCESS, COMMENTS_FAILURE ]
 }))
