@@ -1,15 +1,15 @@
-import React        from 'react';
-import { Provider } from 'react-redux';
-import { createDevToolsWindow } from 'utils';
-import { Route, Redirect, DefaultRoute, NotFoundRoute, Router, RoutingContext  } from "react-router";
+import React from 'react'
+import { Provider } from 'react-redux'
+import { createDevToolsWindow } from 'utils'
+import { Route, Redirect, DefaultRoute, NotFoundRoute, Router, RoutingContext } from 'react-router'
 
 /* eslint-disable no-multi-spaces */
 // Only import from `route-handlers/*`
-import { getExtensions } from "config/extensions";
-import { HOME_URL } from "config/config";
-import setupViews from "views";
+import { getExtensions } from 'config/extensions'
+import { HOME_URL } from 'config/config'
+import setupViews from 'views'
 
-import { ReduxRouter } from 'redux-router';
+import { ReduxRouter } from 'redux-router'
 
 /* eslint-enable */
 
@@ -23,81 +23,81 @@ export default class Root extends React.Component {
     application    : React.PropTypes.func.isRequired,
   }
 
-  getRoutes(){
+  getRoutes () {
     const routes_by_path = {},
-          remapRoutes = (routes, path='') => {
-            for (let i = routes.length - 1; i >= 0; i--) {
-              addRoute(routes[i], path)
-            };
-          },
-          addRoute = (x, parents="") => {
-            parents = parents.charAt(parents.length - 1) ? parents : parents + '/'
-            let path = x.props.path.charAt(0) == "/" ? x.props.path : parents + x.props.path;
+      remapRoutes = (routes, path = '') => {
+        for (let i = routes.length - 1; i >= 0; i--) {
+          addRoute(routes[i], path)
+        };
+      },
+      addRoute = (x, parents = '') => {
+        parents = parents.charAt(parents.length - 1) ? parents : parents + '/'
+        let path = x.props.path.charAt(0) === '/' ? x.props.path : parents + x.props.path
             // react router creates some weird double-slashes, which are
             // incompatible with our way of looking at urls
             // sanitise them!
-            path = path.replace(/(\/\/)/, "/");
-            routes_by_path[path] = x;
-            if (x.props.children){
-              remapRoutes(x.props.children, path)
-            }
-          },
-          routes = getExtensions('routes');
+        path = path.replace(/(\/\/)/, '/')
+        routes_by_path[path] = x
+        if (x.props.children) {
+          remapRoutes(x.props.children, path)
+        }
+      },
+      routes = getExtensions('routes')
 
-    remapRoutes(routes);
-    if (routes_by_path[HOME_URL]){
-      const store = routes_by_path[HOME_URL]._store;
-      if(store){
+    remapRoutes(routes)
+    if (routes_by_path[HOME_URL]) {
+      const store = routes_by_path[HOME_URL]._store
+      if (store) {
         // already assigned
-        store.originalProps.path = "/";
-        store.props.path = "/";
+        store.originalProps.path = '/'
+        store.props.path = '/'
       } else {
         // not yet handeled, let's fake it
-        routes_by_path[HOME_URL].props.path = "/"
+        routes_by_path[HOME_URL].props.path = '/'
       }
       routes.push(<Redirect from={HOME_URL} to="/" />)
     } else {
       // routes.push(<Route component={HomeView} path="*" />);
     }
 
-    return routes;
+    return routes
 
   }
 
   render () {
-    let debugTools = null;
+    let debugTools = null
 
     if (__REDUX_DEV_TOOLS__) {
-        const { DevTools, LogMonitor, DebugPanel } = require('redux-devtools/lib/react');
-        if (__DEBUG_NW__) {
-            const win = window.open(
+      const { DevTools, LogMonitor, DebugPanel } = require('redux-devtools/lib/react')
+      if (__DEBUG_NW__) {
+        const win = window.open(
               null,
               'redux-devtools', // give it a name so it reuses the same window
               'menubar=no,location=no,resizable=yes,scrollbars=no,status=no'
-            );
+            )
 
             // reload in case it's reusing the same window with the old content
-            win.location.reload();
+        win.location.reload()
 
             // wait a little bit for it to reload, then render
-            setTimeout(() => {
-              React.render(
+        setTimeout(() => {
+          React.render(
                 <DebugPanel top right bottom left >
                   <DevTools store={this.props.store} monitor={LogMonitor} />
                 </DebugPanel>
-                , win.document.body);
-            }, 10);
-          return;
-        } else {
-          debugTools = (
+                , win.document.body)
+        }, 10)
+        return
+      } else {
+        debugTools = (
             <DebugPanel top left bottom key='debugPanel'>
               <DevTools store={this.props.store} monitor={LogMonitor} />
             </DebugPanel>
-          );
-        }
+          )
+      }
     }
 
-    setupViews(this.props.application);
+    setupViews(this.props.application)
 
     return (
       <div>
@@ -110,6 +110,6 @@ export default class Root extends React.Component {
           </ReduxRouter>
         </Provider>
       </div>
-    );
+    )
   }
 }

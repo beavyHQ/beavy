@@ -1,9 +1,9 @@
 
-import { CALL_API } from 'middleware/api';
-import { make_url } from 'utils';
-import { STORY_SUBMIT, STORY_SUBMIT_REQUEST, STORY_SUBMIT_SUCCESS, STORY_SUBMIT_FAILURE } from './consts';
+import { CALL_API } from 'middleware/api'
+import { make_url } from 'utils'
+import { STORY_SUBMIT, STORY_SUBMIT_REQUEST, STORY_SUBMIT_SUCCESS, STORY_SUBMIT_FAILURE } from './consts'
 
-function submit_story(payload) {
+function submit_story (payload) {
   return {
     [CALL_API]: {
       types: [STORY_SUBMIT_REQUEST, STORY_SUBMIT_SUCCESS, STORY_SUBMIT_FAILURE],
@@ -14,11 +14,11 @@ function submit_story(payload) {
         body: JSON.stringify(payload)
       }
     }
-  };
+  }
 }
 
-export function submitStory(payload){
+export function submitStory (payload) {
   return (dispatch, getState) => {
-    return dispatch(submit_story(payload));
+    return dispatch(submit_story(payload))
   }
 }

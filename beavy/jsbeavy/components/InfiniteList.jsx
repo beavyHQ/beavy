@@ -1,25 +1,25 @@
-import React, { Component, PropTypes} from 'react';
-import Infinite from 'react-infinite';
-import map from 'lodash/collection/map';
-import fill from 'lodash/array/fill';
+import React, { Component, PropTypes} from 'react'
+import Infinite from 'react-infinite'
+import map from 'lodash/collection/map'
+import fill from 'lodash/array/fill'
 
 class SizeReportWrapper extends Component {
   propTypes: {
     reportHeight: PropTypes.func.isRequired,
     element: PropTypes.Component.isRequired,
   }
-  componentDidMount() {
-    console.log("mounted");
-      var el = React.findDOMNode(this.refs.child);
-      this.props.reportHeight(el.offsetHeight);
+  componentDidMount () {
+    console.log('mounted')
+    var el = React.findDOMNode(this.refs.child)
+    this.props.reportHeight(el.offsetHeight)
   }
-  render() {
-    console.log("rendering");
-    return React.cloneElement(this.props.element, {ref: "child"});
+  render () {
+    console.log('rendering')
+    return React.cloneElement(this.props.element, {ref: 'child'})
   }
 }
 
-export default class InfiniteList extends Component{
+export default class InfiniteList extends Component {
 
   propTypes: {
     children: PropTypes.array.isRequired,
@@ -33,23 +33,23 @@ export default class InfiniteList extends Component{
     // })
   }
 
-  constructor(props) {
-      super(props);
-      let minimalItemHeight = props.minimalItemHeight || 100;
-      this.state = {
-          elementHeights: map(props.children, x => minimalItemHeight),
-          containerHeight: window.innerHeight - 60
-      };
+  constructor (props) {
+    super(props)
+    let minimalItemHeight = props.minimalItemHeight || 100
+    this.state = {
+      elementHeights: map(props.children, x => minimalItemHeight),
+      containerHeight: window.innerHeight - 60
+    }
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-      var propsChanged = this.props !== nextProps;
-      var stateChanged = this.state !== nextState;
-      return propsChanged || stateChanged;
+  shouldComponentUpdate (nextProps, nextState) {
+    var propsChanged = this.props !== nextProps
+    var stateChanged = this.state !== nextState
+    return propsChanged || stateChanged
   }
 
-  render() {
-    console.log(this.state);
+  render () {
+    console.log(this.state)
     console.log(map(this.props.children, (c, i) => <SizeReportWrapper element={c} reportHeight={(height) => this.reportHeight(i, height)} />))
     return <Infinite elementHeight={this.state.elementHeights}
                      containerHeight={this.state.containerHeight}
@@ -64,56 +64,56 @@ export default class InfiniteList extends Component{
                      >
         {map(this.props.children, (c, i) => <SizeReportWrapper element={c} reportHeight={(height) => this.reportHeight(i, height)} />
         )}
-    </Infinite>;
+    </Infinite>
   }
 
-  reportHeight(i, height){
-    console.log(i, height);
-    let curHeights = this.state.elementHeights;
-        curHeights[i] = height;
-    this.setState({elementHeights: curHeights});
+  reportHeight (i, height) {
+    console.log(i, height)
+    let curHeights = this.state.elementHeights
+    curHeights[i] = height
+    this.setState({elementHeights: curHeights})
   }
 
-  handleResize(e) {
-      this.setState({containerHeight: window.innerHeight - 60});
+  handleResize (e) {
+    this.setState({containerHeight: window.innerHeight - 60})
   }
 
-  componentDidMount() {
-      window.addEventListener('resize', this.handleResize);
+  componentDidMount () {
+    window.addEventListener('resize', this.handleResize)
   }
 
-  componentDidUnmount() {
-      window.removeEventListener('resize', this.handleResize);
+  componentDidUnmount () {
+    window.removeEventListener('resize', this.handleResize)
   }
 
-  componentWillReceiveProps(newProps) {
-    let newState = {elements: newProps.children};
-    if (this.props.children.length < newProps.children.length){
-      const minimalItemHeight = newProps.minimalItemHeight || this.props.minimalItemHeight || 100;
+  componentWillReceiveProps (newProps) {
+    let newState = {elements: newProps.children}
+    if (this.props.children.length < newProps.children.length) {
+      const minimalItemHeight = newProps.minimalItemHeight || this.props.minimalItemHeight || 100
       newState.elementHeights = this.state.elementHeights.concat(
         fill(Array(newProps.children.length - this.props.children.length), minimalItemHeight))
     }
-    console.log(newState);
-    this.setState(newState);
+    console.log(newState)
+    this.setState(newState)
   }
 
-  handleInfiniteLoad() {
-    console.log("LOAD MOA!");
+  handleInfiniteLoad () {
+    console.log('LOAD MOA!')
     this.props.loader(this.props.meta.page + 1)
   }
 
-  elementInfiniteLoad() {
-      return <div className="infinite-list-item">
+  elementInfiniteLoad () {
+    return <div className="infinite-list-item">
           Loading...
-      </div>;
+      </div>
   }
 
-  scrollCallback(num) {
-      if(this.props.routeOnScroll) {
-          routeActions.setRoute('/infinite_demo/'+this.props.query+'/'+this.state.elements[num].props.data.masterid);
-      }
-      if (this.props.scrollCallback) {
-          this.props.scrollCallback(num)
-      }
+  scrollCallback (num) {
+    if (this.props.routeOnScroll) {
+      routeActions.setRoute('/infinite_demo/' + this.props.query + '/' + this.state.elements[num].props.data.masterid)
+    }
+    if (this.props.scrollCallback) {
+      this.props.scrollCallback(num)
+    }
   }
 }

@@ -1,46 +1,46 @@
-import { compose, createStore, applyMiddleware, combineReducers } from 'redux';
-import thunkMiddleware from 'redux-thunk';
-import { reducer as formReducer } from 'redux-form';
-import apiMiddleware from '../middleware/api';
-import { getNamedExtensions, getExtensions, addManyExtensions, addExtension, addNamedExtension } from 'config/extensions';
-import createHistory from 'history/lib/createBrowserHistory';
+import { compose, createStore, applyMiddleware, combineReducers } from 'redux'
+import thunkMiddleware from 'redux-thunk'
+import { reducer as formReducer } from 'redux-form'
+import apiMiddleware from '../middleware/api'
+import { getNamedExtensions, getExtensions, addManyExtensions, addExtension, addNamedExtension } from 'config/extensions'
+import createHistory from 'history/lib/createBrowserHistory'
 
 import {
   routerStateReducer,
   reduxReactRouter
-} from 'redux-router';
+} from 'redux-router'
 
-addManyExtensions("storeMiddlewares", [thunkMiddleware, apiMiddleware]);
+addManyExtensions('storeMiddlewares', [thunkMiddleware, apiMiddleware])
 
-addNamedExtension("reducers", "router", routerStateReducer)
-addNamedExtension("reducers", "CURRENT_USER", (x=null) => x)
-addNamedExtension("reducers", "form", formReducer)
+addNamedExtension('reducers', 'router', routerStateReducer)
+addNamedExtension('reducers', 'CURRENT_USER', (x = null) => x)
+addNamedExtension('reducers', 'form', formReducer)
 
 
 export default function configureStore (initialState) {
-  let middlewares = getExtensions("storeMiddlewares");
+  let middlewares = getExtensions('storeMiddlewares')
   if (__DEBUG__) {
     // we concat to make sure we aren't messing with
     // with the extensions list itself but create a copy
     const createLogger = require('redux-logger'),
-          logAttrs = {
-            level: 'info',
-            collapsed: true
-          };
+      logAttrs = {
+        level: 'info',
+        collapsed: true
+      }
 
-    if(window._phantom) {
+    if (window._phantom) {
       // in test environment, we need to stringify our
       // logs to be able to read them
-      logAttrs.transformer = (state) => JSON.stringify(state);
-      logAttrs.actionTransformer = (action) => JSON.stringify(action);
+      logAttrs.transformer = (state) => JSON.stringify(state)
+      logAttrs.actionTransformer = (action) => JSON.stringify(action)
     }
-    middlewares = middlewares.concat([createLogger(logAttrs)]);
+    middlewares = middlewares.concat([createLogger(logAttrs)])
   }
 
-  let createStoreWithMiddleware = applyMiddleware.apply(this, middlewares);
+  let createStoreWithMiddleware = applyMiddleware.apply(this, middlewares)
 
-  if (__REDUX_DEV_TOOLS__){
-    const { devTools, persistState } = require('redux-devtools');
+  if (__REDUX_DEV_TOOLS__) {
+    const { devTools, persistState } = require('redux-devtools')
     createStoreWithMiddleware = compose(
         createStoreWithMiddleware,
         reduxReactRouter({ createHistory }),
@@ -57,7 +57,7 @@ export default function configureStore (initialState) {
   }
 
   const store = createStoreWithMiddleware(createStore)(
-      combineReducers(getNamedExtensions("reducers")), initialState);
+      combineReducers(getNamedExtensions('reducers')), initialState)
 
   // if (module.hot) {
   //   module.hot.accept('../reducers', () => {
@@ -66,5 +66,5 @@ export default function configureStore (initialState) {
   //     store.replaceReducer(nextRootReducer);
   //   });
   // }
-  return store;
+  return store
 }

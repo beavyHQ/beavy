@@ -1,10 +1,10 @@
-import React             from 'react';
-import TestUtils         from 'react-addons-test-utils';
-import { HomeView }      from './HomeView';
-import { shallowRender } from 'utils/test';
+import React from 'react'
+import TestUtils from 'react-addons-test-utils'
+import { HomeView } from './HomeView'
+import { shallowRender } from 'utils/test'
 
 function renderWith (props = {}) {
-  return TestUtils.renderIntoDocument(<HomeView {...props} />);
+  return TestUtils.renderIntoDocument(<HomeView {...props} />)
 }
 
 function shallowRenderWith (props = {}) {
@@ -12,73 +12,73 @@ function shallowRenderWith (props = {}) {
 }
 
 describe('(View) Home', function () {
-  let component, rendered;
+  let component, rendered
 
   beforeEach(function () {
-    component = shallowRenderWith();
-    rendered  = renderWith();
-  });
+    component = shallowRenderWith()
+    rendered = renderWith()
+  })
 
   it('(Meta) Should have a test that works with Chai expectations.', function () {
-    expect(true).to.be.true;
-  });
+    expect(true).to.be.true
+  })
 
   it('Should render as a <div>.', function () {
-    expect(component.type).to.equal('div');
-  });
+    expect(component.type).to.equal('div')
+  })
 
   it('Should include an <h1> with welcome text.', function () {
-    const h1 = TestUtils.findRenderedDOMComponentWithTag(rendered, 'h1');
+    const h1 = TestUtils.findRenderedDOMComponentWithTag(rendered, 'h1')
 
-    expect(h1).to.exist;
-    expect(h1.textContent).to.match(/Welcome to the React Redux Starter Kit/);
-  });
+    expect(h1).to.exist
+    expect(h1.textContent).to.match(/Welcome to the React Redux Starter Kit/)
+  })
 
   it('Should render with an <h2> that includes Sample Counter text.', function () {
-    const h2 = TestUtils.findRenderedDOMComponentWithTag(rendered, 'h2');
+    const h2 = TestUtils.findRenderedDOMComponentWithTag(rendered, 'h2')
 
-    expect(h2).to.exist;
-    expect(h2.textContent).to.match(/Sample Counter/);
-  });
+    expect(h2).to.exist
+    expect(h2.textContent).to.match(/Sample Counter/)
+  })
 
   it('Should render props.counter at the end of the sample counter <h2>.', function () {
     const h2 = TestUtils.findRenderedDOMComponentWithTag(
       renderWith({ counter : 5 }), 'h2'
-    );
+    )
 
-    expect(h2).to.exist;
-    expect(h2.textContent).to.match(/5$/);
-  });
+    expect(h2).to.exist
+    expect(h2.textContent).to.match(/5$/)
+  })
 
   it('Should render an "Increment" button.', function () {
-    const btn = TestUtils.findRenderedDOMComponentWithTag(rendered, 'button');
+    const btn = TestUtils.findRenderedDOMComponentWithTag(rendered, 'button')
 
-    expect(btn).to.exist;
-    expect(btn.textContent).to.match(/Increment/);
-  });
+    expect(btn).to.exist
+    expect(btn.textContent).to.match(/Increment/)
+  })
 
   it('Should call props.dispatch when "Increment" button is clicked.', function () {
-    const dispatch = sinon.spy();
+    const dispatch = sinon.spy()
     const btn = TestUtils.findRenderedDOMComponentWithTag(
       renderWith({ dispatch }), 'button'
-    );
+    )
 
-    dispatch.should.have.not.been.called;
-    TestUtils.Simulate.click(btn);
-    dispatch.should.have.been.called;
-  });
+    dispatch.should.have.not.been.called
+    TestUtils.Simulate.click(btn)
+    dispatch.should.have.been.called
+  })
 
   it('Should dispatch an action with type "COUNTER_INCREMENT" when "Increment" button is clicked.', function () {
-    const dispatch = sinon.spy();
+    const dispatch = sinon.spy()
     const btn = TestUtils.findRenderedDOMComponentWithTag(
       renderWith({ dispatch }), 'button'
-    );
+    )
 
-    dispatch.should.have.not.been.called;
-    TestUtils.Simulate.click(btn);
+    dispatch.should.have.not.been.called
+    TestUtils.Simulate.click(btn)
 
-    expect(dispatch.firstCall.args[0]).to.exist;
-    expect(dispatch.firstCall.args[0]).be.an.object;
-    expect(dispatch.firstCall.args[0]).to.have.property('type', 'COUNTER_INCREMENT');
-  });
-});
+    expect(dispatch.firstCall.args[0]).to.exist
+    expect(dispatch.firstCall.args[0]).be.an.object
+    expect(dispatch.firstCall.args[0]).to.have.property('type', 'COUNTER_INCREMENT')
+  })
+})

@@ -1,21 +1,21 @@
-import React from "react";
-import { MainMenu } from "components/MainMenu";
-import UserModal from "containers/UserModal";
-import UserMenuWidget from "containers/UserMenuWidget";
+import React from 'react'
+import { MainMenu } from 'components/MainMenu'
+import UserModal from 'containers/UserModal'
+import UserMenuWidget from 'containers/UserMenuWidget'
 
-import { getExtensions } from "config/extensions";
+import { getExtensions } from 'config/extensions'
 
 export default class Application extends React.Component {
-    render() {
-        return <div>
+    render () {
+      return <div>
                   <UserModal />
                   <MainMenu
                     logo='http://svgporn.com/logos/kong.svg'
                     navigationTools={<UserMenuWidget />}
                   >
-                    {getExtensions('MainMenuItem').map(x=>x.call(this))}
+                    {getExtensions('MainMenuItem').map(x => x.call(this))}
                   </MainMenu>
                   {this.props.children}
-                </div>;
+                </div>
     }
 }

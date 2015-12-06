@@ -1,14 +1,14 @@
 
-import { addNamedExtension } from 'config/extensions';
-import { USER_SUCCESS } from 'actions/user';
+import { addNamedExtension } from 'config/extensions'
+import { USER_SUCCESS } from 'actions/user'
 
-function userMapper(state = {}, action) {
+function userMapper (state = {}, action) {
 
-  if (action.type == USER_SUCCESS)
-    return action.response.entities.User[action.response.result];
-  return state;
+  if (action.type === USER_SUCCESS)
+    return action.response.entities.User[action.response.result]
+  return state
 }
 
-export const USER = 'user';
+export const USER = 'user'
 
-addNamedExtension("reducers", "user", userMapper);
+addNamedExtension('reducers', 'user', userMapper)

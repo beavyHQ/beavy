@@ -1,15 +1,15 @@
-import React from "react";
+import React from 'react'
 
 export default class TEMPLATE extends React.Component {
-	render() {
-		var { aaa, bbb, ccc } = this.props;
-		return <div>
+	render () {
+		          var { aaa, bbb, ccc } = this.props
+		          return <div>
 			This is an Element.
-		</div>;
+		</div>
 	}
 }
 TEMPLATE.propTypes = {
-	aaa: React.PropTypes.object.isRequired,
-	bbb: React.PropTypes.string.isRequired,
-	ccc: React.PropTypes.bool
-};
+	          aaa: React.PropTypes.object.isRequired,
+	          bbb: React.PropTypes.string.isRequired,
+	          ccc: React.PropTypes.bool
+}
