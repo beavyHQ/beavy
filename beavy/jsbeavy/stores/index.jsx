@@ -1,8 +1,9 @@
+/*global __DEBUG__, __REDUX_DEV_TOOLS__*/
 import { compose, createStore, applyMiddleware, combineReducers } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import { reducer as formReducer } from 'redux-form'
 import apiMiddleware from '../middleware/api'
-import { getNamedExtensions, getExtensions, addManyExtensions, addExtension, addNamedExtension } from 'config/extensions'
+import { getNamedExtensions, getExtensions, addManyExtensions, addNamedExtension } from 'config/extensions'
 import createHistory from 'history/lib/createBrowserHistory'
 
 import {
@@ -16,17 +17,16 @@ addNamedExtension('reducers', 'router', routerStateReducer)
 addNamedExtension('reducers', 'CURRENT_USER', (x = null) => x)
 addNamedExtension('reducers', 'form', formReducer)
 
-
 export default function configureStore (initialState) {
   let middlewares = getExtensions('storeMiddlewares')
   if (__DEBUG__) {
     // we concat to make sure we aren't messing with
     // with the extensions list itself but create a copy
-    const createLogger = require('redux-logger'),
-      logAttrs = {
-        level: 'info',
-        collapsed: true
-      }
+    const createLogger = require('redux-logger')
+    const logAttrs = {
+      level: 'info',
+      collapsed: true
+    }
 
     if (window._phantom) {
       // in test environment, we need to stringify our

@@ -1,3 +1,4 @@
+/*eslint-disable react/no-multi-comp*/
 import React, { Component, PropTypes} from 'react'
 import Infinite from 'react-infinite'
 import map from 'lodash/collection/map'
@@ -29,7 +30,7 @@ export default class InfiniteList extends Component {
     // meta: PropTypes.shape({
     //   has_next: PropTypes.bool.isRequired,
     //   page: PropTypes.number.isRequired,
-    //   // "total-pages': PropTypes.number.isRequired,
+    //   // 'total-pages': PropTypes.number.isRequired,
     // })
   }
 
@@ -58,7 +59,7 @@ export default class InfiniteList extends Component {
                      loadingSpinnerDelegate={this.elementInfiniteLoad()}
                      isInfiniteLoading={this.props.isFetching}
                      preloadBatchSize={20}
-         className="infinite-list"
+         className='infinite-list'
          scrollNumberCallback={this.scrollCallback}
          selectedItem={this.props.selectedItem}
                      >
@@ -103,14 +104,15 @@ export default class InfiniteList extends Component {
   }
 
   elementInfiniteLoad () {
-    return <div className="infinite-list-item">
+    return <div className='infinite-list-item'>
           Loading...
       </div>
   }
 
   scrollCallback (num) {
     if (this.props.routeOnScroll) {
-      routeActions.setRoute('/infinite_demo/' + this.props.query + '/' + this.state.elements[num].props.data.masterid)
+      // FIXME: WHAT IS ROUTE ACTIONS?
+      // routeActions.setRoute('/infinite_demo/' + this.props.query + '/' + this.state.elements[num].props.data.masterid)
     }
     if (this.props.scrollCallback) {
       this.props.scrollCallback(num)

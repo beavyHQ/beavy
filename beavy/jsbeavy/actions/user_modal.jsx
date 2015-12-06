@@ -8,7 +8,6 @@ export const CLOSE_MODAL = 'USER_MODAL_CLOSED'
 // export const CLOSE_LOGIN = 'CLOSE_LOGIN';
 // export const CLOSE_REGISTER = 'OPEN_REGISTER';
 
-
 export function openLogin () {
   return { type: OPEN_LOGIN }
 }

@@ -1,7 +1,7 @@
-
+/*eslint-disable no-throw-literal */
 // our extensions collection
 // not exported, please use the helper functions below
-let extensions = {}
+const extensions = {}
 
 function getOrDefault (key, df) {
   if (!extensions[key]) {
@@ -14,7 +14,9 @@ function getOrDefault (key, df) {
 
 export function addNamedExtension (key, name, item) {
   let base = getOrDefault(key, {})
-  if (base[name]) throw 'Name ' + name + ' has already been registerd for ' + key
+  if (base[name]) {
+    throw 'Name ' + name + ' has already been registerd for ' + key
+  }
   base[name] = item
 }
 
@@ -22,9 +24,7 @@ export function getNamedExtensions (key) {
   return extensions[key] || {}
 }
 
-
-/// list based
-
+// list based
 export function insertExtension (key, position, item) {
   let base = getOrDefault(key, [])
   base.splice(position, 0, item)

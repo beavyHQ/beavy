@@ -1,6 +1,5 @@
 import merge from 'lodash/object/merge'
 import union from 'lodash/array/union'
-import map from 'lodash/collection/map'
 
 // based on the ideas of the real world example of rackt/redux:
 // https://github.com/rackt/redux/blob/master/examples/real-world/reducers/paginate.js

@@ -21,7 +21,7 @@ class UserView extends Component {
   }
 
   render () {
-    const { user, userId, children } = this.props
+    const { user, children } = this.props
     if (!user) {
       return <h1><i>Loading profile...</i></h1>
     }
@@ -41,7 +41,7 @@ UserView.propTypes = {
   dispatch: PropTypes.func,
   userId: PropTypes.string.isRequired,
   user: PropTypes.object,
-  checkUser: PropTypes.func.isRequired,
+  checkUser: PropTypes.func.isRequired
 }
 
 function mapStateToProps (state, ownProps) {

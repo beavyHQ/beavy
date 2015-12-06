@@ -1,3 +1,4 @@
+/* globals __DEBUG__ */
 import merge from 'lodash/object/merge'
 
 export default function simple_submit ({ types }) {

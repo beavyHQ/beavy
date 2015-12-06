@@ -14,5 +14,4 @@ function entities (state = {}, action) {
   return state
 }
 
-
 addNamedExtension('reducers', 'entities', entities)

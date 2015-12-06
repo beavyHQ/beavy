@@ -1,4 +1,3 @@
-import React from 'react'
 import config, { HOME_URL } from 'config/config'
 
 export function createConstants (...constants) {
@@ -14,17 +13,17 @@ export function getStoreEntity (state, item) {
 
 function makePrefixUrlMaker (prefix) {
   if (prefix.slice(-1) !== '/') prefix += '/'
-  return (function makeUrl (inp) {
+  return function makeUrl (inp) {
     let url = prefix + inp
     if (url.slice(-1) !== '/') {
       url += '/'
     }
     if (url === HOME_URL) { return '/' }
     return url
-  })
+  }
 }
 
-export const make_url = function (cfg) {
+export const make_url = (function (cfg) {
   const urlMakers = {}
   for (var key in cfg) {
     if (cfg.hasOwnProperty(key) && key.slice(-4) === '_URL') {
@@ -32,4 +31,4 @@ export const make_url = function (cfg) {
     }
   }
   return urlMakers
-}(config)
+})(config)

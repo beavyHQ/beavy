@@ -8,37 +8,35 @@ function simplify (x) {
 }
 
 export default function format_jsonapi_result (input, key) {
-  const entitiesMap = {},
-    result = {},
-    output = {
-      entities: entitiesMap,
-    },
-    addToMap = (x) => {
-      if (!entitiesMap[x.type]) entitiesMap[x.type] = {}
+  const entitiesMap = {}
+  const result = {}
+  const output = { entities: entitiesMap }
+  const addToMap = (x) => {
+    if (!entitiesMap[x.type]) { entitiesMap[x.type] = {} }
 
-      let toAdd = simplify(x)
-      if (x.attributes) toAdd = merge(toAdd, x.attributes)
-      if (x.relationships) toAdd = merge(toAdd, extract_relationships(x))
+    let toAdd = simplify(x)
+    if (x.attributes) toAdd = merge(toAdd, x.attributes)
+    if (x.relationships) toAdd = merge(toAdd, extract_relationships(x))
 
-      entitiesMap[x.type][x.id] = toAdd
-    },
-    extract_relationships = (data) => {
-      const relationships = {}
-      forEach(data.relationships || {}, (n, key) => {
-        if (Array.isArray(n.data)) {
-          relationships[key] = []
-          forEach(n.data, (x) => {
-            addToMap(x)
-            relationships[key].push(simplify(x))
-          })
-        } else {
-          addToMap(n.data)
-          relationships[key] = simplify(n.data)
-        }
-      })
+    entitiesMap[x.type][x.id] = toAdd
+  }
+  const extract_relationships = (data) => {
+    const relationships = {}
+    forEach(data.relationships || {}, (n, key) => {
+      if (Array.isArray(n.data)) {
+        relationships[key] = []
+        forEach(n.data, (x) => {
+          addToMap(x)
+          relationships[key].push(simplify(x))
+        })
+      } else {
+        addToMap(n.data)
+        relationships[key] = simplify(n.data)
+      }
+    })
 
-      return relationships
-    }
+    return relationships
+  }
 
   if (input.included) {
     forEach(input.included, addToMap)

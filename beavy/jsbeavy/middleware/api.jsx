@@ -1,13 +1,10 @@
-// import 'isomorphic-fetch';
-import entites from 'reducers/entities'
+// we import it here to make sure it runs!
+import entites from 'reducers/entities' //eslint-disable-line
 import format_jsonapi_result from './format_jsonapi_result'
-
-
 
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
 function callApi (endpoint, key, params) {
-
   return fetch(endpoint, Object.assign({
     credentials: 'same-origin', // keep the cookies for the session!
     headers: { // we always ask for json
@@ -25,7 +22,6 @@ function callApi (endpoint, key, params) {
       return Object.assign({}, format_jsonapi_result(json, key))
     })
 }
-
 
 // Action key that carries API call info interpreted by this Redux middleware.
 export const CALL_API = 'Call API'
