@@ -14,9 +14,9 @@ Whenever you are at state that you want to integrate upstream changes into your 
 
 == Code Quality
 
-image:https://img.shields.io/badge/Javascript-standard-green.svg?style=flat-square[link="http://standardjs.com/"] image:https://img.shields.io/badge/Python-PEP--8-green.svg?style=flat-square[link="https://www.python.org/dev/peps/pep-0008/"]
+image:https://img.shields.io/badge/Javascript-eslint--standard--react-green.svg?style=flat-square[link="http://standardjs.com/"] image:https://img.shields.io/badge/Python-flake8 (PEP--8)-green.svg?style=flat-square[link="https://www.python.org/dev/peps/pep-0008/"]
 
-This Project follows the link:http://standardjs.com/[Standard] Code Style for Javascript and link:https://www.python.org/dev/peps/pep-0008/[PEP-8] for Python. Code quality is checked automatically by travis and Pull-Requests with obvious code style errors need to be fixed before they can be merged.
+This Project follows the link:http://standardjs.com/[Standard] Code Style for Javascript and link:https://www.python.org/dev/peps/pep-0008/[PEP-8] for Python. Code quality is checked automatically by travis and Pull-Requests with obvious code style errors need to be fixed before they can be merged. We are using link:http://eslint.org/docs/user-guide/integrations.html[eslint] and link:https://pypi.python.org/pypi/flake8[flake8] for ensuring the coding style and recommend to install the linters for your editor, too!
 
 == Let's get started.
 
