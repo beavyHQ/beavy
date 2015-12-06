@@ -19,7 +19,6 @@ if __name__ == '__main__':
     with open("config.yml") as reader:
         config = yaml.safe_load(reader)
 
-
     if os.environ.get("BEAVY_ENV", None):
         print("----- Adding basic requirements")
         collect(os.path.join(BASE_DIR, "beavy", "requirements", "base.txt"))
@@ -32,7 +31,8 @@ if __name__ == '__main__':
         collect(os.path.join(BASE_DIR, "beavy", "requirements", "dev.txt"))
 
     for module in config["MODULES"]:
-        filename = os.path.join(BASE_DIR, "beavy_modules", module, "requirements.txt")
+        filename = os.path.join(BASE_DIR,
+                                "beavy_modules", module, "requirements.txt")
         if os.path.exists(filename):
             print("----- Adding Requirements for {}".format(module))
             collect(filename)

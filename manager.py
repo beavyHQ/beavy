@@ -11,8 +11,8 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 def patched_migrate(fn):
     def wrapped(*args, **kwargs):
         paths = list(filter(lambda x: os.path.isdir(x),
-                        map(lambda x: os.path.join(BASE_DIR, \
-                                   'beavy_modules', x, "migrations"),
+                     map(lambda x: os.path.join(BASE_DIR,
+                         'beavy_modules', x, "migrations"),
                             app.config.get("MODULES", []))))
         print("Adding module migrations:\n - {}".format("\n - ".join(paths)))
         app_migrations_path = os.path.join(BASE_DIR,
@@ -23,7 +23,10 @@ def patched_migrate(fn):
             paths.append(app_migrations_path)
             print('Adding App migration: \n - {}'.format(app_migrations_path))
         cfg = fn(*args, **kwargs)
-        cfg.set_main_option('version_locations', "{} {}".format(os.path.join('migrations', 'versions'), " ".join(paths)))
+        cfg.set_main_option('version_locations',
+                            "{} {}".format(os.path.join('migrations',
+                                                        'versions'),
+                                           " ".join(paths)))
         return cfg
     return wrapped
 
@@ -36,14 +39,17 @@ from beavy.app import app, manager
 from behave.__main__ import main as behave_main
 from behave.configuration import options as behave_options
 
+
 def reformat_options(opts):
     res = []
     for args, kwargs in opts:
-        if not args: continue
+        if not args:
+            continue
         if "config_help" in kwargs:
             del kwargs['config_help']
         res.append(Option(*args, **kwargs))
     return res
+
 
 def get_all_beavy_paths(fn):
     fn("beavy")
@@ -52,8 +58,6 @@ def get_all_beavy_paths(fn):
         fn("beavy_modules/{}".format(module))
 
     return fn("beavy_apps/{}".format(app.config["APP"]))
-
-
 
 
 class Behave(Command):
@@ -67,10 +71,12 @@ class Behave(Command):
             print("You need to configure the APP to be used!")
             exit(1)
 
-        exit(behave_main(sys.argv[2:] + ['--no-capture', "beavy_apps/{}/tests/features".format(frontend)]))
+        exit(behave_main(sys.argv[2:] + ['--no-capture',
+             "beavy_apps/{}/tests/features".format(frontend)]))
 
 
 manager.add_command("behave", Behave())
+
 
 class PyTest(Command):
     def run(self):
@@ -97,6 +103,7 @@ class GetPaths(Command):
 
 manager.add_command("paths", GetPaths())
 
+
 # Setup app
 @manager.command
 def create_app(name):
@@ -107,11 +114,11 @@ def create_app(name):
     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
     if not re.match("^[a-z][a-z0-9]{2,24}$", name):
-        print("Sorry, the app name has to be a lower-cased 3-25 character long string only containing letters, numbers and underscore and starting with a letter!")
+        print("""Sorry, the app name has to be a lower-cased 3-25 character
+long string only containing letters, numbers and underscore and starting
+with a letter!""")
         print("RegEx: ^[a-z][a-z0-9]{2,24}$ ")
         exit(1)
-
-
 
     APP_DIR = os.path.join(ROOT_DIR, "beavy_apps", name)
 
@@ -126,7 +133,8 @@ def create_app(name):
     # create minimal frontend
     os.mkdir(os.path.join(APP_DIR, "frontend"))
 
-    with open(os.path.join(APP_DIR, "frontend", "application.jsx"), 'w') as jsx:
+    with open(os.path.join(APP_DIR, "frontend",
+                           "application.jsx"), 'w') as jsx:
         jsx.write("""
 import React from "react";
 import { MainMenu } from "components/MainMenu";
@@ -164,10 +172,7 @@ export default class Application extends React.Component {
     with open(os.path.join(APP_DIR, "tests", "steps", "steps.py"), 'w') as stp:
         stp.write("from beavy.testing.steps import *\n")
 
-
     print("{} successfully created!".format(name))
-
-
 
 
 if __name__ == '__main__':
