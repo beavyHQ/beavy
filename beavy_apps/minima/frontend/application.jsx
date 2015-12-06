@@ -7,7 +7,7 @@ import { getExtensions } from 'config/extensions'
 
 export default class Application extends React.Component {
   static propTypes = {
-    children: PropTypes.array
+    children: PropTypes.object
   }
   render () {
     return <div>

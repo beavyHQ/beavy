@@ -11,7 +11,7 @@ import styles from './styles/twitterApp.scss'
 export default class Application extends React.Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
-    children: PropTypes.array
+    children: PropTypes.object
   }
   static getProps (stores, params) {
     var transition = stores.Router.getItem('transition')

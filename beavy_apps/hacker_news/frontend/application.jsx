@@ -18,7 +18,7 @@ Object.assign(MainMenuStyles, {logo: styles.logo, title: styles.title})
 
 export default class HackerNewsApplication extends React.Component {
   static propTypes = {
-    children: PropTypes.array
+    children: PropTypes.object
   }
   render () {
     return <div className={styles.hackerNews}>
