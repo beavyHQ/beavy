@@ -1,14 +1,36 @@
 var path = require('path')
 var fs = require('fs')
+var merge = require('lodash/object/merge')
+var transform = require('lodash/object/transform')
+var partial = require('lodash/function/partial')
+var isBoolean = require('lodash/lang/isBoolean')
+var isObject = require('lodash/lang/isObject')
 var yaml = require('js-yaml')
 var webpack = require('webpack')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var ManifestPlugin = require('webpack-manifest-plugin')
 var StatsPlugin = require('stats-webpack-plugin')
 var loadersByExtension = require('./helpers/loadersByExtension')
-var appConfig = yaml.safeLoad(fs.readFileSync('config.yml'))
 var ROOT = path.join(__dirname, '..', '..')
 var JS_ROOT = path.join(ROOT, 'beavy', 'jsbeavy')
+var BEAVY_ENV = process.env.BEAVY_ENV || 'DEVELOPMENT'
+
+var appConfig = merge({},
+	yaml.safeLoad(fs.readFileSync('beavy/config.yml'))[BEAVY_ENV],
+	yaml.safeLoad(fs.readFileSync('config.yml'))
+)
+
+function deepTransform (prefix, result, value, key) {
+  if (isObject(value)) {
+    transform(value,
+              partial(deepTransform, prefix + '_' + key),
+              result)
+  }
+  if (!isBoolean(value)) {
+    value = JSON.stringify(value)
+  }
+  result[prefix + '_' + key] = value
+}
 
 module.exports = function (options) {
   var entry = {
@@ -69,10 +91,13 @@ module.exports = function (options) {
   var plugins = [
     new webpack.PrefetchPlugin('react'),
     new webpack.PrefetchPlugin('react/lib/ReactComponentBrowserEnvironment'),
-    new webpack.DefinePlugin({
+    new webpack.DefinePlugin(merge({
       __DEBUG__: !!options.debug,
       __REDUX_DEV_TOOLS__: !!options.redux_dev_tools,
-      __DEBUG_NW__: !!options.redux_dev_tools})
+      __DEBUG_NW__: !!options.redux_dev_tools
+    },
+    transform(appConfig, partial(deepTransform, '__CONFIG_'))
+  ))
   ]
   if (options.prerender) {
     plugins.push(new StatsPlugin('stats.prerender.json', {

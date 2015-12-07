@@ -7,5 +7,3 @@ MODULES:
  - url_extractor
 
 APP: 'minima'
-
-HOME_URL: '/account/comments/'

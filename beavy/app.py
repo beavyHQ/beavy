@@ -13,6 +13,7 @@ from flask_admin import Admin, AdminIndexView
 
 from flask_social_blueprint.core import SocialBlueprint as SocialBp
 from flask.ext.babel import Babel
+from beavy.utils.deepmerge import deepmerge
 
 from flask_environments import Environments
 from pprint import pprint
@@ -20,6 +21,7 @@ from pprint import pprint
 from celery import Celery
 
 import os
+import yaml
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -39,7 +41,9 @@ def make_env(app):
     env = Environments(app, var_name="BEAVY_ENV")
 
     env.from_yaml(os.path.join(BASE_DIR, 'config.yml'))
-    env.from_yaml(os.path.join(os.getcwd(), 'config.yml'))
+    # env.from_yaml(os.path.join(os.getcwd(), 'config.yml'))
+    with open(os.path.join(os.getcwd(), 'config.yml'), "r") as r:
+        deepmerge(app.config, yaml.load(r))
 
     # update social buttons
     _FLBLPRE = "flask_social_blueprint.providers.{}"

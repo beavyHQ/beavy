@@ -56,7 +56,7 @@ def generate_capability_maps(obj):
 
 
 def replaceHomeEndpoint(app):
-    HOME_URL = app.config["HOME_URL"]
+    HOME_URL = app.config["URLS"]["HOME"]
     original_endpoint = None
     for rule in app.url_map.iter_rules():
         if HOME_URL == rule.rule:
