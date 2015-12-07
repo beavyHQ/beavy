@@ -1,7 +1,5 @@
 from beavy.common.paging_schema import makePaginationSchema
 from beavy.common.including_hyperlink_related import IncludingHyperlinkRelated
-from beavy.schemas.user import BaseUser
-from beavy.schemas.activity import ActivityField
 from beavy.schemas.object import ObjectField
 # from marshmallow import Schema, fields
 
@@ -37,7 +35,6 @@ class UserLike(Schema):
         return item
 
     object = IncludingHyperlinkRelated(ObjectField())
-
 
 
 user_likes_paged = makePaginationSchema(UserLike)(many=False)

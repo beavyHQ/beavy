@@ -14,11 +14,11 @@ from collections import defaultdict
 
 class ObjectQuery(AccessQuery):
 
-    def by_capability(self, *caps, aborting=True, abort_code=404):
+    def by_capability(self, aborting=True, abort_code=404, *caps):
         caps = set(chain.from_iterable(map(lambda c:
-                                            getattr(Object.TypesForCapability,
-                                                getattr(c, 'value', c), []),
-                                            caps)))
+                                           getattr(Object.TypesForCapability,
+                                                   getattr(c, 'value', c), []),
+                                           caps)))
         if not caps:
             # No types found, break right here.
             if aborting:
@@ -33,11 +33,12 @@ class ObjectQuery(AccessQuery):
 
         from .activity import Activity
 
-        my_activities = aliased(Activity.query.filter(Activity.subject_id == current_user.id
-                  ).cte(name="my_activities"), "my_activities")
+        my_activities = aliased(Activity.query.filter(
+            Activity.subject_id == current_user.id
+            ).cte(name="my_activities"), "my_activities")
 
-        return self.outerjoin(my_activities).options(contains_eager(Object.my_activities,
-                                           alias=my_activities))
+        return self.outerjoin(my_activities).options(contains_eager(
+            Object.my_activities, alias=my_activities))
 
 
 class Object(db.Model):
@@ -59,7 +60,6 @@ class Object(db.Model):
         # This can be searched for
         searchable = 'searchable'
 
-
     __tablename__ = "objects"
     query_class = ObjectQuery
 
@@ -72,7 +72,7 @@ class Object(db.Model):
     belongs_to = db.Column(db.Integer, db.ForeignKey("objects.id"),
                            nullable=True)
     # children = db.relationship("Object", backref=db.backref('belongs_to',
-                                                            # remote_side=id))
+    #                                                         remote_side=id))
 
     __mapper_args__ = {'polymorphic_on': discriminator}
 

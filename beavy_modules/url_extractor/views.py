@@ -8,8 +8,9 @@ from .blueprint import blueprint
 
 from flask import request
 
+
 @blueprint.route('extract')
-@cache.memoize(15 * 60) # keep in cache for 15min
+@cache.memoize(15 * 60)    # keep in cache for 15min
 # @login_required
 @rate_limit("1/second")
 @api_only

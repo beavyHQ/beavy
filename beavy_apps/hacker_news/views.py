@@ -22,8 +22,6 @@ def show_topic(topic):
     return topic_schema.dump(topic)
 
 
-
-
 @hn_bp.route("/submit/", methods=["GET", "POST"])
 @fallbackRender('hacker_news/submit.html')
 @login_required
@@ -33,7 +31,7 @@ def submit_story():
         title, url = params['title'].strip(), params['url'].strip()
         text = params.get('text', "").strip()
         if not title:
-            return abort(400, "You have to provide a 'title'");
+            return abort(400, "You have to provide a 'title'")
 
         if url:
             link = Link(title=title, url=url, owner_id=current_user.id)
@@ -44,7 +42,7 @@ def submit_story():
             topic = Topic(title=title, text=text, owner_id=current_user.id)
             db.session.add(topic)
             db.session.commit()
-            return topic_schema.dump(t)
+            return topic_schema.dump(topic)
 
         return abort(400, "You have to provide either 'url' or 'text', too")
 

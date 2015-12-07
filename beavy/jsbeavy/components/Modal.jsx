@@ -1,7 +1,6 @@
-import React from "react";
-import { Link } from "react-router";
-import styles from './Modal.scss';
-import classnames from 'classnames';
+import React from 'react'
+import styles from './Modal.scss'
+import classnames from 'classnames'
 
 export class Modal extends React.Component {
   propTypes: {
@@ -16,7 +15,7 @@ export class Modal extends React.Component {
     ariaHideApp: true,
     // closeTimeoutMS: 0
   }
-  render() {
+  render () {
     return <div className={classnames(styles.modal, styles.open)}>
             <div className={styles.modalFadeScreen}>
               <div className={styles.modalInner}>
@@ -24,6 +23,6 @@ export class Modal extends React.Component {
                 {this.props.children}
               </div>
             </div>
-          </div>;
+          </div>
   }
 }

@@ -1,12 +1,12 @@
 
-import { addNamedExtension } from 'config/extensions';
-import { COMMENTS_REQUEST, COMMENTS_SUCCESS, COMMENTS_FAILURE } from './actions';
+import { addNamedExtension } from 'config/extensions'
+import { COMMENTS_REQUEST, COMMENTS_SUCCESS, COMMENTS_FAILURE } from './actions'
 
-import paginate from 'reducers/paginate';
+import paginate from 'reducers/paginate'
 
-export const COMMENTS = "comments";
+export const COMMENTS = 'comments'
 
-addNamedExtension("reducers", COMMENTS, paginate({
+addNamedExtension('reducers', COMMENTS, paginate({
   mapActionToKey: x => COMMENTS,
-  types: [ COMMENTS_REQUEST, COMMENTS_SUCCESS, COMMENTS_FAILURE]
-}));
+  types: [ COMMENTS_REQUEST, COMMENTS_SUCCESS, COMMENTS_FAILURE ]
+}))

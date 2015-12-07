@@ -4,7 +4,7 @@ from beavy.schemas.object import ObjectField, fields
 blueprint = Blueprint('likes', __name__,
                       template_folder='templates')
 
-from .views import *
+from .views import *   # noqa
 
 
 def init_app(app):

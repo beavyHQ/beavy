@@ -12,7 +12,7 @@ app.url_map.converters['user'] = url_converters.UserConverter
 load_modules_and_app(app)
 
 # then load our views:
-from beavy import views
+from beavy import views     # noqa
 
 # allows them to register on blueprints before we do that setup
 
@@ -42,7 +42,7 @@ def delay_security_email(msg):
     send_security_email.delay(msg)
 
 
-## ---- generate object capabilities
+# ---- generate object capabilities
 def generate_capability_maps(obj):
     capabilities_map = dict((x.value, []) for x in obj.Capabilities)
     for typ, kls in obj.__mapper__.polymorphic_map.items():
@@ -77,4 +77,3 @@ def replaceHomeEndpoint(app):
 @fallbackRender('home.html')
 def hello():
     return {"title": "home"}
-

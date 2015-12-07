@@ -1,6 +1,5 @@
 # import os
 from behaving import environment as benv
-from splinter.browser import Browser
 from beavy.app import app
 from .database import ensure_personas, mixer
 from pprint import pprint
@@ -13,29 +12,17 @@ import os
 log = logging.Logger(__name__)
 
 BEHAVE_DEBUG_ON_ERROR = not os.getenv("CI", False)
-BEHAVE_ERROR_ON_BROWSER_WARNINGS = os.getenv("BEHAVE_ERROR_ON_BROWSER_WARNINGS", not BEHAVE_DEBUG_ON_ERROR)
+BEHAVE_ERROR_ON_BROWSER_WARNINGS = os.getenv("BEHAVE_ERROR_ON_BROWSER_WARNINGS", not BEHAVE_DEBUG_ON_ERROR)  # noqa
+
 
 def before_all(context):
-
-    # Unless we tell our test runner otherwise, set our default browser to PhantomJS
-    # if context.config.get("browser"):
-    #     context.browser = Browser(context.config.get("browser"))
-    # else:
-
-    # When we're running with PhantomJS we need to specify the window size.
-    # This is a workaround for an issue where PhantomJS cannot find elements
-    # by text - see: https://github.com/angular/protractor/issues/585
     context.default_browser = os.getenv("BEHAVE_DEFAULT_BROWSER", 'chrome')
 
     context.default_browser_size = (1280, 1024)
-    context.base_url = os.getenv("BEHAVE_BASE_URL",  "http://localhost:{}".format(app.config.get("DEBUG", False) and "2992" or "5000"))
+    default_url = "http://localhost:{}".format(app.config.get("DEBUG", False)
+                                               and "2992" or "5000")
+    context.base_url = os.getenv("BEHAVE_BASE_URL", default_url)
 
-
-    # import mypackage
-    # context.attachment_dir = os.path.join(os.path.dirname(mypackage.__file__), 'tests/data')
-    # context.sms_path = os.path.join(os.path.dirname(mypackage.__file__), '../../var/sms/')
-    # context.gcm_path = os.path.join(os.path.dirname(mypackage.__file__), '../../var/gcm/')
-    # context.mail_path = os.path.join(os.path.dirname(mypackage.__file__), '../../var/mail/')
     benv.before_all(context)
 
     mixer.init_app(app)
@@ -73,17 +60,18 @@ def after_scenario(context, scenario):
                 pass
             else:
                 # in chrome we can extract much more info!
-                if msg["level"] in ["warn", "error"] and msg.get("source") == "console-api":
+                if msg["level"] in ["warn", "error"] and \
+                   msg.get("source") == "console-api":
                     entry = dict(level=msg["level"],
                                  timestamp=entry["timestamp"],
                                  message=msg["text"])
                 else:
                     continue
 
-
             has_warnings = True
 
-            log.warning("Browser {level}: {timestamp}: {message}".format(**entry))
+            log.warning("Browser {level}: {timestamp}: {message}".format(
+                        **entry))
 
         if BEHAVE_ERROR_ON_BROWSER_WARNINGS and has_warnings:
             print("Exciting – Browser Warnings/Errors!")

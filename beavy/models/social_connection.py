@@ -32,7 +32,8 @@ class SocialConnection(db.Model):
     @classmethod
     def by_profile(cls, profile):
         provider = profile.data["provider"]
-        return cls.query.filter(cls.provider == provider, cls.profile_id == profile.id).first()
+        return cls.query.filter(cls.provider == provider,
+                                cls.profile_id == profile.id).first()
 
     @classmethod
     def from_profile(cls, user, profile):
@@ -48,7 +49,8 @@ class SocialConnection(db.Model):
                 raise Exception(_(msg))
             conflict = User.query.filter(User.email == email).first()
             if conflict:
-                msg = "Email {} is already used. Login and then connect external profile."
+                msg = "Email {} is already used. Login and then connect " + \
+                      "external profile."
                 msg = _(msg).format(email)
                 logging.warning(msg)
                 raise Exception(msg)

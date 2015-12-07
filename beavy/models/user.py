@@ -40,4 +40,6 @@ class User(db.Model, UserMixin):
                             backref=db.backref('users', lazy='dynamic'))
 
     def __str__(self):
-        return "<User #{} '{}' ({})>".format(self.id, self.name or "", self.email)
+        return "<User #{} '{}' ({})>".format(self.id,
+                                             self.name or "",
+                                             self.email)
