@@ -20,7 +20,7 @@ class CommentObject(Object, RenderedTextMixin):
 
 
 def filter_comments_for_view(cls, method):
-    if not current_user or current_user.is_anonymous():
+    if not current_user or current_user.is_anonymous:
         return
     return and_(cls.discriminator == COMMENT_ID,
                 cls.owner_id == current_user.id)

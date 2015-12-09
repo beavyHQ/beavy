@@ -37,7 +37,7 @@ class SocialConnection(db.Model):
 
     @classmethod
     def from_profile(cls, user, profile):
-        if not user or user.is_anonymous():
+        if not user or user.is_anonymous:
             if not app.config.get("SECURITY_REGISTERABLE"):
                 msg = "User not found. Registration disabled."
                 logging.warning(msg)
