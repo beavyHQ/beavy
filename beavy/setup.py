@@ -25,7 +25,7 @@ register_blueprints(app)
 # inject current_user in the template
 @app.context_processor
 def inject_user():
-    if current_user.is_anonymous():
+    if current_user.is_anonymous:
         return dict(SERIALIZED_USER='false')
     return dict(SERIALIZED_USER=CurrentUser().dumps(current_user).data)
 
