@@ -28,7 +28,7 @@ class ObjectQuery(AccessQuery):
         return self.filter(Object.discriminator.in_(caps))
 
     def with_my_activities(self):
-        if not current_user or not current_user.is_authenticated():
+        if not current_user or not current_user.is_authenticated:
             return self
 
         from .activity import Activity

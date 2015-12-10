@@ -102,7 +102,7 @@ class SocialBlueprint(SocialBp):
 
 class BeavyAdminIndexView(AdminIndexView):
     def is_accessible(self):
-        if not current_user.is_active() or not current_user.is_authenticated():
+        if not current_user.is_active() or not current_user.is_authenticated:
             return False
 
         if current_user.has_role('admin'):
@@ -112,7 +112,7 @@ class BeavyAdminIndexView(AdminIndexView):
 
 
 def _limiter_key():
-    if current_user.is_authenticated():
+    if current_user.is_authenticated:
         return "u_{}".format(current_user.id)
     return "ip_{}".format(get_ipaddr())
 # --------------------------- Setting stuff up in order ----------
