@@ -12,7 +12,6 @@ from flask_limiter.util import get_ipaddr
 from flask_admin import Admin, AdminIndexView
 
 from flask_social_blueprint.core import SocialBlueprint as SocialBp
-from flask.ext.babel import Babel
 from beavy.utils.deepmerge import deepmerge
 
 from flask_environments import Environments
@@ -136,9 +135,6 @@ ma = Marshmallow(app)
 manager = Manager(app)
 # add DB+migrations commands
 manager.add_command('db', MigrateCommand)
-
-# initialize i18n
-babel = Babel(app)
 
 # initialize email support
 mail = Mail(app)
