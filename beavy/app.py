@@ -1,4 +1,4 @@
-from flask import Flask, session, url_for, redirect, json
+from flask import Flask, session, url_for, redirect, json, request
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.script import Manager
 from flask.ext.marshmallow import Marshmallow
@@ -15,6 +15,7 @@ from flask_social_blueprint.core import SocialBlueprint as SocialBp
 from beavy.utils.deepmerge import deepmerge
 
 from flask_environments import Environments
+from flask_security import current_user
 from pprint import pprint
 
 from celery import Celery
@@ -151,6 +152,18 @@ cache = Cache(app)
 from flask.ext.icu import ICU
 icu = ICU(app, app.config.get("DEFAULT_LANGUAGE"))
 
+@icu.localeselector
+def get_locale():
+    """Determines i18n locale if possible."""
+    print('get_locale() called')
+    locale = None
+    if current_user.is_authenticated:
+        locale = current_user.language_preference
+    elif app.config.get("LANGUAGES") is not None:
+        languages = app.config.get("LANGUAGES")
+        locale = request.accept_languages.best_match(languages)
+    print('locale: ' + locale)
+    return locale # If no locale, babel uses the default setting.
 #  ------ Database setup is done after here ----------
 from beavy.models.user import User
 from beavy.models.role import Role
