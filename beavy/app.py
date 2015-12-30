@@ -148,6 +148,8 @@ for handler in app.logger.handlers:
 # add caching support
 cache = Cache(app)
 
+from flask.ext.icu import ICU
+icu = ICU(app, app.config.get("DEFAULT_LANGUAGE"))
 
 #  ------ Database setup is done after here ----------
 from beavy.models.user import User
