@@ -149,6 +149,7 @@ for handler in app.logger.handlers:
 # add caching support
 cache = Cache(app)
 
+#  -------------- initialize i18n --------------
 from flask.ext.icu import ICU
 icu = ICU(app, app.config.get("DEFAULT_LANGUAGE"))
 
