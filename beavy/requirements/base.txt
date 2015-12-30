@@ -65,6 +65,7 @@ ptyprocess==0.5
 py==1.4.30
 pyasn1==0.1.8
 pyasn1-modules==0.0.7
+pyicu==1.9.2
 pycparser==2.14
 python-dateutil==2.4.2
 python-editor==0.4

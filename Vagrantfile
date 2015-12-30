@@ -38,7 +38,7 @@ MESSAGE
 # The list of packages we want to install
 INSTALL = <<-INSTALL
 sudo apt-get update
-sudo apt-get install -y postgresql-9.4 postgresql-client-9.4 postgresql-server-dev-9.4 redis-server python3 python3-pip python3-virtualenv virtualenv nodejs npm zsh git tmux libffi-dev libncurses5-dev xvfb chromedriver chromium build-essential libssl-dev curl git-core
+sudo apt-get install -y postgresql-9.4 postgresql-client-9.4 postgresql-server-dev-9.4 redis-server python3 python3-pip python3-virtualenv virtualenv nodejs npm zsh git tmux libffi-dev libncurses5-dev xvfb chromedriver chromium build-essential libssl-dev curl git-core libicu-dev
 
 INSTALL
 
