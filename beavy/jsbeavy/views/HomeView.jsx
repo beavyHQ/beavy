@@ -17,7 +17,7 @@ export class HomeView extends React.Component {
           tagname='p'
           id='hello-world-docs-link'
           defaultMessage={'Please take a look at the <a href="{link} target="_blank">documentation</a>.'}
-          link='https://beavyhq.gitbooks.io/beavy-documentation/content/'
+          values={{link: 'https://beavyhq.gitbooks.io/beavy-documentation/content/'}}
         />
       </div>
     )
