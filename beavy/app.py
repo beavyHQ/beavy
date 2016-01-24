@@ -150,7 +150,7 @@ for handler in app.logger.handlers:
 cache = Cache(app)
 
 #  -------------- initialize i18n --------------
-from flask.ext.icu import ICU
+from flask.ext.icu import ICU, get_messages
 icu = ICU(app, app.config.get("DEFAULT_LANGUAGE"))
 
 @icu.localeselector
@@ -165,6 +165,11 @@ def get_locale():
         locale = request.accept_languages.best_match(languages)
     print('locale: ' + locale)
     return locale # If no locale, babel uses the default setting.
+
+@app.context_processor
+def inject_messages():
+    return dict(MESSAGES=json.dumps(get_messages()))
+
 #  ------ Database setup is done after here ----------
 from beavy.models.user import User
 from beavy.models.role import Role
