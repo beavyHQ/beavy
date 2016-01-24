@@ -153,6 +153,11 @@ cache = Cache(app)
 from flask.ext.icu import ICU, get_messages
 icu = ICU(app, app.config.get("DEFAULT_LANGUAGE"))
 
+# Inject ICU messages for delivery to client via _preload.html template
+@app.context_processor
+def inject_messages():
+    return dict(MESSAGES=json.dumps(get_messages()))
+
 @icu.localeselector
 def get_locale():
     """Determines i18n locale if possible."""
@@ -165,10 +170,6 @@ def get_locale():
         locale = request.accept_languages.best_match(languages)
     print('locale: ' + locale)
     return locale # If no locale, babel uses the default setting.
-
-@app.context_processor
-def inject_messages():
-    return dict(MESSAGES=json.dumps(get_messages()))
 
 #  ------ Database setup is done after here ----------
 from beavy.models.user import User
