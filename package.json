@@ -44,6 +44,7 @@
     "module-imports": "git+https://github.com/ligthyear/webpack-module-imports.git",
     "node-sass": "^3.4.2",
     "prosemirror": "0.3.0",
+    "po2json": "^0.4.1",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
     "react-infinite": "^0.7.1",
