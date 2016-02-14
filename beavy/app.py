@@ -158,12 +158,14 @@ icu = ICU(app, app.config.get("DEFAULT_LANGUAGE"))
 def inject_messages():
     return dict(MESSAGES=json.dumps(get_messages()))
 
+import pdb
+
 @icu.localeselector
 def get_locale():
     """Determines i18n locale if possible."""
     print('get_locale() called')
     locale = None
-    if current_user.is_authenticated:
+    if current_user is not None and current_user.is_authenticated:
         locale = current_user.language_preference
     elif app.config.get("LANGUAGES") is not None:
         languages = app.config.get("LANGUAGES")
