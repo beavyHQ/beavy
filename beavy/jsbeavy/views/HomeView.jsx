@@ -10,7 +10,7 @@ export class HomeView extends React.Component {
           <FormattedMessage
             id='hello-world-title'
             description='Hello World Title'
-            defaultMessage='Wecome to Beavy!'
+            defaultMessage='Welcome to Beavy!'
           />
         </h1>
         <FormattedHTMLMessage
