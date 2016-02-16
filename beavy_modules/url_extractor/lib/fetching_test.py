@@ -24,6 +24,12 @@ class Present:
             return isinstance(other, self._type)
         return other is not None
 
+class Contains:
+    def __init__(self, str):
+        self.str = str
+    def __eq__(self, other):
+        return self.str in other
+
 class HasItems:
     def __init__(self, items=[]):
         self.items = items
@@ -42,12 +48,13 @@ def test_blogger_example():
             "application/atom+xml": "http://buzz.blogger.com/feeds/653731578225022752/comments/default",
             "application/rss+xml": "http://buzz.blogger.com/feeds/posts/default?alt=rss"
         },
-        "description": "This morning we posted an update about Blogspot to Google\u2019s Security Blog https://googleonlinesecurity.blogspot.com/2015/09/https-support-coming-to-blogspot.html. Since 2008, we've worked to encrypt the connections between our users and Google servers. Over the years\u00a0we've announced that Search, Gmail, Drive, and many other products have encrypted connections by default, and most recently, we've made a similar announcement for our ads products. In this same vein, today we're expanding on the HTT",
+        "description": StartsWith("This morning we posted an update about Blogspot to Google"),
         "generator": "blogger",
+        "site_name": "Blogger Buzz",
         "images": [
             {
-                "src": "http://2.bp.blogspot.com/-i2Zz0p3UoX4/VgsPJGm9_fI/AAAAAAAAROA/HoN3rq-s93U/s640/unnamed.png",
-                "type": "contentImage"
+                "src": "http://2.bp.blogspot.com/-i2Zz0p3UoX4/VgsPJGm9_fI/AAAAAAAAROA/HoN3rq-s93U/s72-c/unnamed.png",
+                "type": "og:image"
             },
             {
                 "src": "http://buzz.blogger.com/favicon.ico",
@@ -55,7 +62,7 @@ def test_blogger_example():
             }
         ],
         "locale": "en_US",
-        "title": "Blogger Buzz: HTTPS support coming to Blogspot",
+        "title": "HTTPS support coming to Blogspot",
         "type": "article:blog",
         "url": "http://buzz.blogger.com/2015/09/https-support-coming-to-blogspot.html",
         "videos": []
@@ -123,7 +130,6 @@ def test_wikipedia_example():
     assert extractor.fetch("https://en.wikipedia.org/wiki/Polygon") == {
         "alternates": {
             "android-app": "android-app://org.wikipedia/http/en.m.wikipedia.org/wiki/Polygon",
-            "application/atom+xml": "/w/index.php?title=Special:RecentChanges&feed=atom",
             "application/x-wiki": "/w/index.php?title=Polygon&action=edit"
         },
         "description": "In elementary geometry, a polygon /\u02c8p\u0252l\u026a\u0261\u0252n/ is a plane figure that is bounded by a finite chain of straight line segments closing in a loop to form a closed chain or circuit. These segments are called its edges or sides, and the points where two edges meet are the polygon's vertices (singular: vertex) or corners. The interior of the polygon is sometimes called its body. An n-gon is a polygon with n sides. A polygon is a 2-dimensional example of the more general polytope in any number of dimensions.",
@@ -152,16 +158,7 @@ def test_wikipedia_example():
 @pytest.mark.external
 def test_meetup_com_event_example():
     assert extractor.fetch("http://www.meetup.com/opentechschool-berlin/events/226129991/") == {
-        "alternates": {
-            "de": "http://www.meetup.com/de/opentechschool-berlin/events/226129991/",
-            "en": "http://www.meetup.com/opentechschool-berlin/events/226129991/",
-            "es": "http://www.meetup.com/es/opentechschool-berlin/events/226129991/",
-            "fr": "http://www.meetup.com/fr/opentechschool-berlin/events/226129991/",
-            "it": "http://www.meetup.com/it/opentechschool-berlin/events/226129991/",
-            "ja": "http://www.meetup.com/ja/opentechschool-berlin/events/226129991/",
-            "pt": "http://www.meetup.com/pt/opentechschool-berlin/events/226129991/",
-            "x-default": "http://www.meetup.com/opentechschool-berlin/events/226129991/"
-        },
+        "alternates": HasItems(["de-DE", "en", "x-default"]),
         "country_name": "de",
         "description": "ABOUT:The meet-up is all about Ruby and Rails (but also about all the other things you can do with Ruby).We are a friendly group that meets every monday at seven o'clock to learn together and work o",
         "images": [
@@ -331,19 +328,13 @@ def test_zeitDe_example():
         "description": "Die Unabh\u00e4ngigkeitsparaden in Polen waren einmal bunt und lustig. Das ist vorbei, auch weil der Extremismus in der Politik angekommen ist.",
         "images": [
             {
-                "src": "http://www.zeit.de/politik/ausland/2015-11/unabhaengigkeit-parade-polen/wide__1300x731",
-                "type": "og:image"
-            },
-            {
-                "src": "http://www.zeit.de/politik/ausland/2015-11/unabhaengigkeit-parade-polen/wide__1300x731",
-                "type": "twitter:image"
-            },
-            {
                 "src": "http://images.zeit.de/static/img/favicon.ico",
                 "type": "favicon"
             }
         ],
         "keywords": [
+            "Politik",
+            "Unabhängigkeitstag",
             "Polen",
             "Nationalismus",
             "Rechtsextremismus",
@@ -351,7 +342,7 @@ def test_zeitDe_example():
         ],
         "locale": "de_DE",
         "site_name": "ZEIT ONLINE",
-        "title": "Unabh\u00e4ngigkeitstag: Radikal ist in Polen zum Mainstream geworden |\u00a0ZEIT ONLINE",
+        "title": Contains("Unabh\u00e4ngigkeitstag: Radikal ist in Polen zum Mainstream geworden"),
         "type": "article",
         "url": "http://www.zeit.de/politik/ausland/2015-11/polen-unabhaengigkeit-marsch-nationalisten",
         "videos": []
