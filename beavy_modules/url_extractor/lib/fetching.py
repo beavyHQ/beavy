@@ -144,7 +144,7 @@ class SoundcloudInfoExtractor:
     MATCHER = re.compile(r"^soundcloud:")
 
     def __call__(self, soup, data, url=None):
-        if not _matches(data, type="soundcloud:sound", site_name="SoundCloud"):
+        if not _matches(data, type="music.song", site_name="SoundCloud"):
             return
 
         data["soundcloud"] = dict([(m.get("property")[11:], m.get("content"))

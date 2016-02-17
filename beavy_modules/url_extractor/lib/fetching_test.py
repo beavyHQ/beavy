@@ -254,7 +254,7 @@ def test_soundcloud_song_example():
             "user": "https://soundcloud.com/bassmelodie"
         },
         "title": "Bassmelodie | Wintermelancholie",
-        "type": "soundcloud:sound",
+        "type": "music.song",
         "url": "https://soundcloud.com/bassmelodie/bassmelodie-wintermelancholie",
         "videos": []
     }
