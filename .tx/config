@@ -2,25 +2,25 @@
 host = https://www.transifex.com
 
 [beavy.server]
-file_filter = translations/<lang>/beavy_server.json
+file_filter = beavy/translations/<lang>/beavy_server.json
 source_file = var/server-messages/beavy-server.json
 source_lang = en
 type = KEYVALUEJSON
 
 [beavy.web]
-file_filter = translations/<lang>/beavy_web.json
+file_filter = beavy/translations/<lang>/beavy_web.json
 source_file = var/react-intl-messages/beavy-core.json
 source_lang = en
 type = KEYVALUEJSON
 
 [beavy.hacker-news-app]
-file_filter = translations/<lang>/hacker_news.json
+file_filter = beavy/translations/<lang>/hacker_news.json
 source_file = var/react-intl-messages/beavy-hacker_news-app.json
 source_lang = en
 type = KEYVALUEJSON
 
 [beavy.comments-module]
-file_filter = translations/<lang>/comments-module.json
+file_filter = beaby/translations/<lang>/comments-module.json
 source_file = var/react-intl-messages/beavy-comments-module.json
 source_lang = en
 type = KEYVALUEJSON
