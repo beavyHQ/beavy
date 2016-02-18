@@ -162,16 +162,13 @@ import pdb
 
 @icu.localeselector
 def get_locale():
-    """Determines i18n locale if possible."""
-    print('get_locale() called')
     locale = None
     if current_user is not None and current_user.is_authenticated:
         locale = current_user.language_preference
     elif app.config.get("LANGUAGES") is not None:
         languages = app.config.get("LANGUAGES")
         locale = request.accept_languages.best_match(languages)
-    print('locale: ' + locale)
-    return locale # If no locale, babel uses the default setting.
+    return locale # If no locale, Flask-ICU uses the default setting.
 
 #  ------ Database setup is done after here ----------
 from beavy.models.user import User
