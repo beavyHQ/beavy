@@ -158,8 +158,6 @@ icu = ICU(app, app.config.get("DEFAULT_LANGUAGE"))
 def inject_messages():
     return dict(MESSAGES=json.dumps(get_messages()))
 
-import pdb
-
 @icu.localeselector
 def get_locale():
     locale = None
