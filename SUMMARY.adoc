@@ -28,6 +28,7 @@
 .. link:docs/Development-Running.adoc[Running]
 .. link:docs/Development-Database-Migrations.adoc[Database Migrations]
 .. link:docs/Development-Module-Development.adoc[New Modules]
+.. link:docs/Development-i18n.adoc[Internationalisation]
 .. link:docs/Development-Testing[Testing your Development]
 
 . link:docs/Contributing.adoc[Contributing]
