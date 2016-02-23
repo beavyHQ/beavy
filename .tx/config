@@ -20,7 +20,7 @@ source_lang = en
 type = KEYVALUEJSON
 
 [beavy.comments-module]
-file_filter = beaby/translations/<lang>/comments-module.json
+file_filter = beavy/translations/<lang>/comments-module.json
 source_file = var/react-intl-messages/beavy-comments-module.json
 source_lang = en
 type = KEYVALUEJSON
