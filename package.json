@@ -9,7 +9,7 @@
     "dev-server": "webpack-dev-server --config .infrastructure/webpack/webpack-dev-server.config.js --progress --colors --port 2992 --inline",
     "hot-dev-server": "webpack-dev-server --config .infrastructure/webpack/webpack-hot-dev-server.config.js --hot --progress --colors --port 2992 --inline",
     "build": "webpack --config .infrastructure/webpack/webpack-production.config.js --progress --profile --colors",
-    "extract-messages": "rm -rf var/react-intl-messages && ./node_modules/babel-cli/bin/babel.js -x .jsx beavy/jsbeavy beavy_modules beavy_apps > /dev/null && python .infrastructure/i18n/reformat-react-intl-json.py && rm -rf var/react-intl-messages/beavy/  var/react-intl-messages/beavy_modules/ var/react-intl-messages/beavy_apps/",
+    "extract-messages": "rm -rf var/react-intl-messages && ./node_modules/babel-cli/bin/babel.js -x .jsx beavy/jsbeavy beavy_modules beavy_apps > /dev/null && python .infrastructure/i18n/reformat-react-intl-json.py && rm -rf var/react-intl-messages/beavy/  var/react-intl-messages/beavy_modules/ var/react-intl-messages/beavy_apps/ && rm -rf var/server-messages && ./.infrastructure/i18n/extract-server-msgs.sh",
     "vagrant": "webpack-dev-server --config .infrastructure/webpack/webpack-hot-dev-server-onvagrant.config.js --hot --progress --colors --host 0.0.0.0 --port 2992 --inline"
   },
   "author": "Benjamin Kampmann <ben@create-build-execute.com>",
