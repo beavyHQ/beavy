@@ -10,6 +10,7 @@ pytest-flask==0.10.0
 pytest-mock==0.8.1
 selenium==2.48.0
 splinter==0.7.3
+transifex-client==0.11
 flake8==2.5.0
 mccabe==0.3.1
 pep8==1.5.7
