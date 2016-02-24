@@ -1,4 +1,45 @@
 
+= Internationalization (i18n)
 
-== Internationalization (i18n)
+== Intro
+
+Translation messages for Beavy core, as well as Beavy apps and modules, use the
+[ICU syntax](http://userguide.icu-project.org/formatparse/messages).
+
+The translation messages themselves are managed with the
+[transifex](http://docs.transifex.com/introduction/)
+localization platform, using English as the default language. Please see
+BeavyHQ's transifex dashboard here:
+
+[www.transifex.com/beavy/beavy/](https://www.transifex.com/beavy/beavy/)
+
+If you would like to help us translate Beavy, please let us know or click the
+"Help Translate Beavy" button on the link above.
+
+== Python Translations
+
+Backend translations in python are accomplished using the following functions
+(supported by [Flask-ICU](https://github.com/beavyHQ/flask-icu)):
+
+  * `format()`
+  * `format_date()`
+  * `format_time()`
+  * `format_datetime()`
+  * `format_number()`
+  * `format_decimal()`
+  * `format_currency()`
+  * `format_scientific()`
+  * `format_percent()`
+
+== How to use it in Javascript
+
+== Working with translations files
+
+== Extracting & pushing to transifex
+
+To extract messages 
+
+== Updating from transifex
+
+== Shipping your own translations (for your app)
 
