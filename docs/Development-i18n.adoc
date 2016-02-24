@@ -4,7 +4,9 @@
 == Intro
 
 Translation messages for Beavy core, as well as Beavy apps and modules, use the
-[ICU syntax](http://userguide.icu-project.org/formatparse/messages).
+[ICU syntax](http://userguide.icu-project.org/formatparse/messages), which is
+also used in Java and PHP. For a more step-wise description of the ICU syntax,
+see here: [http://formatjs.io/guides/message-syntax/](http://formatjs.io/guides/message-syntax/).
 
 The translation messages themselves are managed with the
 [transifex](http://docs.transifex.com/introduction/)
@@ -37,9 +39,26 @@ Backend translations in python are accomplished using the following functions
 
 == Extracting & pushing to transifex
 
-To extract messages 
+If you have added new localizations to your Beavy implementation, you need to
+"extract" the messages from the code, and upload the message keys to Transifex
+for translation.
+
+To do this issue these commands from inside the vagrant instance (i.e. inside the
+vagrant guest):
+
+```
+npm extract-messages && tx push -t
+```
 
 == Updating from transifex
+
+Once new localization messages have been translated on Transifex, they can be
+quickly pulled down into your app by running the following command from within
+the vagrant instance:
+
+```
+tx pull -a && tx pull -l en
+```
 
 == Shipping your own translations (for your app)
 
