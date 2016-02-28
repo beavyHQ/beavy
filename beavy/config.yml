@@ -20,6 +20,9 @@ COMMON: &common
   # to 15minutes
   CACHE_DEFAULT_TIMEOUT: 900
 
+  # i18n STUFF
+  DEFAULT_LANGUAGE: 'en'
+
   RATELIMITS:
     # custom rate limits:
     # full.path.module.view : "RATE LIMIT"
