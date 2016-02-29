@@ -23,23 +23,27 @@ class WriteReply extends React.Component {
   render () {
     if (this.state.editing) {
       if (!this.state.editor) {
-        return <FormattedMessage id='loading' defaultMessage="loading..." />
+        return <FormattedMessage id='loading' defaultMessage='loading...' />
       }
       const Editor = this.state.editor
-      return <div>
-              <FormattedMessage tag="h3" id='reply' />
-              <Editor value={''} options={this.options} ref='editor'/>
-              <button onClick={::this.send}>
-                <FormattedMessage id='send' defaultMessage="send" />
-              </button>
-            </div>
+      return (
+        <div>
+          <FormattedMessage tag='h3' id='reply' />
+          <Editor value={''} options={this.options} ref='editor'/>
+          <button onClick={::this.send}>
+            <FormattedMessage id='send' defaultMessage='send' />
+          </button>
+        </div>
+      )
     }
-    return <div>
-              <FormattedMessage tag="h3" id='reply' />
-              <div onClick={x => this.setState({editing: true})}>
-                <FormattedMessage id='activate-for-reply' defaultMessage="click to reply"/>
-              </div>
-           </div>
+    return (
+      <div>
+        <FormattedMessage tag='h3' id='reply' />
+        <div onClick={x => this.setState({editing: true})}>
+          <FormattedMessage id='activate-for-reply=' defaultMessage='click to reply='/>
+        </div>
+     </div>
+   )
   }
   send () {
     alert(this.refs.editor.pm.getContent('markdown'))

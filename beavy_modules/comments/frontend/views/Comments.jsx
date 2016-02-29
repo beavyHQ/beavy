@@ -64,11 +64,11 @@ class PrivateMessagesView extends Component {
   render () {
     const { comments } = this.props
     if (!comments || !comments.meta) {
-      return <FormattedMessage tag="h1" id="loading-comments" defaultMessage="loadin comments ..." />
+      return <FormattedMessage tag='h1' id='loading-comments' defaultMessage='loadin comments ...' />
     }
     return (
       <div>
-        <FormattedMessage tag="h1" count={comments.meta.total} id="comments-with-count" defaultMessage="{count} Comments" />
+        <FormattedMessage tag='h1' count={comments.meta.total} id='comments-with-count' defaultMessage='{count} Comments' />
         <InfiniteList
           meta={comments.meta}
           loader={::this.loadMore}

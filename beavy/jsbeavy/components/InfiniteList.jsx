@@ -104,9 +104,11 @@ export default class InfiniteList extends Component {
   }
 
   elementInfiniteLoad () {
-    return <div className='infinite-list-item'>
-          Loading...
+    return (
+      <div className='infinite-list-item'>
+        Loading...
       </div>
+    )
   }
 
   scrollCallback (num) {

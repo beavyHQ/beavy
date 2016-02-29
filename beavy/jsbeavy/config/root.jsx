@@ -99,7 +99,7 @@ export default class Root extends React.Component {
     return (
       <div>
         {debugTools}
-          <IntlProvider locale="en" messages={ window.PRELOAD.MESSAGES }>
+          <IntlProvider locale='en' messages={ window.PRELOAD.MESSAGES }>
             <Provider store={this.props.store}>
               <ReduxRouter>
                 <Route component={this.props.application}>
