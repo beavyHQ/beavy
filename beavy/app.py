@@ -15,7 +15,6 @@ from flask_social_blueprint.core import SocialBlueprint as SocialBp
 from beavy.utils.deepmerge import deepmerge
 
 from flask_environments import Environments
-from flask_security import current_user
 from pprint import pprint
 
 from celery import Celery
@@ -153,10 +152,12 @@ cache = Cache(app)
 from flask.ext.icu import ICU, get_messages
 icu = ICU(app, app.config.get("DEFAULT_LANGUAGE"))
 
+
 # Inject ICU messages for delivery to client via _preload.html template
 @app.context_processor
 def inject_messages():
     return dict(MESSAGES=json.dumps(get_messages()))
+
 
 @icu.localeselector
 def get_locale():
@@ -166,7 +167,8 @@ def get_locale():
     elif app.config.get("LANGUAGES") is not None:
         languages = app.config.get("LANGUAGES")
         locale = request.accept_languages.best_match(languages)
-    return locale # If no locale, Flask-ICU uses the default setting.
+    return locale  # If no locale, Flask-ICU uses the default setting.
+
 
 #  ------ Database setup is done after here ----------
 from beavy.models.user import User
