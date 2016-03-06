@@ -13,15 +13,14 @@ source_file = var/react-intl-messages/beavy-core.json
 source_lang = en
 type = KEYVALUEJSON
 
-[beavy.hacker-news-app]
-file_filter = beavy/translations/<lang>/hacker_news.json
+[app-hacker-news.web]
+file_filter = beavy/translations/<lang>/app-hacker-news.web.json
 source_file = var/react-intl-messages/beavy-hacker_news-app.json
 source_lang = en
 type = KEYVALUEJSON
 
-[beavy.comments-module]
-file_filter = beavy/translations/<lang>/comments-module.json
+[module-comments.web]
+file_filter = beavy/translations/<lang>/module-comments.web.json
 source_file = var/react-intl-messages/beavy-comments-module.json
 source_lang = en
 type = KEYVALUEJSON
-
