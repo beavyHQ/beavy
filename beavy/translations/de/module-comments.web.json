@@ -1,6 +1,6 @@
 {
-    "activate-for-reply": "click to reply",
-    "comments-with-count": "{count} Comments",
+    "activate-for-reply=": "click to reply=",
+    "comments-with-count": "{count} Bemerkungen",
     "loading": "loading...",
     "loading-comments": "loadin comments ...",
     "send": "send"
