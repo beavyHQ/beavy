@@ -1,5 +1,6 @@
 /*eslint-disable react/no-multi-comp*/
 import React, { Component, PropTypes} from 'react'
+import { FormattedMessage, FormattedHTMLMessage } from 'react-intl'
 import Infinite from 'react-infinite'
 import map from 'lodash/collection/map'
 import fill from 'lodash/array/fill'
@@ -106,7 +107,10 @@ export default class InfiniteList extends Component {
   elementInfiniteLoad () {
     return (
       <div className='infinite-list-item'>
-        Loading...
+        <FormattedMessage
+          id="infinite-list-message"
+          description="Infinite List Message"
+          defaultMessage="Loading..." />
       </div>
     )
   }
