@@ -46,12 +46,13 @@ configure the Transifex client in your Beavy development environment. Please see
 http://docs.transifex.com/tutorials/client/[this guide] for instructions.
 
 Once you've configured the client, you can begin the translation workflow. That
-workflow consists of a few simple steps:
+workflow consists of a few simple steps, all of which are explained in greater
+detail below:
 
-  . Write new (or update) translations on the frontend or backend (see 3.1).
-  . Extract the translations & push them to Transifex (see 3.2).
+  . Write new (or update) translations on the frontend or backend.
+  . Extract the translations & push them to Transifex.
   . Translate them (or wait for them to be translated) on Transifex.
-  . Update the translation files locally from Transifex (see 3.3).
+  . Update the translation files locally from Transifex.
 
 Good luck!
 
@@ -72,7 +73,31 @@ Backend translations in python are accomplished using the following functions
    * `format_scientific()`
    * `format_percent()`
 
-==== Javascript (client-side) translations:*
+For more detailed documentation, see http://github.com/beavyHQ/flask-icu[Flask-ICU].
+
+==== Javascript (client-side) translations:
+
+Front-end translations are provided via https://github.com/yahoo/react-intl[React-Intl].
+Extensive documentation and many examples can be found on their documentation
+website http://formatjs.io/react/[here].
+
+Here's a simple example:
+
+```javascript
+export class HomeView extends React.Component {
+  render () {
+    return (
+      <div className='container text-center'>
+        <h1>
+          <FormattedMessage
+            id='hello-world-title'
+            description='Hello World Title'
+            defaultMessage='Welcome to Beavy!' />
+        </h1>
+    )
+  }
+}
+```
 
 === Extracting & pushing to Transifex
 
