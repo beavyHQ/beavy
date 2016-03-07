@@ -1,7 +1,7 @@
 {
     "activate-for-reply=": "click to reply=",
-    "comments-with-count": "{count} Bemerkungen",
+    "comments-with-count": "{count} Comments",
     "loading": "loading...",
-    "loading-comments": "loadin comments ...",
+    "loading-comments": "loading comments ...",
     "send": "send"
 }
