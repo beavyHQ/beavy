@@ -64,7 +64,7 @@ class PrivateMessagesView extends Component {
   render () {
     const { comments } = this.props
     if (!comments || !comments.meta) {
-      return <FormattedMessage tag='h1' id='loading-comments' defaultMessage='loadin comments ...' />
+      return <FormattedMessage tag='h1' id='loading-comments' defaultMessage='loading comments ...' />
     }
     return (
       <div>
