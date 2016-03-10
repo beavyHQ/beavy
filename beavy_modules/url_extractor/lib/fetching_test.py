@@ -45,26 +45,26 @@ class HasItems:
 def test_blogger_example():
     assert extractor.fetch("http://buzz.blogger.com/2015/09/https-support-coming-to-blogspot.html") == {
         "alternates": {
-            "application/atom+xml": "http://buzz.blogger.com/feeds/653731578225022752/comments/default",
-            "application/rss+xml": "http://buzz.blogger.com/feeds/posts/default?alt=rss"
+            "application/atom+xml": "https://blogger.googleblog.com/feeds/653731578225022752/comments/default",
+            "application/rss+xml": "https://blogger.googleblog.com/feeds/posts/default?alt=rss"
         },
         "description": StartsWith("This morning we posted an update about Blogspot to Google"),
         "generator": "blogger",
         "site_name": "Blogger Buzz",
         "images": [
             {
-                "src": Contains("http://2.bp.blogspot.com/-i2Zz0p3UoX4/VgsPJGm9_fI/AAAAAAAAROA/HoN3rq-s93U/") and Contains('unnamed.png'),
+                "src": Contains("http://2.bp.blogspot.com/-i2Zz0p3UoX4/VgsPJGm9_fI/AAAAAAAAROA/HoN3rq-s93U/"),
                 "type": "og:image"
             },
             {
-                "src": "http://buzz.blogger.com/favicon.ico",
+                "src": "https://blogger.googleblog.com/favicon.ico",
                 "type": "favicon"
             }
         ],
         "locale": "en_US",
         "title": "HTTPS support coming to Blogspot",
         "type": "article:blog",
-        "url": "http://buzz.blogger.com/2015/09/https-support-coming-to-blogspot.html",
+        "url": "https://blogger.googleblog.com/2015/09/https-support-coming-to-blogspot.html",
         "videos": []
     }
 
