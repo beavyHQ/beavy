@@ -53,7 +53,7 @@ def test_blogger_example():
         "site_name": "Blogger Buzz",
         "images": [
             {
-                "src": Contains("http://2.bp.blogspot.com/-i2Zz0p3UoX4/VgsPJGm9_fI/AAAAAAAAROA/HoN3rq-s93U/"),
+                "src": Contains("http://2.bp.blogspot.com/-i2Zz0p3UoX4/VgsPJGm9_fI/AAAAAAAAROA/HoN3rq-s93U/") and Contains("unnamed.png"),
                 "type": "og:image"
             },
             {
