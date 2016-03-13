@@ -1,6 +1,6 @@
 /*eslint-disable react/no-multi-comp*/
 import React, { Component, PropTypes} from 'react'
-import { FormattedMessage, FormattedHTMLMessage } from 'react-intl'
+import { FormattedMessage } from 'react-intl'
 import Infinite from 'react-infinite'
 import map from 'lodash/collection/map'
 import fill from 'lodash/array/fill'
