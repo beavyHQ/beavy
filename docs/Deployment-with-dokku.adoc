@@ -12,7 +12,6 @@ For any Beavy app we need to install a link:http://dokku.viewdocs.io/dokku/plugi
 dokku plugin:install https://github.com/dokku/dokku-postgres.git postgres
 dokku plugin:install https://github.com/dokku/dokku-rabbitmq.git rabbitmq
 dokku plugin:install https://github.com/dokku/dokku-redis.git redis
-dokku plugin:install https://github.com/OzConseil/dokku-deploy-script.git
 ```
 
 == Create and Configure app
