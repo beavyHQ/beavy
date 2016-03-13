@@ -8,6 +8,7 @@ import { Link } from 'react-router'
 
 import styles from './styles/hn_styles.scss'
 import { setupViews } from './setup'
+import { FormattedMessage } from 'react-intl'
 
 setupViews()
 
@@ -28,8 +29,9 @@ export default class HackerNewsApplication extends React.Component {
                 logo='http://svgporn.com/logos/ycombinator.svg'
                 navigationTools={<UserMenuWidget />}
               >
-                <Link to={make_url.account('comments/')}>threads</Link>
-               | <Link to='/submit/'>submit</Link>
+                <Link to={make_url.account('comments/')}>
+                  <FormattedMessage id='threads' defaultMessage='threads'/></Link>
+               | <Link to='/submit/'><FormattedMessage id='submit' defaultMessage='submit'/></Link>
 
               </MainMenu>
               {this.props.children}

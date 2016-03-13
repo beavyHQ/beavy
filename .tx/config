@@ -1,0 +1,26 @@
+[main]
+host = https://www.transifex.com
+
+[beavy.core-server]
+file_filter = beavy/translations/<lang>/beavy-core-server.json
+source_file = var/server-messages/beavy-server.json
+source_lang = en
+type = KEYVALUEJSON
+
+[beavy.core-web]
+file_filter = beavy/translations/<lang>/beavy-core-web.json
+source_file = var/react-intl-messages/beavy-core.json
+source_lang = en
+type = KEYVALUEJSON
+
+[beavy.apps-hacker-news-web]
+file_filter = beavy/translations/<lang>/beavy-apps-hacker-news-web.json
+source_file = var/react-intl-messages/beavy-hacker_news-app.json
+source_lang = en
+type = KEYVALUEJSON
+
+[beavy.modules-comments-web]
+file_filter = beavy/translations/<lang>/beavy-module-comments-web.json
+source_file = var/react-intl-messages/beavy-comments-module.json
+source_lang = en
+type = KEYVALUEJSON

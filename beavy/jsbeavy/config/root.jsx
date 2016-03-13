@@ -2,6 +2,7 @@
 import React from 'react'
 import { Provider } from 'react-redux'
 import { Route, Redirect } from 'react-router'
+import { IntlProvider } from 'react-intl'
 
 /* eslint-disable no-multi-spaces */
 // Only import from `route-handlers/*`
@@ -98,14 +99,16 @@ export default class Root extends React.Component {
     return (
       <div>
         {debugTools}
-        <Provider store={this.props.store}>
-          <ReduxRouter>
-            <Route component={this.props.application}>
-              {this.getRoutes()}
-            </Route>
-          </ReduxRouter>
-        </Provider>
-      </div>
+          <IntlProvider locale='en' messages={ window.PRELOAD.MESSAGES }>
+            <Provider store={this.props.store}>
+              <ReduxRouter>
+                <Route component={this.props.application}>
+                  {this.getRoutes()}
+                </Route>
+              </ReduxRouter>
+            </Provider>
+          </IntlProvider>
+        </div>
     )
   }
 }

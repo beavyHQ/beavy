@@ -35,6 +35,7 @@ class User(db.Model, UserMixin):
     last_login_ip = db.Column(db.String(255))
     current_login_ip = db.Column(db.String(255))
     login_count = db.Column(db.Integer())
+    language_preference = db.Column(db.String(2))
 
     roles = db.relationship('Role', secondary=roles_users,
                             backref=db.backref('users', lazy='dynamic'))

@@ -12,6 +12,7 @@
     <script type="text/javascript">
     window.PRELOAD = {
         CURRENT_USER: {{ SERIALIZED_USER | safe }},
+        MESSAGES: {{ MESSAGES | safe }},
         PAYLOAD: { key: "{{key}}",
                    data: {{ data | tojson | safe }}
                }

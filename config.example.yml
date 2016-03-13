@@ -38,6 +38,10 @@ URLS:
 # like this:
 #  USERS: '/nutzer'
 
+# Which language do you want to serve as your apps' default
+# localization language? The default is English.
+# DEFAULT_LANGUAGE: 'en'
+
 # Uncomment this to enable registrations
 # SECURITY_REGISTERABLE: true
 

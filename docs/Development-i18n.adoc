@@ -1,0 +1,122 @@
+
+
+= Internationalization (i18n)
+
+== Intro
+
+Translation messages for Beavy core, as well as Beavy apps and modules, use the
+http://userguide.icu-project.org/formatparse/messages[ICU Syntax]. The
+translation messages themselves are managed with the
+http://docs.transifex.com/introduction/[Transifex]
+localization platform, using English as the default language.
+
+Please see BeavyHQ's transifex dashboard here:
+
+https://www.transifex.com/beavy[transifex.com/beavy]
+
+If you would like to help us translate Beavy, please let us know or click the
+"Help Translate Beavy" button on the link above.
+
+== ICU syntax
+
+ICU messages are strings that frequently contains variables such as names, dates
+and numbers. A relatively, simple ICU message looks like this:
+
+ {name} likes the Beavy framework
+
+Here's a more complex example, handling pluralization:
+
+```
+There is {number, plural,
+  =0 {no}
+  one {one}
+  other {#}} framework to rule them all.
+```
+
+For a more detailed explanation of the ICU syntax, please consult this
+http://formatjs.io/guides/message-syntax/[excellent guide] from the
+http://format.js.io[FormatJS website].
+
+== Working with translation files
+
+New and updated translations will be regularly checked into the Beavy code base,
+so you may not need to work directly with the translation files. However, if it
+becomes necessary manipulate the translation files directly, you will need to
+configure the Transifex client in your Beavy development environment. Please see
+http://docs.transifex.com/tutorials/client/[this guide] for instructions.
+
+Once you've configured the client, you can begin the translation workflow. That
+workflow consists of a few simple steps, all of which are explained in greater
+detail below:
+
+  . Write new (or update) translations on the frontend or backend.
+  . Extract the translations & push them to Transifex.
+  . Translate them (or wait for them to be translated) on Transifex.
+  . Update the translation files locally from Transifex.
+
+Good luck!
+
+=== Writing translations
+
+==== Python (server-side) translations
+
+Backend translations in python are accomplished using the following functions
+(supported by http://github.com/beavyHQ/flask-icu[Flask-ICU]):
+
+   * `format()`
+   * `format_date()`
+   * `format_time()`
+   * `format_datetime()`
+   * `format_number()`
+   * `format_decimal()`
+   * `format_currency()`
+   * `format_scientific()`
+   * `format_percent()`
+
+For more detailed documentation, see http://github.com/beavyHQ/flask-icu[Flask-ICU].
+
+==== Javascript (client-side) translations:
+
+Front-end translations are provided via https://github.com/yahoo/react-intl[React-Intl].
+Extensive documentation and many examples can be found on their documentation
+website http://formatjs.io/react/[here].
+
+Here's a simple example:
+
+```javascript
+export class HomeView extends React.Component {
+  render () {
+    return (
+      <div className='container text-center'>
+        <h1>
+          <FormattedMessage
+            id='hello-world-title'
+            description='Hello World Title'
+            defaultMessage='Welcome to Beavy!' />
+        </h1>
+    )
+  }
+}
+```
+
+=== Extracting & pushing to Transifex
+
+If you have added new localizations to your Beavy implementation, you need to
+"extract" the messages from the code, and upload the message keys to Transifex
+for translation.
+
+To do this issue these commands from inside the vagrant instance (i.e. inside the
+vagrant guest):
+
+ npm extract-messages && tx push -t
+
+=== Updating from Transifex
+
+Once new localization messages have been translated on Transifex, they can be
+quickly pulled down into your app by running the following command from within
+the vagrant instance:
+
+ tx pull -a && tx pull -l en
+
+== Shipping your own translations (for your app)
+

@@ -9,6 +9,7 @@
     "dev-server": "webpack-dev-server --config .infrastructure/webpack/webpack-dev-server.config.js --progress --colors --port 2992 --inline",
     "hot-dev-server": "webpack-dev-server --config .infrastructure/webpack/webpack-hot-dev-server.config.js --hot --progress --colors --port 2992 --inline",
     "build": "webpack --config .infrastructure/webpack/webpack-production.config.js --progress --profile --colors",
+    "extract-messages": "rm -rf var/react-intl-messages && ./node_modules/babel-cli/bin/babel.js -x .jsx beavy/jsbeavy beavy_modules beavy_apps > /dev/null && python .infrastructure/i18n/reformat-react-intl-json.py && rm -rf var/react-intl-messages/beavy/  var/react-intl-messages/beavy_modules/ var/react-intl-messages/beavy_apps/ && rm -rf var/server-messages && ./.infrastructure/i18n/extract-server-msgs.sh",
     "vagrant": "webpack-dev-server --config .infrastructure/webpack/webpack-hot-dev-server-onvagrant.config.js --hot --progress --colors --host 0.0.0.0 --port 2992 --inline"
   },
   "author": "Benjamin Kampmann <ben@create-build-execute.com>",
@@ -18,6 +19,7 @@
     "babel": "^6.2.1",
     "babel-core": "^6.2.1",
     "babel-loader": "^6.2.0",
+    "babel-plugin-react-intl": "^2.0.0",
     "babel-preset-es2015": "^6.1.18",
     "babel-preset-react": "^6.1.18",
     "babel-preset-stage-0": "^6.1.18",
@@ -42,10 +44,12 @@
     "module-imports": "git+https://github.com/ligthyear/webpack-module-imports.git",
     "node-sass": "^3.4.2",
     "prosemirror": "0.3.0",
+    "po2json": "^0.4.1",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
     "react-infinite": "^0.7.1",
     "react-prosemirror": "^0.1.4",
+    "react-intl": "^2.0.0-beta-2",
     "react-proxy-loader": "^0.3.4",
     "react-redux": "^4.0.0",
     "react-router": "^1.0.0-rc1",
@@ -89,6 +93,15 @@
       "es6": true
     }
   },
+  "babel":{
+    "presets": ["react", "es2015", "stage-0"],
+    "plugins": [
+        ["react-intl", {
+            "messagesDir": "./var/react-intl-messages/",
+            "enforceDescriptions": false
+        }]
+      ]
+  },
   "devDependencies": {
     "babel-cli": "^6.2.0",
     "babel-eslint": "^4.1.6",
@@ -100,6 +113,7 @@
     "eslint-plugin-standard": "^1.1.0",
     "jest-cli": "^0.5.10",
     "jest-webpack": "^0.2.1",
+    "po2json": "^0.4.1",
     "react-hot-loader": "^1.3.0",
     "redux-devtools": "^3.0.0-beta-3",
     "redux-logger": "^1.0.6",

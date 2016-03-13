@@ -13,6 +13,7 @@ class BaseUser(Schema):
     name = fields.String()
     active = fields.Boolean()
     created_at = fields.DateTime()
+    language_preference = fields.String()
 
 
 class CurrentUser(BaseUser):

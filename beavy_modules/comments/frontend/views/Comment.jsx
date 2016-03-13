@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { getStoreEntity } from 'utils'
 import LoadEditor from 'components/Editor'
+import { FormattedMessage } from 'react-intl'
 
 class WriteReply extends React.Component {
   constructor (props) {
@@ -22,19 +23,27 @@ class WriteReply extends React.Component {
   render () {
     if (this.state.editing) {
       if (!this.state.editor) {
-        return <div>Loading</div>
+        return <FormattedMessage id='loading' defaultMessage='loading...' />
       }
       const Editor = this.state.editor
-      return <div>
-              <h3>Reply</h3>
-              <Editor value={''} options={this.options} ref='editor'/>
-              <button onClick={::this.send}>Send</button>
-            </div>
+      return (
+        <div>
+          <FormattedMessage tag='h3' id='reply' />
+          <Editor value={''} options={this.options} ref='editor'/>
+          <button onClick={::this.send}>
+            <FormattedMessage id='send' defaultMessage='send' />
+          </button>
+        </div>
+      )
     }
-    return <div>
-             <h3>Reply</h3>
-             <div onClick={x => this.setState({editing: true})}>click here to write reply</div>
-           </div>
+    return (
+      <div>
+        <FormattedMessage tag='h3' id='reply' />
+        <div onClick={x => this.setState({editing: true})}>
+          <FormattedMessage id='activate-for-reply=' defaultMessage='click to reply='/>
+        </div>
+     </div>
+   )
   }
   send () {
     alert(this.refs.editor.pm.getContent('markdown'))

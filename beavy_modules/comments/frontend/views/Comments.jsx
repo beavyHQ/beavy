@@ -6,6 +6,7 @@ import { Link } from 'react-router'
 import { COMMENTS } from '../reducers'
 // import Ago from 'react-ago-component';
 import InfiniteList from 'components/InfiniteList'
+import { FormattedMessage } from 'react-intl'
 
 class SimpleListItem extends Component {
 
@@ -63,11 +64,11 @@ class PrivateMessagesView extends Component {
   render () {
     const { comments } = this.props
     if (!comments || !comments.meta) {
-      return <h1><i>Loading comments...</i></h1>
+      return <FormattedMessage tag='h1' id='loading-comments' defaultMessage='loading comments ...' />
     }
     return (
       <div>
-        <h1>{comments.meta.total} Comment</h1>
+        <FormattedMessage tag='h1' count={comments.meta.total} id='comments-with-count' defaultMessage='{count} Comments' />
         <InfiniteList
           meta={comments.meta}
           loader={::this.loadMore}

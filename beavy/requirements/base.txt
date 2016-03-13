@@ -23,6 +23,7 @@ Flask-Babel==0.9
 Flask-CLI==0.2.1
 Flask-DebugToolbar==0.10.0
 -e git+https://github.com/ligthyear/flask-environments.git@bceef9e26720728cddf0e581efe81d5246b1513b#egg=Flask_Environments-master
+-e git+https://github.com/beavyHQ/flask-icu.git@master#egg=flask-icu
 Flask-Limiter==0.8.2
 Flask-Login==0.3.2
 Flask-Mail==0.9.1
@@ -65,6 +66,7 @@ ptyprocess==0.5
 py==1.4.30
 pyasn1==0.1.8
 pyasn1-modules==0.0.7
+pyicu==1.9.2
 pycparser==2.14
 python-dateutil==2.4.2
 python-editor==0.4

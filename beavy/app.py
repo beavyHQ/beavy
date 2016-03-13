@@ -1,4 +1,4 @@
-from flask import Flask, session, url_for, redirect, json
+from flask import Flask, session, url_for, redirect, json, request
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.script import Manager
 from flask.ext.marshmallow import Marshmallow
@@ -12,7 +12,6 @@ from flask_limiter.util import get_ipaddr
 from flask_admin import Admin, AdminIndexView
 
 from flask_social_blueprint.core import SocialBlueprint as SocialBp
-from flask.ext.babel import Babel
 from beavy.utils.deepmerge import deepmerge
 
 from flask_environments import Environments
@@ -137,9 +136,6 @@ manager = Manager(app)
 # add DB+migrations commands
 manager.add_command('db', MigrateCommand)
 
-# initialize i18n
-babel = Babel(app)
-
 # initialize email support
 mail = Mail(app)
 
@@ -151,6 +147,27 @@ for handler in app.logger.handlers:
 
 # add caching support
 cache = Cache(app)
+
+#  -------------- initialize i18n --------------
+from flask.ext.icu import ICU, get_messages
+icu = ICU(app, app.config.get("DEFAULT_LANGUAGE"))
+
+
+# Inject ICU messages for delivery to client via _preload.html template
+@app.context_processor
+def inject_messages():
+    return dict(MESSAGES=json.dumps(get_messages()))
+
+
+@icu.localeselector
+def get_locale():
+    locale = None
+    if current_user is not None and current_user.is_authenticated:
+        locale = current_user.language_preference
+    elif app.config.get("LANGUAGES") is not None:
+        languages = app.config.get("LANGUAGES")
+        locale = request.accept_languages.best_match(languages)
+    return locale  # If no locale, Flask-ICU uses the default setting.
 
 
 #  ------ Database setup is done after here ----------
