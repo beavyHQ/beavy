@@ -3,6 +3,5 @@ _app:
   build: ..
   volumes:
     - ../var/uploads:/APP/uploads
-    - ../var/assets:/APP/assets
   environment:
     BEAVY_ENV: "PRODUCTION"
