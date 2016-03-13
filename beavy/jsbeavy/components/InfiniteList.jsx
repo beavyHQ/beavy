@@ -108,9 +108,9 @@ export default class InfiniteList extends Component {
     return (
       <div className='infinite-list-item'>
         <FormattedMessage
-          id="infinite-list-message"
-          description="Infinite List Message"
-          defaultMessage="Loading..." />
+          id='infinite-list-message'
+          description='Infinite List Message'
+          defaultMessage='Loading...' />
       </div>
     )
   }
