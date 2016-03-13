@@ -1,0 +1,77 @@
+= Deploying with Dokku
+
+_This Guide was written for dokku 0.4.14._
+
+If you haven't yet, start by link:http://dokku.viewdocs.io/dokku/installation/[installing dokku]. If you want to run it on DigitalOcean, they provide a handy link:https://www.digitalocean.com/community/tutorials/how-to-use-the-dokku-one-click-digitalocean-image-to-run-a-node-js-app[one-click-installer for dokku].
+
+== Required Plugins
+
+For any Beavy app we need to install a link:http://dokku.viewdocs.io/dokku/plugins/[few plugins with dokku], mostly to provide external services like Database and Queuing. You need to install the following plugins: Redis, Postgres, RabbitMQ and Pre-Deploy-Services. Run the following commands on your dokku server (as root):
+
+```bash
+dokku plugin:install https://github.com/dokku/dokku-postgres.git postgres
+dokku plugin:install https://github.com/dokku/dokku-rabbitmq.git rabbitmq
+dokku plugin:install https://github.com/dokku/dokku-redis.git redis
+dokku plugin:install https://github.com/OzConseil/dokku-deploy-script.git
+```
+
+== Create and Configure app
+
+Start by creating your beavy app. We will use the "hello-world" as an example here for the appname, replace it with your appropriate name.
+
+`dokku apps:create hello-world`
+
+=== Create backends
+
+Next up we need to create the backend services and link them to our new app
+
+For Redis:
+
+```bash
+dokku redis:create hello-world
+dokku redis:link hello-world hello-world
+```
+
+For Postgres:
+
+```bash
+dokku postgres:create hello-world
+dokku postgres:link hello-world hello-world
+```
+
+For RabbitMQ:
+
+```bash
+dokku rabbitmq:create hello-world
+dokku rabbitmq:link hello-world hello-world
+```
+
+To confirm you can type `dokku config hello-world` and should see all the previously mentioned services are linked there.
+
+---
+
+We need to setup some volumes for persistent storage
+
+```bash
+sudo -u dokku mkdir -p /home/dokku/hello-world/uploads
+sudo -u dokku mkdir -p /home/dokku/hello-world/backups
+dokku docker-options:add hello-world deploy,run "-v /home/dokku/hello-world/uploads:/APP/uploads"
+dokku docker-options:add hello-world deploy,run "-v /home/dokku/hello-world/backups:/APP/backups"
+```
+
+=== Set Enviroment Configuration
+
+Running beavy on the server means we need to expose the proper enviroment variables
+
+`dokku config:set hello-world DOKKU_DOCKERFILE_PORT=5000 BEAVY_ENV=PRODUCTION BEAVY_CONFIG_FROM_ENV=1 DOKKU_DOCKERFILE_START_CMD='/app/run.sh' C_FORCE_ROOT=1`
+
+This informs dokku that we will be hosting the project on port 5000, tells beavy to run in the production mode and understand the environment variables as configuration option. This way it will automatically detect the services we linked perviously. In this mode, you can set any (first-level) configuration option of beavy via `dokku config:set`, too.
+
+== Your first push
+
+Now you can try to push the app for the first time, to see if it builds properly. If you haven't yet created a local `config.yml` for your app, do that and force add it to git (`git add -f config.yml`) – otherwise it will break (with `lstat config.yml: no such file or directory`). In your git do `git push dokku@SERVER:hello-world HEAD:master` (dokku only deploys `master` branches). The first push might take a while as it is building the docker container for the first time.
+
+After a lot of output about installing, it should end with something like:
+```
+
+```
