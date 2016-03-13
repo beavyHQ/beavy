@@ -1,5 +1,6 @@
 # flake8: noqa
 import pytest
+from urllib.parse import urlparse
 from .fetching import extractor
 
 class Number:
@@ -40,31 +41,132 @@ class HasItems:
                 return False
         return True
 
+class URL:
+
+    def scheme(self, inp):
+        self._scheme = inp
+        return self
+
+    def netloc(self, inp):
+        self._netloc = inp
+        return self
+
+    def path(self, inp):
+        self._path = inp
+        return self
+
+    def hostname(self, inp):
+        self._hostname = inp
+        return self
+
+    def port(self, inp):
+        self._port = inp
+        return self
+
+    def username(self, inp):
+        self._username = inp
+        return self
+
+    def password(self, inp):
+        self._password = inp
+        return self
+
+    def params(self, inp):
+        self._params = inp
+        return self
+
+    def scheme_check(self, inp):
+        self._scheme_check = inp
+        return self
+
+    def netloc_check(self, inp):
+        self._netloc_check = inp
+        return self
+
+    def path_check(self, inp):
+        self._path_check = inp
+        return self
+
+    def hostname_check(self, inp):
+        self._hostname_check = inp
+        return self
+
+    def port_check(self, inp):
+        self._port_check = inp
+        return self
+
+    def username_check(self, inp):
+        self._username_check = inp
+        return self
+
+    def password_check(self, inp):
+        self._password_check = inp
+        return self
+
+    def params_check(self, inp):
+        self._params_check = inp
+        return self
+
+    def __eq__(self, other):
+        url = urlparse(other)
+
+        for p in ("scheme", "netloc", "path", "hostname", "port",
+                  "username", "password", "params"):
+            attr = "_{}".format(p)
+            if hasattr(self, attr):
+                if not getattr(url, p) == getattr(self, attr):
+                    assert False, "{} faulty: {} isn't {}".format(url, p, getattr(self, attr))
+
+            check_attr = "{}_check".format(attr)
+            if hasattr(self, check_attr):
+                if not getattr(self, check_attr)(getattr(url, p), url):
+                    assert False, "{} faulty: {} failed check".format(url, p)
+
+        return True
+
+
+def ImageUrl(endswith, scheme=None, hostname=None):
+    url = URL().path_check(lambda p, u: p.endswith(endswith))
+    if scheme:
+        url.scheme(scheme)
+    if hostname:
+        url.hostname(hostname)
+    return url
+
+
+def AndroidAppURL(appid):
+    return URL().scheme("android-app").hostname(appid)
+
+
+def IOSAppURL(appid):
+    return URL().scheme("ios-app").hostname(appid)
+
+
 @pytest.mark.slow
 @pytest.mark.external
 def test_blogger_example():
     assert extractor.fetch("http://buzz.blogger.com/2015/09/https-support-coming-to-blogspot.html") == {
         "alternates": {
-            "application/atom+xml": "http://buzz.blogger.com/feeds/653731578225022752/comments/default",
-            "application/rss+xml": "http://buzz.blogger.com/feeds/posts/default?alt=rss"
+            "application/atom+xml": URL().scheme("https").path_check(lambda p,x: p.startswith("/feeds")),
+            "application/rss+xml": URL().scheme("https").path_check(lambda p,x: p.startswith("/feeds"))
         },
         "description": StartsWith("This morning we posted an update about Blogspot to Google"),
         "generator": "blogger",
         "site_name": "Blogger Buzz",
         "images": [
             {
-                "src": Contains("http://2.bp.blogspot.com/-i2Zz0p3UoX4/VgsPJGm9_fI/AAAAAAAAROA/HoN3rq-s93U/") and Contains('unnamed.png'),
+                "src": ImageUrl("unnamed.png", "http"),
                 "type": "og:image"
             },
             {
-                "src": "http://buzz.blogger.com/favicon.ico",
+                "src": ImageUrl("favicon.ico", "https"),
                 "type": "favicon"
             }
         ],
         "locale": "en_US",
         "title": "HTTPS support coming to Blogspot",
         "type": "article:blog",
-        "url": "http://buzz.blogger.com/2015/09/https-support-coming-to-blogspot.html",
+        "url": "https://blogger.googleblog.com/2015/09/https-support-coming-to-blogspot.html",
         "videos": []
     }
 
@@ -93,7 +195,7 @@ def test_amazon_example():
         "description": "Der Fall Jane Eyre: Roman (dtv Unterhaltung)",
         "images": [
             {
-                "src": "http://ecx.images-amazon.com/images/I/51oEhE2AYEL._SS500_.jpg",
+                "src": ImageUrl(".jpg", "http").hostname_check(lambda p,u: p.endswith("amazon.com")),
                 "type": "og:image"
             }
         ],
@@ -129,18 +231,19 @@ def test_amazon_example():
 def test_wikipedia_example():
     assert extractor.fetch("https://en.wikipedia.org/wiki/Polygon") == {
         "alternates": {
-            "android-app": "android-app://org.wikipedia/http/en.m.wikipedia.org/wiki/Polygon",
+            "android-app": AndroidAppURL("org.wikipedia")
+                                .path_check(lambda p,x: p.endswith("Polygon")),
             "application/x-wiki": "/w/index.php?title=Polygon&action=edit"
         },
         "description": StartsWith("In elementary geometry, a polygon /\u02c8p\u0252l\u026a\u0261\u0252n/ is a plane figure that is bounded by a finite chain of straight line segments closing in a loop to form a closed chain or circuit. These segments are called its edges or sides, and the points where two edges meet are the polygon's vertices (singular: vertex) or corners. The interior of the polygon is sometimes called its body. An n-gon is a polygon with n sides."),
         "generator": StartsWith("MediaWiki"),
         "images": [
             {
-                "src": "//upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Assorted_polygons.svg/400px-Assorted_polygons.svg.png",
+                "src": ImageUrl("400px-Assorted_polygons.svg.png", None ,"upload.wikimedia.org"),
                 "type": "contentImage"
             },
             {
-                "src": "https://en.wikipedia.org/static/favicon/wikipedia.ico",
+                "src": ImageUrl(".ico", "https" ,"en.wikipedia.org"),
                 "type": "favicon"
             }
         ],
@@ -163,7 +266,8 @@ def test_meetup_com_event_example():
         "description": "ABOUT:The meet-up is all about Ruby and Rails (but also about all the other things you can do with Ruby).We are a friendly group that meets every monday at seven o'clock to learn together and work o",
         "images": [
             {
-                "src": "http://photos3.meetupstatic.com/photos/event/2/6/1/8/highres_162009752.jpeg",
+                "src": URL().scheme("http")
+                            .path_check(lambda p,x: "highres" in p and p.endswith("jpeg")),
                 "type": "og:image"
             }
         ],
@@ -199,24 +303,32 @@ def test_meetup_com_event_example():
 def test_soundcloud_song_example():
     assert extractor.fetch("https://soundcloud.com/bassmelodie/bassmelodie-wintermelancholie") == {
         "alternates": {
-            "android-app": StartsWith("android-app://com.soundcloud.android/"),
-            "ios-app": StartsWith("ios-app://"),
-            "only screen and (max-width: 640px)": StartsWith("https://m.soundcloud.com/"),
-            "text/json+oembed": StartsWith("https://soundcloud.com/oembed?"),
-            "text/xml+oembed": StartsWith("https://soundcloud.com/oembed")
+            "android-app": AndroidAppURL("com.soundcloud.android"),
+            "ios-app": URL().scheme("ios-app"),
+            "only screen and (max-width: 640px)": URL()
+                                .scheme("https")
+                                .hostname("m.soundcloud.com"),
+            "text/json+oembed": URL().scheme("https")
+                                     .hostname("soundcloud.com")
+                                     .path("/oembed"),
+            "text/xml+oembed": URL().scheme("https")
+                                    .hostname("soundcloud.com")
+                                    .path("/oembed")
         },
         "author_name": "Bassmelodie",
-        "author_url": "https://soundcloud.com/bassmelodie",
+        "author_url": URL().scheme("https")
+                                .hostname("soundcloud.com")
+                                .path("/bassmelodie"),
         "description": "Winter has its ups and downs... Lots of people are alone and don't have anyone whom they are able to share their feelings and emotions with. Sometimes it's worth to think not only about oneself. Ther",
         "images": [
             {
                 "height": 500,
-                "src": "https://i1.sndcdn.com/artworks-000100023660-j8gjf5-t500x500.jpg",
+                "src": ImageUrl(".jpg", "https").hostname_check(lambda h, x: h.endswith("sndcdn.com")),
                 "type": "og:image",
                 "width": 500
             },
             {
-                "src": "https://a-v2.sndcdn.com/assets/images/sc-icons/favicon-2cadd14b.ico",
+                "src": ImageUrl(".ico", "https").hostname_check(lambda h, x: h.endswith("sndcdn.com")),
                 "type": "favicon"
             }
         ],
@@ -255,7 +367,9 @@ def test_soundcloud_song_example():
         },
         "title": "Bassmelodie | Wintermelancholie",
         "type": "music.song",
-        "url": "https://soundcloud.com/bassmelodie/bassmelodie-wintermelancholie",
+        "url": URL().scheme("https")
+                    .hostname("soundcloud.com")
+                    .path("/bassmelodie/bassmelodie-wintermelancholie"),
         "videos": []
     }
 
@@ -268,11 +382,11 @@ def test_slidesCom_example():
         "description": "Understanding UI as reusable components and building it in a modular way are the new black in web development. But how exactly do you apply these latest technologies while still allowing overall themes and customization as we are used to? In this case study, we will look under the hood of beavy to understand how it uses CSS Modules and React to marry having highly complex, reusable UI-components and ensuring they can be completely customized at the same time. And what that means for the overall design process. --- This talk has been presented at UpFront #62, Nov 10th 2015, Berlin: http://www.meetup.com/up-front-ug/events/226053994/",
         "images": [
             {
-                "src": "https://s3.amazonaws.com/media-p.slid.es/thumbnails/secure/69e3a7/decks.jpg",
+                "src": ImageUrl("decks.jpg", "https", "s3.amazonaws.com"),
                 "type": "og:image"
             },
             {
-                "src": "https://s3.amazonaws.com/media-p.slid.es/thumbnails/secure/69e3a7/decks.jpg",
+                "src": ImageUrl("decks.jpg", "https", "s3.amazonaws.com"),
                 "type": "twitter:image"
             }
         ],
@@ -288,18 +402,19 @@ def test_slidesCom_example():
 def test_nytimes_example():
     assert extractor.fetch("http://www.nytimes.com/2015/11/15/arts/music/le1f-speaks-out-like-his-fearless-models-on-riot-boi.html") == {
         "alternates": {
-            "android-app": "android-app://com.nytimes.android/nytimes/reader/id/100000004021164",
+            "android-app": AndroidAppURL("com.nytimes.android")
+                                .path_check(lambda p,x: p.endswith("/100000004021164")),
             "http": "http://mobile.nytimes.com/2015/11/15/arts/music/le1f-speaks-out-like-his-fearless-models-on-riot-boi.html"
         },
         "description": "The rapper talks about a range of influences he drew on \u2014 Amanda Blank, M.I.A., Dev Hynes and others \u2014 in addressing misogyny, homophobia and more in his first full-length album.",
         "genre": "News",
         "images": [
             {
-                "src": "http://static01.nyt.com/images/2015/11/15/arts/15PLAYLIST1/15PLAYLIST1-facebookJumbo.jpg",
+                "src": ImageUrl("facebookJumbo.jpg", "http", "static01.nyt.com"),
                 "type": "og:image"
             },
             {
-                "src": "http://static01.nyt.com/favicon.ico",
+                "src": ImageUrl("favicon.ico", "https", "static01.nyt.com"),
                 "type": "favicon"
             }
         ],
@@ -323,12 +438,14 @@ def test_nytimes_example():
 def test_zeitDe_example():
     assert extractor.fetch("http://www.zeit.de/politik/ausland/2015-11/polen-unabhaengigkeit-marsch-nationalisten") == {
         "alternates": {
-            "application/rss+xml": "http://newsfeed.zeit.de/index"
+            "application/rss+xml": URL().scheme("http")
+                                        .hostname("newsfeed.zeit.de")
+                                        .path("/index")
         },
         "description": "Die Unabh\u00e4ngigkeitsparaden in Polen waren einmal bunt und lustig. Das ist vorbei, auch weil der Extremismus in der Politik angekommen ist.",
         "images": [
             {
-                "src": "http://images.zeit.de/static/img/favicon.ico",
+                "src": ImageUrl("favicon.ico", "http", "images.zeit.de"),
                 "type": "favicon"
             }
         ],
@@ -354,8 +471,12 @@ def test_zeitDe_example():
 def test_flickr_image_example():
     assert extractor.fetch("https://www.flickr.com/photos/wbaiv/4332173964/in/photolist-7APwoy") == {
         "alternates": {
-            "application/json+oembed": "https://www.flickr.com/services/oembed?url=https://www.flickr.com/photos/wbaiv/4332173964&format=json",
-            "text/xml+oembed": "https://www.flickr.com/services/oembed?url=https://www.flickr.com/photos/wbaiv/4332173964&format=xml"
+            "application/json+oembed": URL().scheme("https")
+                                            .hostname("www.flickr.com")
+                                            .path_check(lambda p,x: p.endswith("oembed")),
+            "text/xml+oembed": URL().scheme("https")
+                                    .hostname("www.flickr.com")
+                                    .path_check(lambda p,x: p.endswith("oembed"))
         },
         "author_name": "wbaiv",
         "author_url": "https://www.flickr.com/photos/wbaiv/",
@@ -363,7 +484,7 @@ def test_flickr_image_example():
         "images": [
             {
                 "height": 500,
-                "src": "https://c1.staticflickr.com/5/4047/4332173964_e60fa3d95a.jpg",
+                "src":  ImageUrl(".jpg", "https", "c1.staticflickr.com"),
                 "type": "og:image",
                 "width": 375
             }
@@ -412,17 +533,17 @@ def test_tedCom_example():
         "images": [
             {
                 "height": 550,
-                "secure_src": "https://tedcdnpi-a.akamaihd.net/r/tedcdnpe-a.akamaihd.net/images/ted/90eeddc216ca86ad2fbf99d0823a39fe681e7513_2880x1620.jpg?c=1050%2C550&w=1050",
-                "src": "https://tedcdnpi-a.akamaihd.net/r/tedcdnpe-a.akamaihd.net/images/ted/90eeddc216ca86ad2fbf99d0823a39fe681e7513_2880x1620.jpg?c=1050%2C550&w=1050",
+                "secure_src": ImageUrl(".jpg").hostname_check(lambda h,u: h.startswith("tedcdn")),
+                "src": ImageUrl(".jpg").hostname_check(lambda h,u: h.startswith("tedcdn")),
                 "type": "og:image",
                 "width": 1050
             },
             {
-                "src": "https://tedcdnpa-a.akamaihd.net/favicon.svg",
+                "src":  ImageUrl("favicon.svg").hostname_check(lambda h,u: h.startswith("tedcdn")),
                 "type": "favicon"
             },
             {
-                "src": "https://tedcdnpa-a.akamaihd.net/favicon.ico",
+                "src": ImageUrl("favicon.ico").hostname_check(lambda h,u: h.startswith("tedcdn")),
                 "type": "favicon"
             }
         ],
@@ -451,7 +572,7 @@ def test_tedCom_example():
             "provider_name": "TED",
             "provider_url": "http://ted.com",
             "thumbnail_height": 180,
-            "thumbnail_url": "http://tedcdnpe-a.akamaihd.net/images/ted/1ffc899e31b37f85948bea87dd18710f1a847b4d_240x180.jpg?lang=en",
+            "thumbnail_url": ImageUrl(".jpg").hostname_check(lambda h,u: h.startswith("tedcdn")),
             "thumbnail_width": 240,
             "title": "Andreas Ekstr\u00f6m: The moral bias behind your search results",
             "type": "video",
@@ -471,12 +592,18 @@ def test_tedCom_example():
 def test_youtube_example():
     assert extractor.fetch("https://www.youtube.com/watch?v=SQ5wYZqHQGo?t=505") == {
         "alternates": {
-            "android-app": "android-app://com.google.android.youtube/http/www.youtube.com/watch?v=SQ5wYZqHQGo",
-            "application/json+oembed": StartsWith("http://www.youtube.com/oembed"),
-            "handheld": "http://m.youtube.com/watch?v=SQ5wYZqHQGo",
-            "ios-app": "ios-app://544007664/vnd.youtube/www.youtube.com/watch?v=SQ5wYZqHQGo",
-            "only screen and (max-width: 640px)": "http://m.youtube.com/watch?v=SQ5wYZqHQGo",
-            "text/xml+oembed": StartsWith("http://www.youtube.com/oembed")
+            "android-app": AndroidAppURL("com.google.android.youtube"),
+            "application/json+oembed": URL().scheme("http")
+                                            .hostname("www.youtube.com")
+                                            .path("/oembed"),
+            "handheld": URL().scheme("http")
+                             .hostname("m.youtube.com"),
+            "ios-app": IOSAppURL("544007664"),
+            "only screen and (max-width: 640px)": URL().scheme("http")
+                                                       .hostname("m.youtube.com"),
+            "text/xml+oembed": URL().scheme("http")
+                                    .hostname("www.youtube.com")
+                                    .path("/oembed")
         },
         "author_name": "O'Reilly",
         "author_url": "https://www.youtube.com/user/OreillyMedia",
@@ -484,31 +611,31 @@ def test_youtube_example():
         "full_description": "From the 2015 Velocity Conference in New York: I\u2019m going to talk about cognitive bias in operations land. I will go through two examples.The first example is how cognitive biases can help us miss the next great thing. In this case, I will show how we could have almost missed the Docker revolution. I\u2019ll use this example to draw parallels and build up a transition to my second point.The second example is the meat of the talk. In this example I\u2019ll reflect on how blindly rejecting ideas from others unlike yourself is the biggest diversity/integration issue in tech and society.The talk will end with bold assertions about why we are in the tech industry. I will fall short of proposing a solution, but will leave with tech\u2019s problems are society\u2019s problems, and we have to think bigger in our search for solutions.About Bryan Liles (DigitalOcean):Bryan Liles works on strategic initiatives for DigitalOcean. In layman\u2019s terms, this means he writes OSS for DigitalOcean and others. He helps communities move their software to the public cloud, and gets to speak at conferences on topics ranging from Machine Learning to how build the next generation of developers. When not thinking about code, Bryan races cars in straight lines and around turns and builds robots and devicesWatch more from Velocity NYC 2015: https://goo.gl/PZAqiYVisit the Velocity website: http://velocityconf.com/Don't miss an upload! Subscribe! http://goo.gl/szEauhStay Connected to O'Reilly Media by Email - http://goo.gl/YZSWbOFollow O'Reilly Media:http://plus.google.com/+oreillymediahttps://www.facebook.com/OReillyhttps://twitter.com/OReillyMedia",
         "images": [
             {
-                "src": "https://i.ytimg.com/vi/SQ5wYZqHQGo/hqdefault.jpg",
+                "src": ImageUrl("hqdefault.jpg", "https").hostname_check(lambda h,u: h.endswith(".ytimg.com")),
                 "type": "og:image"
             },
             {
-                "src": "https://i.ytimg.com/vi/SQ5wYZqHQGo/hqdefault.jpg",
+                "src": ImageUrl("hqdefault.jpg", "https").hostname_check(lambda h,u: h.endswith(".ytimg.com")),
                 "type": "twitter:image"
             },
             {
-                "src": "https://s.ytimg.com/yts/img/favicon-vflz7uhzw.ico",
+                "src": ImageUrl(".ico", "https").hostname_check(lambda h,u: h.endswith(".ytimg.com")),
                 "type": "favicon"
             },
             {
-                "src": "https://s.ytimg.com/yts/img/favicon_32-vfl8NGn4k.png",
+                "src": ImageUrl(".png", "https").hostname_check(lambda h,u: h.endswith(".ytimg.com")),
                 "type": "favicon"
             },
             {
-                "src": "https://s.ytimg.com/yts/img/favicon_48-vfl1s0rGh.png",
+                "src": ImageUrl(".png", "https").hostname_check(lambda h,u: h.endswith(".ytimg.com")),
                 "type": "favicon"
             },
             {
-                "src": "https://s.ytimg.com/yts/img/favicon_96-vfldSA3ca.png",
+                "src": ImageUrl(".png", "https").hostname_check(lambda h,u: h.endswith(".ytimg.com")),
                 "type": "favicon"
             },
             {
-                "src": "https://s.ytimg.com/yts/img/favicon_144-vflWmzoXw.png",
+                "src": ImageUrl(".png", "https").hostname_check(lambda h,u: h.endswith(".ytimg.com")),
                 "type": "favicon"
             }
         ],
@@ -545,13 +672,13 @@ def test_youtube_example():
         "videos": [
             {
                 "height": 720,
-                "secure_src": "https://www.youtube.com/v/SQ5wYZqHQGo?version=3&autohide=1",
-                "src": "http://www.youtube.com/v/SQ5wYZqHQGo?version=3&autohide=1",
+                "secure_src": ImageUrl("SQ5wYZqHQGo", "https", "www.youtube.com"),
+                "src": ImageUrl("SQ5wYZqHQGo", "http", "www.youtube.com"),
                 "width": 1280
             },
             {
                 "height": 720,
-                "src": "https://www.youtube.com/embed/SQ5wYZqHQGo",
+                "src": ImageUrl("SQ5wYZqHQGo", "https", "www.youtube.com"),
                 "width": 1280
             }
         ]
