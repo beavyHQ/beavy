@@ -58,19 +58,57 @@ dokku docker-options:add hello-world deploy,run "-v /home/dokku/hello-world/uplo
 dokku docker-options:add hello-world deploy,run "-v /home/dokku/hello-world/backups:/APP/backups"
 ```
 
-=== Set Enviroment Configuration
+=== Set Environment Configuration
 
-Running beavy on the server means we need to expose the proper enviroment variables
+Running beavy on the server means we need to expose the proper environment variables
 
 `dokku config:set hello-world DOKKU_DOCKERFILE_PORT=5000 BEAVY_ENV=PRODUCTION BEAVY_CONFIG_FROM_ENV=1 DOKKU_DOCKERFILE_START_CMD='/app/run.sh' C_FORCE_ROOT=1`
 
 This informs dokku that we will be hosting the project on port 5000, tells beavy to run in the production mode and understand the environment variables as configuration option. This way it will automatically detect the services we linked perviously. In this mode, you can set any (first-level) configuration option of beavy via `dokku config:set`, too.
 
+In details this is what they do:
+
+ - `DOKKU_DOCKERFILE_PORT=5000` tells dokku that we will be serving on port `5000`.
+ - `BEAVY_ENV=PRODUCTION` sets beavy into production mode.
+ - `BEAVY_CONFIG_FROM_ENV=1` enabled Environment-variables overwrite of configuration values. This is necessary because dokku exposes connections to the backend services via environment variables we need to configure the service
+ - `DOKKU_DOCKERFILE_START_CMD='/app/run.sh'` informs dokku to run a custom script we are shipping in the container, which allows us to start either web or worker processes and scale properly with dokku features
+  - `C_FORCE_ROOT=1` informs celerey (our worker system) that is fine to run as root. At the moment, dokku makes somes troubles if we run the service as a different user. But constraint in the container that doesn't matter that much.
+
 == Your first push
 
-Now you can try to push the app for the first time, to see if it builds properly. If you haven't yet created a local `config.yml` for your app, do that and force add it to git (`git add -f config.yml`) – otherwise it will break (with `lstat config.yml: no such file or directory`). In your git do `git push dokku@SERVER:hello-world HEAD:master` (dokku only deploys `master` branches). The first push might take a while as it is building the docker container for the first time.
+Now you can try to push the app for the first time, to see if it builds properly. If you haven't yet created a local `config.yml` for your app, do that and force add it to git (`git add -f config.yml`) – otherwise it will break (with `lstat config.yml: no such file or directory`).
 
-After a lot of output about installing, it should end with something like:
+=== Assets
+
+In the build, the system currently assumes the pre-built assets are shipped in the repository. Once we have travis set up, that will happen automatically, but if you want to push from your local repository, the build will fail because it can't find them.
+
+To still be able to push, we recommend you check out a temporary branch, build the assets (for e.g. from within your vagrant), commit and push that. The commands would be as follows
+
+```
+export BEAVY_ENV=PRODUCTION
+git co -b test-deploy
+npm install --all
+npm run build
+git add -f config.yml var/assets/*
+git commit -m"Adding config and assets for deploy"
 ```
 
+Then you can push the current HEAD of your git via (this does _not_ push uncommitted changes!):
+
 ```
+git push dokku@SERVER:hello-world HEAD:master
+```
+
+
+The first push might take a while because dokku needs to make the first pull of the docker image and other dependencies, and the output will inform you about all the stuff going on. But if it all succeeds it will end with something along the lines of:
+
+```
+=====> Application deployed:
+       http://hello-world.example.com
+```
+
+And you can now find your app running on the mentioned URL.
+
+YAY \o/
+
+== Travis setup
