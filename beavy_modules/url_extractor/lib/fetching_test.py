@@ -445,6 +445,16 @@ def test_zeitDe_example():
         "description": "Die Unabh\u00e4ngigkeitsparaden in Polen waren einmal bunt und lustig. Das ist vorbei, auch weil der Extremismus in der Politik angekommen ist.",
         "images": [
             {
+                "height": 731,
+                "src": ImageUrl("wide__1300x731", "http", "www.zeit.de"),
+                "type": "og:image",
+                "width": 1300
+            },
+            {
+                "src": ImageUrl("wide__1300x731", "http", "www.zeit.de"),
+                "type": "twitter:image"
+            },
+            {
                 "src": ImageUrl("favicon.ico", "http", "images.zeit.de"),
                 "type": "favicon"
             }
