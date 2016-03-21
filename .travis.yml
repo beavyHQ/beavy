@@ -7,9 +7,8 @@ python:
 
 env:
   global:
-    # ✨ CHANGE THE FOLLOWING TO THE REMOTE SERVER YOU WANT TO BUILD
-    - DEPLOY_SERVER="root@46.101.137.120"
-    - DEPLOY_PATH="~/beavy-apps"
+    # ✨ UNCOMMENT AND CHANGE THE FOLLOWING TO THE REMOTE SERVER YOU WANT TO BUILD
+    # - DEPLOY_COMMAND="git deploy dokku@SERVER:APP HEAD:master"
     # ✨ CHANGE THE FOLLOWING TO SLUG OF YOUR REPO AND BRANCH
     #    TO TRIGGER DEPLOY
     - DEPLOY_SLUG=beavyHQ/beavy
@@ -96,7 +95,7 @@ after_success:
     set -e
 
     # start ssh agent
-    export DEPLOY_PATH_FULL="$DEPLOY_PATH/$APP"
+    export DEFAULT_DEPLOY_SERVER="root@46.101.137.120"
     export NEW_TAG="CI_$APP_$TRAVIS_JOB_NUMBER"
 
     if [ "$TRAVIS_PULL_REQUEST" == "false" ] &&
@@ -112,14 +111,20 @@ after_success:
         git config --global user.name "Travis CI"
         git config --global user.email "travis@beavy.xyz"
 
-        git remote add deploy "$DEPLOY_SERVER:$DEPLOY_PATH_FULL"
-
         git add -f config.yml var/assets/*
         git commit -m"Adding config and assets for deploy"
         git tag $NEW_TAG
 
         # this will trigger the autodeploy if setup properly
-        git push deploy $NEW_TAG
+
+        if [[ -z "$DEPLOY_COMMAND" ]]; then
+          # Without a deploy command, we use our default setup
+          # for beavy itself
+          git remote add deploy "$DEFAULT_DEPLOY_SERVER:~/beavy-apps/$APP"
+          git push deploy $NEW_TAG
+        else
+          eval "$DEPLOY_COMMAND"
+        fi
 
     else
       echo "We are not on the target deploy branch. Aborting."
