@@ -79,7 +79,8 @@ manager.add_command("behave", Behave())
 
 
 @manager.command
-def pytest(path=None, no_coverage=False, maxfail=0, debug=False, verbose=False):
+def pytest(path=None, no_coverage=False, maxfail=0,
+           debug=False, verbose=False):
     import pytest
 
     arguments = []
