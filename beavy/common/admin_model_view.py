@@ -38,7 +38,8 @@ class AdminModelView(ModelView):
 
             See commit ``#45a2723`` for details.
         """
-        if 'polymorphic_identity' in self.model.__mapper_args__:
+        if 'polymorphic_identity' in getattr(self.model, "__mapper_args__",
+                                             {}):
             return self.session.query(func.count('*')).select_from(
                 self.model.query.selectable)
 
