@@ -25,6 +25,8 @@ env:
     # - APP=myAwesomeApp
 
 before_install:
+  # install latest ICU for best localisation support
+  - sh .infrastructure/install_icu.sh
   # if there isn't a config file, pick up the
   # one used for the testing of the app
   - "[ ! -f config.yml ] && cp -f \"beavy_apps/$APP/tests/config.yml\" config.yml || echo \"config file already found\" "
