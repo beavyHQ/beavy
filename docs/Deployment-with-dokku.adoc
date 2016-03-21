@@ -4,6 +4,10 @@ _This Guide was written for dokku 0.4.14._
 
 If you haven't yet, start by link:http://dokku.viewdocs.io/dokku/installation/[installing dokku]. If you want to run it on DigitalOcean, they provide a handy link:https://www.digitalocean.com/community/tutorials/how-to-use-the-dokku-one-click-digitalocean-image-to-run-a-node-js-app[one-click-installer for dokku].
 
+> *Digital Ocean Notes*
+> Make sure, however to *disable* IPv6 support when creating the droplet, link:http://dokku.viewdocs.io/dokku/getting-started/install/digitalocean/[as there are known issues with that for dokku].
+> If you are using the pre-built droplet, *make sure* to open a browser with the target IP (or domain) and finish the configuration once the droplet is up (you normally can just leave it as is and click `Finish Setup`). Once you are done with that, you can continue.
+
 == Required Plugins
 
 For any Beavy app we need to install a link:http://dokku.viewdocs.io/dokku/plugins/[few plugins with dokku], mostly to provide external services like Database and Queuing. You need to install the following plugins: Redis, Postgres, RabbitMQ and Pre-Deploy-Services. Run the following commands on your dokku server (as root):
@@ -44,6 +48,8 @@ For RabbitMQ:
 dokku rabbitmq:create hello-world
 dokku rabbitmq:link hello-world hello-world
 ```
+
+> Note: It appears the rabbitmq create hangs sometimes and doesn't do anything. Just press `ctrl` + `c` to confirm and it will continue just fine.
 
 To confirm you can type `dokku config hello-world` and should see all the previously mentioned services are linked there.
 
