@@ -59,7 +59,7 @@ before_script:
 
 script:
   # we are starting with running all unit tests
-  - python manager.py pytest
+  - python manager.py pytest -v
   # lets run jstests – currently without reporitng
   - npm test
   # starting up test-server
