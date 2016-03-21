@@ -38,7 +38,7 @@ MESSAGE
 # The list of packages we want to install
 INSTALL = <<-INSTALL
 sudo apt-get update
-sudo apt-get install -y postgresql-9.4 postgresql-client-9.4 postgresql-server-dev-9.4 redis-server python3 python3-pip python3-virtualenv virtualenv nodejs npm zsh git tmux libffi-dev libncurses5-dev xvfb chromedriver chromium build-essential libssl-dev curl git-core libicu-dev
+sudo apt-get install -y postgresql-9.4 postgresql-client-9.4 postgresql-server-dev-9.4 redis-server python3 python3-pip python3-virtualenv virtualenv nodejs npm zsh git tmux libffi-dev libncurses5-dev xvfb chromedriver chromium build-essential libssl-dev curl git-core
 
 INSTALL
 
@@ -88,6 +88,7 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder ".", "/vagrant",  type: 'nfs', mount_options: ['rw', 'vers=3', 'tcp', 'fsc' ,'actimeo=1']
 
   config.vm.provision "shell", inline: INSTALL
+  config.vm.provision "shell", path: ".infrastructure/install_icu.sh"
   config.vm.provision "shell", inline: SETUP
 
   # add local git and zsh config
