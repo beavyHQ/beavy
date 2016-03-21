@@ -118,3 +118,70 @@ And you can now find your app running on the mentioned URL.
 YAY \o/
 
 == Travis setup
+
+We use the (for open source free) link:https://travis-ci.org[Travis build service] on github to run continuous testing, integration and deploy and recommend you do the same. We already bring all the things you need to get started. Just head over to travis and activate the repository link:https://travis-ci.org/profile[on your account page].
+
+
+=== Update Travis config keys
+
+The only other thing you need to do is adapt the `.travis.yml` configuration to automatically deploy to your server.
+
+Just open the file in the editor of your choice and search for the `✨` (sparkle) sign, it alerts you about things you need to change. You should find the following section:
+
+```yaml
+env:
+  global:
+    # ✨ UNCOMMENT AND CHANGE THE FOLLOWING TO THE REMOTE SERVER YOU WANT TO BUILD
+    # - DEPLOY_COMMAND="git deploy dokku@SERVER:APP HEAD:master"
+    # ✨ CHANGE THE FOLLOWING TO SLUG OF YOUR REPO AND BRANCH
+    #    TO TRIGGER DEPLOY
+    - DEPLOY_SLUG=beavyHQ/beavy
+    - DEPLOY_BRANCH=master
+    # ✨ END OF CHANGES
+    - BEAVY_ENV=TEST
+    - secure: [..redacted..]
+  matrix:
+    # ✨ REPLACE THESE WITH THE APP YOU WANT TO BUILD
+    # RECOMMENDED WAY: comment these and add your own after
+    - APP=minima
+    - APP=hacker_news
+    # - APP=myAwesomeApp
+```
+
+Do as the comments say, uncommment the `DEPLOY_COMMAND` and fill in server-ip and app-name. In our case this would become ` - DEPLOY_COMMAND git deploy dokku@127.0.0.1:hello-world HEAD:master`. Then update the DEPLOY_SLUG and deploy branch. Lastly remove the existing apps and replace it with the app you want to build. In our example this would look like this:
+
+```yaml
+env:
+  global:
+    # ✨ UNCOMMENT AND CHANGE THE FOLLOWING TO THE REMOTE SERVER YOU WANT TO BUILD
+    - DEPLOY_COMMAND="git deploy dokku@127.0.0.1:hello-world HEAD:master"
+    # ✨ CHANGE THE FOLLOWING TO SLUG OF YOUR REPO AND BRANCH
+    #    TO TRIGGER DEPLOY
+    - DEPLOY_SLUG=EXAMPLE/hello-wolrd
+    - DEPLOY_BRANCH=hello-world
+    # ✨ END OF CHANGES
+    - BEAVY_ENV=TEST
+    - secure: [..redacted..]
+  matrix:
+    # ✨ REPLACE THESE WITH THE APP YOU WANT TO BUILD
+    # RECOMMENDED WAY: comment these and add your own after
+    - APP=hello_world
+```
+
+*Update ssh keys*
+
+In order for travis to be able to push to dokku, it needs access to the ssh keys. Of course _you should never_ commit your SSH keys into any github repo, but link:https://docs.travis-ci.com/user/encrypting-files[travis allows us to easily add them in an encrypted form] only travis can decrypt them with. In order for that to work. remove the `-secure=[...]` key and its value from the `.travis.yml` file.
+
+Now move an `ida_rsa` ssh-private-key-file, which has push-access to the dokku at `.infrastructure/travis/id_rsa` and run the travis encrypt command as follows (if you haven't yet, you might need to install and login with it first – see link:https://docs.travis-ci.com/user/encrypting-files[their docs on how to do that]): `travis encrypt .infrastructure/travis/id_rsa .infrastructure/travis/id_rsa.in`
+
+This encrypts the file and tells you about a command that you should add into your `.travis.yml` file, starting with `openssl aes-256...`. Copy that string and search for `openssl` in the current `.travis.yml`, should find a line which is again marked with a ✨ on top. Replace that command by pasting the one from the command line over it. Save the travis file.
+
+Now add `.travis.yml` and `.infrastructure/travis/id_rsa.in` - more sure **TO NOT** add the source ssh key – and commit the changes. Now push to the repo and travis should automatically pick it up, run the tests and deploy it on your server!
+
+```
+git add .travis.yml .infrastructure/travis/id_rsa.in
+git ci -m"Adding travis and dokku deploy setup"
+git push
+```
+
+You are done now!
