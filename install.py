@@ -22,7 +22,12 @@ if __name__ == '__main__':
     if os.environ.get("BEAVY_ENV", None):
         print("----- Adding basic requirements")
         collect(os.path.join(BASE_DIR, "beavy", "requirements", "base.txt"))
-        if os.environ.get("BEAVY_ENV", None) in ["TEST", "DEV", "DEBUG"]:
+
+        if os.environ.get("BEAVY_ENV", None) == "PRODUCTION":
+            print("----- Adding production requirements")
+            collect(os.path.join(BASE_DIR, "beavy", "requirements",
+                                 "production.txt"))
+        elif os.environ.get("BEAVY_ENV", None) in ["TEST", "DEV", "DEBUG"]:
             print("----- Adding dev requirements")
             collect(os.path.join(BASE_DIR, "beavy", "requirements", "dev.txt"))
     else:

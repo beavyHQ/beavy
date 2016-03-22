@@ -16,3 +16,4 @@ Vagrantfile
 .vagrant
 npm-debug.log
 .transifexrc
+.infrastructure/travis/id_rsa

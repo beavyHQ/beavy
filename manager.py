@@ -36,8 +36,12 @@ ext_migrate._get_config = patched_migrate(ext_migrate._get_config)
 from beavy.app import app, manager
 
 
-from behave.__main__ import main as behave_main
-from behave.configuration import options as behave_options
+try:
+    from behave.configuration import options as behave_options
+    from behave.__main__ import main as behave_main
+    has_behave = True
+except ImportError:
+    has_behave = False
 
 
 def reformat_options(opts):
@@ -74,12 +78,17 @@ class Behave(Command):
         exit(behave_main(sys.argv[2:] + ['--no-capture',
              "beavy_apps/{}/tests/features".format(frontend)]))
 
+if has_behave:
+    manager.add_command("behave", Behave())
 
-manager.add_command("behave", Behave())
+try:
+    import pytest
+    has_pytest = True
+except ImportError:
+    has_pytest = False
 
 
-@manager.command
-def pytest(path=None, no_coverage=False, maxfail=0,
+def pytest(path=None, no_coverage=False, maxfail=0,  # noqa
            debug=False, verbose=False):
     import pytest
 
@@ -111,6 +120,9 @@ def pytest(path=None, no_coverage=False, maxfail=0,
         get_all_beavy_paths(add_path)
 
     exit(pytest.main(arguments))
+
+if has_pytest:
+    manager.command(pytest)
 
 
 class GetPaths(Command):

@@ -1,0 +1,235 @@
+= Deploying with Dokku
+
+_This Guide was written for dokku 0.4.14._
+
+If you haven't yet, start by link:http://dokku.viewdocs.io/dokku/installation/[installing dokku]. If you want to run it on DigitalOcean, they provide a handy link:https://www.digitalocean.com/community/tutorials/how-to-use-the-dokku-one-click-digitalocean-image-to-run-a-node-js-app[one-click-installer for dokku].
+
+> *Digital Ocean Notes*
+> Make sure, however to *disable* IPv6 support when creating the droplet, link:http://dokku.viewdocs.io/dokku/getting-started/install/digitalocean/[as there are known issues with that for dokku].
+> If you are using the pre-built droplet, *make sure* to open a browser with the target IP (or domain) and finish the configuration once the droplet is up (you normally can just leave it as is and click `Finish Setup`). Once you are done with that, you can continue.
+
+== Beavy Configuration
+
+If you haven't yet created a local `config.yml` for your app. The easiest way to do that is by copying the `config.example.yml` file and fill in all the fields as the configuration asks you to. Don't forget to add the secret keys and don't worry about leaking information here, we will replace them on the production system via environment variables.
+
+Once you are done with that make sure that to force-commit it to repository:
+
+```bash
+git add -f config.yml
+git commit -m"Adding App configuration"
+```
+
+
+== Required Plugins
+
+For any Beavy app we need to install a link:http://dokku.viewdocs.io/dokku/plugins/[few plugins with dokku], mostly to provide external services like Database and Queuing. You need to install the following plugins: Redis, Postgres, RabbitMQ and Pre-Deploy-Services. Run the following commands on your dokku server (as root):
+
+```bash
+dokku plugin:install https://github.com/dokku/dokku-postgres.git postgres
+dokku plugin:install https://github.com/dokku/dokku-rabbitmq.git rabbitmq
+dokku plugin:install https://github.com/dokku/dokku-redis.git redis
+```
+
+== Create and Configure dokku app
+
+Start by creating your beavy app. We will use the "hello-world" as an example here for the appname, replace it with your appropriate name.
+
+`dokku apps:create hello-world`
+
+=== Create backends
+
+Next up we need to create the backend services and link them to our new app
+
+For Redis:
+
+```bash
+dokku redis:create hello-world
+dokku redis:link hello-world hello-world
+```
+
+For Postgres:
+
+```bash
+dokku postgres:create hello-world
+dokku postgres:link hello-world hello-world
+```
+
+For RabbitMQ:
+
+```bash
+dokku rabbitmq:create hello-world
+dokku rabbitmq:link hello-world hello-world
+```
+
+> Note: It appears the rabbitmq create hangs sometimes and doesn't do anything. Just press `ctrl` + `c` to confirm and it will continue just fine.
+
+To confirm you can type `dokku config hello-world` and should see all the previously mentioned services are linked there.
+
+---
+
+We need to setup some volumes for persistent storage
+
+```bash
+sudo -u dokku mkdir -p /home/dokku/hello-world/uploads
+sudo -u dokku mkdir -p /home/dokku/hello-world/backups
+dokku docker-options:add hello-world deploy,run "-v /home/dokku/hello-world/uploads:/APP/uploads"
+dokku docker-options:add hello-world deploy,run "-v /home/dokku/hello-world/backups:/APP/backups"
+```
+
+=== Set Environment Configuration
+
+Running beavy on the server means we need to expose the proper environment variables
+
+```bash
+dokku config:set hello-world DOKKU_DOCKERFILE_PORT=5000 BEAVY_ENV=PRODUCTION BEAVY_CONFIG_FROM_ENV=1 DOKKU_DOCKERFILE_START_CMD='/app/run.sh' C_FORCE_ROOT=1 SECRET_KEY=`cat /dev/urandom | tr -dc 'a-zA-Z0-9-!@#$%^&*()_+~' | fold -w 32 | head -n 1` SECURITY_PASSWORD_SALT=`cat /dev/urandom | tr -dc 'a-zA-Z0-9-!@#$%^&*()_+~' | fold -w 32 | head -n 1`
+
+```
+
+This informs dokku that we will be hosting the project on port 5000, tells beavy to run in the production mode and understand the environment variables as configuration option. This way it will automatically detect the services we linked perviously. In this mode, you can set any (first-level) configuration option of beavy via `dokku config:set`, too.
+
+In details this is what they do:
+
+ - `DOKKU_DOCKERFILE_PORT=5000` tells dokku that we will be serving on port `5000`.
+ - `BEAVY_ENV=PRODUCTION` sets beavy into production mode.
+ - `BEAVY_CONFIG_FROM_ENV=1` enabled Environment-variables overwrite of configuration values. This is necessary because dokku exposes connections to the backend services via environment variables we need to configure the service
+ - `DOKKU_DOCKERFILE_START_CMD='/app/run.sh'` informs dokku to run a custom script we are shipping in the container, which allows us to start either web or worker processes and scale properly with dokku features
+  - `C_FORCE_ROOT=1` informs celerey (our worker system) that is fine to run as root. At the moment, dokku makes somes troubles if we run the service as a different user. But constraint in the container that doesn't matter that much.
+  - SECRET_KEY and SECURITY_PASSWORD_SALT are overwriting our configuration options. Both have a short command in there to generate a random 32 character long alphanumeric key _once_ and becomes the value. This is the safest way to keep your system secure.
+
+
+== Travis setup
+
+We use the (for open source free) link:https://travis-ci.org[Travis build service] on github to run continuous testing, integration and deploy and recommend you do the same. We already bring all the things you need to get started. Just head over to travis and activate the repository link:https://travis-ci.org/profile[on your account page].
+
+
+=== Update Travis config keys
+
+The only other thing you need to do is adapt the `.travis.yml` configuration to automatically deploy to your server.
+
+Just open the file in the editor of your choice and search for the `✨` (sparkle) sign, it alerts you about things you need to change. You should find the following section:
+
+```yaml
+env:
+  global:
+    # ✨ UNCOMMENT AND CHANGE THE FOLLOWING TO THE REMOTE SERVER YOU WANT TO BUILD
+    # - DEPLOY_COMMAND="git push -f dokku@SERVER:APP HEAD:master"
+    # ✨ CHANGE THE FOLLOWING TO SLUG OF YOUR REPO AND BRANCH
+    #    TO TRIGGER DEPLOY
+    - DEPLOY_SLUG=beavyHQ/beavy
+    - DEPLOY_BRANCH=master
+    # ✨ END OF CHANGES
+    - BEAVY_ENV=TEST
+    - secure: [..redacted..]
+  matrix:
+    # ✨ REPLACE THESE WITH THE APP YOU WANT TO BUILD
+    # RECOMMENDED WAY: comment these and add your own after
+    - APP=minima
+    - APP=hacker_news
+    # - APP=myAwesomeApp
+```
+
+Do as the comments say, uncommment the `DEPLOY_COMMAND` and fill in server-ip and app-name. In our case this would become ` - DEPLOY_COMMAND git deploy dokku@127.0.0.1:hello-world HEAD:master`. Then update the DEPLOY_SLUG and deploy branch. Lastly remove the existing apps and replace it with the app you want to build. In our example this would look like this:
+
+```yaml
+env:
+  global:
+    # ✨ UNCOMMENT AND CHANGE THE FOLLOWING TO THE REMOTE SERVER YOU WANT TO BUILD
+    - DEPLOY_COMMAND="git push -f dokku@127.0.0.1:hello-world HEAD:master"
+    # ✨ CHANGE THE FOLLOWING TO SLUG OF YOUR REPO AND BRANCH
+    #    TO TRIGGER DEPLOY
+    - DEPLOY_SLUG=EXAMPLE/hello-wolrd
+    - DEPLOY_BRANCH=hello-world
+    # ✨ END OF CHANGES
+    - BEAVY_ENV=TEST
+    - secure: [..redacted..]
+  matrix:
+    # ✨ REPLACE THESE WITH THE APP YOU WANT TO BUILD
+    # RECOMMENDED WAY: comment these and add your own after
+    - APP=hello_world
+```
+
+*Add Dokku to known hosts*
+
+Search for the ✨ again and you should find one in the `addons->ssh_known_hosts` section, looking as follows:
+
+```yaml
+addons:
+  ssh_known_hosts:
+    - github.com
+    - 46.101.137.120
+    # ✨ ADD YOUR DEPLOYMENT SERVERNAME/IP HERE:
+    # - myserver.example.org
+  postgresql: '9.4'
+```
+
+Here, add the dokku server, so that travis will be able to connect and push to it through a ssh-tunneled git command. *Use the same name as you have for the push command before*, so if that is a domain, use that domain, if it was an IP use the ip. In our example it was the (localhost) IP `127.0.0.1`, so we will add that here. It would then look like the following:
+
+```yaml
+addons:
+  ssh_known_hosts:
+    - github.com
+    - 46.101.137.120
+    # ✨ ADD YOUR DEPLOYMENT SERVERNAME/IP HERE:
+    - 127.0.0.1
+  postgresql: '9.4'
+```
+
+*Update ssh keys*
+
+In order for travis to be able to push to dokku, it needs access to the ssh keys. Of course _you should never_ commit your SSH keys into any github repo, but link:https://docs.travis-ci.com/user/encrypting-files[travis allows us to easily add them in an encrypted form] only travis can decrypt them with. In order for that to work. remove the `-secure=[...]` key and its value from the `.travis.yml` file.
+
+Now move an `ida_rsa` ssh-private-key-file, which has push-access to the dokku at `.infrastructure/travis/id_rsa` and run the travis encrypt command as follows (if you haven't yet, you might need to install and login with it first – see link:https://docs.travis-ci.com/user/encrypting-files[their docs on how to do that]): `travis encrypt-file .infrastructure/travis/id_rsa .infrastructure/travis/id_rsa.in`
+
+This encrypts the file and tells you about a command that you should add into your `.travis.yml` file, starting with `openssl aes-256...`. Copy that string and search for `openssl` in the current `.travis.yml`, should find a line which is again marked with a ✨ on top. Replace that command by pasting the one from the command line over it. Save the travis file.
+
+Now add `.travis.yml` and `.infrastructure/travis/id_rsa.in` - make sure **TO NOT** add the source ssh key – and commit the changes. Now push to the repo and travis should automatically pick it up, run the tests and deploy it on your server!
+
+```
+git add .travis.yml .infrastructure/travis/id_rsa.in
+git commit -m"Adding travis and dokku deploy setup"
+git push
+```
+
+You are done now!
+
+
+== Troubleshooting
+
+=== Pushing locally
+
+If you have problems deploying, first make sure you can actually push to the dokku server. You can try that locally by creating a test branch, generate the assets (as that is needed first) and push that to dokku as follows:
+
+In the build, the system currently assumes the pre-built assets are shipped in the repository. Once we have travis set up, that will happen automatically, but if you want to push from your local repository, the build will fail because it can't find them.
+
+To still be able to push, we recommend you check out a temporary branch, build the assets (for e.g. from within your vagrant), commit and push that. The commands would be as follows
+
+```
+export BEAVY_ENV=PRODUCTION
+git checkout -b test-deploy
+npm install --all
+npm run build
+git add -f var/assets/*
+git commit -m"Adding assets for deploy"
+```
+
+Then you can push the current HEAD of your git via (this does _not_ push uncommitted changes!):
+
+```
+git push dokku@SERVER:hello-world HEAD:master
+```
+
+
+The first push might take a while because dokku needs to make the first pull of the docker image and other dependencies, and the output will inform you about all the stuff going on. But if it all succeeds it will end with something along the lines of:
+
+```
+=====> Application deployed:
+       http://hello-world.example.com
+```
+
+And you can now find your app running on the mentioned URL.
+
+If this worked all fine, your dokku setup is working just fine and you should investigate the travis setup.
+
+=== Getting help
+
+If you have other troubles, you are welcome to swing by our link:https://gitter.im/beavyHQ/beavy[Gitter Online Chat] and we will try to help you fixing the problems.

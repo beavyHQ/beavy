@@ -44,6 +44,18 @@ def make_env(app):
     with open(os.path.join(os.getcwd(), 'config.yml'), "r") as r:
         deepmerge(app.config, yaml.load(r))
 
+    # allow for environment variables to update items
+    if os.environ.get("BEAVY_CONFIG_FROM_ENV", False):
+        app.config.update(os.environ)
+
+        if "DATABASE_URL" in os.environ:
+            app.config["SQLALCHEMY_DATABASE_URI"] = os.environ["DATABASE_URL"]
+        if "RABBITMQ_URL" in os.environ:
+            app.config["CELERY_BROKER_URL"] = os.environ["RABBITMQ_URL"]
+        if "REDIS_URL" in os.environ:
+            app.config["RATELIMIT_STORAGE_URL"] = os.environ["REDIS_URL"]
+            app.config["CACHE_REDIS_URL"] = os.environ["REDIS_URL"]
+
     # update social buttons
     _FLBLPRE = "flask_social_blueprint.providers.{}"
     if "SOCIAL_BLUEPRINT" not in app.config:

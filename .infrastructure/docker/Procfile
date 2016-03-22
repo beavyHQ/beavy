@@ -1,0 +1,2 @@
+web: gunicorn main:app -w 4 -b :5000
+worker: celery -A beavy.app.celery worker -l info
