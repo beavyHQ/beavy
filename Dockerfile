@@ -1,2 +1,2 @@
-FROM beavy:beavy-base-image
+FROM beavy/beavy-base-image
 MAINTAINER ben@create-build-execute.com
