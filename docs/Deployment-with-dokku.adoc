@@ -112,7 +112,7 @@ Just open the file in the editor of your choice and search for the `✨` (sparkl
 env:
   global:
     # ✨ UNCOMMENT AND CHANGE THE FOLLOWING TO THE REMOTE SERVER YOU WANT TO BUILD
-    # - DEPLOY_COMMAND="git deploy dokku@SERVER:APP HEAD:master"
+    # - DEPLOY_COMMAND="git push -f dokku@SERVER:APP HEAD:master"
     # ✨ CHANGE THE FOLLOWING TO SLUG OF YOUR REPO AND BRANCH
     #    TO TRIGGER DEPLOY
     - DEPLOY_SLUG=beavyHQ/beavy
@@ -134,7 +134,7 @@ Do as the comments say, uncommment the `DEPLOY_COMMAND` and fill in server-ip an
 env:
   global:
     # ✨ UNCOMMENT AND CHANGE THE FOLLOWING TO THE REMOTE SERVER YOU WANT TO BUILD
-    - DEPLOY_COMMAND="git deploy dokku@127.0.0.1:hello-world HEAD:master"
+    - DEPLOY_COMMAND="git push -f dokku@127.0.0.1:hello-world HEAD:master"
     # ✨ CHANGE THE FOLLOWING TO SLUG OF YOUR REPO AND BRANCH
     #    TO TRIGGER DEPLOY
     - DEPLOY_SLUG=EXAMPLE/hello-wolrd
