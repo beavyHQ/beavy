@@ -82,7 +82,7 @@ after_success:
   # show us the coverage report
   - coverage report -m
   # send it all to coveralls
-  - coveralls
+  - coveralls || echo "skipped"
   # decrypt the ssh key
   # ✨ YOU PROBABLY HAVE TO REPLACE THIS WITH THE COMMAND FOR YOUR
   #    OWN id_rsa file!
