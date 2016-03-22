@@ -94,43 +94,8 @@ In details this is what they do:
  - `BEAVY_CONFIG_FROM_ENV=1` enabled Environment-variables overwrite of configuration values. This is necessary because dokku exposes connections to the backend services via environment variables we need to configure the service
  - `DOKKU_DOCKERFILE_START_CMD='/app/run.sh'` informs dokku to run a custom script we are shipping in the container, which allows us to start either web or worker processes and scale properly with dokku features
   - `C_FORCE_ROOT=1` informs celerey (our worker system) that is fine to run as root. At the moment, dokku makes somes troubles if we run the service as a different user. But constraint in the container that doesn't matter that much.
+  - SECRET_KEY and SECURITY_PASSWORD_SALT are overwriting our configuration options. Both have a short command in there to generate a random 32 character long alphanumeric key _once_ and becomes the value. This is the safest way to keep your system secure.
 
-== Your first push
-
-Now you can try to push the app for the first time, to see if it builds properly. If you haven't yet created a local `config.yml` for your app, do that and force add it to git (`git add -f config.yml`) – otherwise it will break (with `lstat config.yml: no such file or directory`).
-
-=== Assets
-
-In the build, the system currently assumes the pre-built assets are shipped in the repository. Once we have travis set up, that will happen automatically, but if you want to push from your local repository, the build will fail because it can't find them.
-
-To still be able to push, we recommend you check out a temporary branch, build the assets (for e.g. from within your vagrant), commit and push that. The commands would be as follows
-
-```
-export BEAVY_ENV=PRODUCTION
-git co -b test-deploy
-npm install --all
-npm run build
-git add -f config.yml var/assets/*
-git commit -m"Adding config and assets for deploy"
-```
-
-Then you can push the current HEAD of your git via (this does _not_ push uncommitted changes!):
-
-```
-git push dokku@SERVER:hello-world HEAD:master
-```
-
-
-The first push might take a while because dokku needs to make the first pull of the docker image and other dependencies, and the output will inform you about all the stuff going on. But if it all succeeds it will end with something along the lines of:
-
-```
-=====> Application deployed:
-       http://hello-world.example.com
-```
-
-And you can now find your app running on the mentioned URL.
-
-YAY \o/
 
 == Travis setup
 
@@ -226,3 +191,45 @@ git push
 ```
 
 You are done now!
+
+
+== Troubleshooting
+
+=== Pushing locally
+
+If you have problems deploying, first make sure you can actually push to the dokku server. You can try that locally by creating a test branch, generate the assets (as that is needed first) and push that to dokku as follows:
+
+In the build, the system currently assumes the pre-built assets are shipped in the repository. Once we have travis set up, that will happen automatically, but if you want to push from your local repository, the build will fail because it can't find them.
+
+To still be able to push, we recommend you check out a temporary branch, build the assets (for e.g. from within your vagrant), commit and push that. The commands would be as follows
+
+```
+export BEAVY_ENV=PRODUCTION
+git checkout -b test-deploy
+npm install --all
+npm run build
+git add -f var/assets/*
+git commit -m"Adding assets for deploy"
+```
+
+Then you can push the current HEAD of your git via (this does _not_ push uncommitted changes!):
+
+```
+git push dokku@SERVER:hello-world HEAD:master
+```
+
+
+The first push might take a while because dokku needs to make the first pull of the docker image and other dependencies, and the output will inform you about all the stuff going on. But if it all succeeds it will end with something along the lines of:
+
+```
+=====> Application deployed:
+       http://hello-world.example.com
+```
+
+And you can now find your app running on the mentioned URL.
+
+If this worked all fine, your dokku setup is working just fine and you should investigate the travis setup.
+
+=== Getting help
+
+If you have other troubles, you are welcome to swing by our link:https://gitter.im/beavyHQ/beavy[Gitter Online Chat] and we will try to help you fixing the problems.
