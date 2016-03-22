@@ -168,6 +168,32 @@ env:
     - APP=hello_world
 ```
 
+*Add Dokku to known hosts*
+
+Search for the ✨ again and you should find one in the `addons->ssh_known_hosts` section, looking as follows:
+
+```yaml
+addons:
+  ssh_known_hosts:
+    - github.com
+    - 46.101.137.120
+    # ✨ ADD YOUR DEPLOYMENT SERVERNAME/IP HERE:
+    # - myserver.example.org
+  postgresql: '9.4'
+```
+
+Here, add the dokku server, so that travis will be able to connect and push to it through a ssh-tunneled git command. *Use the same name as you have for the push command before*, so if that is a domain, use that domain, if it was an IP use the ip. In our example it was the (localhost) IP `127.0.0.1`, so we will add that here. It would then look like the following:
+
+```yaml
+addons:
+  ssh_known_hosts:
+    - github.com
+    - 46.101.137.120
+    # ✨ ADD YOUR DEPLOYMENT SERVERNAME/IP HERE:
+    - 127.0.0.1
+  postgresql: '9.4'
+```
+
 *Update ssh keys*
 
 In order for travis to be able to push to dokku, it needs access to the ssh keys. Of course _you should never_ commit your SSH keys into any github repo, but link:https://docs.travis-ci.com/user/encrypting-files[travis allows us to easily add them in an encrypted form] only travis can decrypt them with. In order for that to work. remove the `-secure=[...]` key and its value from the `.travis.yml` file.
