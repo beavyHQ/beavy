@@ -198,7 +198,7 @@ addons:
 
 In order for travis to be able to push to dokku, it needs access to the ssh keys. Of course _you should never_ commit your SSH keys into any github repo, but link:https://docs.travis-ci.com/user/encrypting-files[travis allows us to easily add them in an encrypted form] only travis can decrypt them with. In order for that to work. remove the `-secure=[...]` key and its value from the `.travis.yml` file.
 
-Now move an `ida_rsa` ssh-private-key-file, which has push-access to the dokku at `.infrastructure/travis/id_rsa` and run the travis encrypt command as follows (if you haven't yet, you might need to install and login with it first – see link:https://docs.travis-ci.com/user/encrypting-files[their docs on how to do that]): `travis encrypt .infrastructure/travis/id_rsa .infrastructure/travis/id_rsa.in`
+Now move an `ida_rsa` ssh-private-key-file, which has push-access to the dokku at `.infrastructure/travis/id_rsa` and run the travis encrypt command as follows (if you haven't yet, you might need to install and login with it first – see link:https://docs.travis-ci.com/user/encrypting-files[their docs on how to do that]): `travis encrypt-file .infrastructure/travis/id_rsa .infrastructure/travis/id_rsa.in`
 
 This encrypts the file and tells you about a command that you should add into your `.travis.yml` file, starting with `openssl aes-256...`. Copy that string and search for `openssl` in the current `.travis.yml`, should find a line which is again marked with a ✨ on top. Replace that command by pasting the one from the command line over it. Save the travis file.
 
