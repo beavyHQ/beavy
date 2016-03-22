@@ -8,6 +8,18 @@ If you haven't yet, start by link:http://dokku.viewdocs.io/dokku/installation/[i
 > Make sure, however to *disable* IPv6 support when creating the droplet, link:http://dokku.viewdocs.io/dokku/getting-started/install/digitalocean/[as there are known issues with that for dokku].
 > If you are using the pre-built droplet, *make sure* to open a browser with the target IP (or domain) and finish the configuration once the droplet is up (you normally can just leave it as is and click `Finish Setup`). Once you are done with that, you can continue.
 
+== Beavy Configuration
+
+If you haven't yet created a local `config.yml` for your app. The easiest way to do that is by copying the `config.example.yml` file and fill in all the fields as the configuration asks you to. Don't forget to add the secret keys and don't worry about leaking information here, we will replace them on the production system via environment variables.
+
+Once you are done with that make sure that to force-commit it to repository:
+
+```bash
+git add -f config.yml
+git commit -m"Adding App configuration"
+```
+
+
 == Required Plugins
 
 For any Beavy app we need to install a link:http://dokku.viewdocs.io/dokku/plugins/[few plugins with dokku], mostly to provide external services like Database and Queuing. You need to install the following plugins: Redis, Postgres, RabbitMQ and Pre-Deploy-Services. Run the following commands on your dokku server (as root):
@@ -18,7 +30,7 @@ dokku plugin:install https://github.com/dokku/dokku-rabbitmq.git rabbitmq
 dokku plugin:install https://github.com/dokku/dokku-redis.git redis
 ```
 
-== Create and Configure app
+== Create and Configure dokku app
 
 Start by creating your beavy app. We will use the "hello-world" as an example here for the appname, replace it with your appropriate name.
 
@@ -68,7 +80,10 @@ dokku docker-options:add hello-world deploy,run "-v /home/dokku/hello-world/back
 
 Running beavy on the server means we need to expose the proper environment variables
 
-`dokku config:set hello-world DOKKU_DOCKERFILE_PORT=5000 BEAVY_ENV=PRODUCTION BEAVY_CONFIG_FROM_ENV=1 DOKKU_DOCKERFILE_START_CMD='/app/run.sh' C_FORCE_ROOT=1`
+```bash
+dokku config:set hello-world DOKKU_DOCKERFILE_PORT=5000 BEAVY_ENV=PRODUCTION BEAVY_CONFIG_FROM_ENV=1 DOKKU_DOCKERFILE_START_CMD='/app/run.sh' C_FORCE_ROOT=1 SECRET_KEY=`cat /dev/urandom | tr -dc 'a-zA-Z0-9-!@#$%^&*()_+~' | fold -w 32 | head -n 1` SECURITY_PASSWORD_SALT=`cat /dev/urandom | tr -dc 'a-zA-Z0-9-!@#$%^&*()_+~' | fold -w 32 | head -n 1`
+
+```
 
 This informs dokku that we will be hosting the project on port 5000, tells beavy to run in the production mode and understand the environment variables as configuration option. This way it will automatically detect the services we linked perviously. In this mode, you can set any (first-level) configuration option of beavy via `dokku config:set`, too.
 
@@ -206,7 +221,7 @@ Now add `.travis.yml` and `.infrastructure/travis/id_rsa.in` - make sure **TO NO
 
 ```
 git add .travis.yml .infrastructure/travis/id_rsa.in
-git ci -m"Adding travis and dokku deploy setup"
+git commit -m"Adding travis and dokku deploy setup"
 git push
 ```
 
