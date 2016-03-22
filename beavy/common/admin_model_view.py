@@ -8,7 +8,7 @@ from flask_security import current_user
 class AdminModelView(ModelView):
 
     def is_accessible(self):
-        if not current_user.is_active() or not current_user.is_authenticated:
+        if not current_user.is_active or not current_user.is_authenticated:
             return False
 
         if current_user.has_role('admin'):
