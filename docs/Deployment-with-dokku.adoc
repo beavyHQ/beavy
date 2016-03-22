@@ -202,7 +202,7 @@ Now move an `ida_rsa` ssh-private-key-file, which has push-access to the dokku a
 
 This encrypts the file and tells you about a command that you should add into your `.travis.yml` file, starting with `openssl aes-256...`. Copy that string and search for `openssl` in the current `.travis.yml`, should find a line which is again marked with a ✨ on top. Replace that command by pasting the one from the command line over it. Save the travis file.
 
-Now add `.travis.yml` and `.infrastructure/travis/id_rsa.in` - more sure **TO NOT** add the source ssh key – and commit the changes. Now push to the repo and travis should automatically pick it up, run the tests and deploy it on your server!
+Now add `.travis.yml` and `.infrastructure/travis/id_rsa.in` - make sure **TO NOT** add the source ssh key – and commit the changes. Now push to the repo and travis should automatically pick it up, run the tests and deploy it on your server!
 
 ```
 git add .travis.yml .infrastructure/travis/id_rsa.in
