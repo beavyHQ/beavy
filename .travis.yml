@@ -24,6 +24,8 @@ env:
     # - APP=myAwesomeApp
 
 before_install:
+  # install latest ICU for best localisation support
+  - bash .infrastructure/install_icu.sh
   # if there isn't a config file, pick up the
   # one used for the testing of the app
   - "[ ! -f config.yml ] && cp -f \"beavy_apps/$APP/tests/config.yml\" config.yml || echo \"config file already found\" "
@@ -36,7 +38,7 @@ before_install:
   # install all node dependencies
   - npm install --all
   # install all python dependencies (requires a config.yml!)
-  - python install.py
+  - LD_LIBRARY_PATH=~/lib python install.py
   # install coveralls to send coverage stats there
   - pip install coveralls
 
@@ -136,6 +138,7 @@ after_success:
 cache:
   directories:
     - $HOME/.cache/pip
+    - $HOME/.icu_cache
     - node_modules
 
 services:
