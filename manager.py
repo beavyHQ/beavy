@@ -35,6 +35,7 @@ ext_migrate._get_config = patched_migrate(ext_migrate._get_config)
 
 from beavy.app import app, manager
 
+
 try:
     from behave.configuration import options as behave_options
     from behave.__main__ import main as behave_main
