@@ -74,6 +74,12 @@ sudo chsh -s /bin/zsh vagrant
 # create the virualenv for vagrant
 sudo -u vagrant virtualenv -p python3 /home/vagrant/venv
 
+# keep node modules on vagrant instance only
+# releases stress on webpack watch, keeps stuff smoothly separated
+sudo -u vagrant mkdir -p /home/vagrant/node_modules
+sudo -u vagrant mkdir -p /vagrant/node_modules
+sudo mount --bind /home/vagrant/node_modules /vagrant/node_modules
+
 SETUP
 
 Vagrant.configure(2) do |config|
