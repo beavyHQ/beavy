@@ -18,7 +18,7 @@ export class MainMenu extends React.Component {
           <span className={styles.title}>{this.props.name || __CONFIG__NAME}</span>
         </Link>
         <a href='' className={styles.navigationMenuButton}>MENU</a>
-        <nav role='navigation'>
+        <nav class={styles.navigationNav} role='navigation'>
           <ul className={classnames(styles.navigationMenu, styles.show)}>
             {this.props.children}
           </ul>
