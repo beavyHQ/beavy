@@ -4,6 +4,7 @@ var config = require('./make-webpack-config')({
   devtool: '#cheap-module-eval-source-map',
   separateStylesheet: true,
   debug: true,
+  redux_dev_tools: true,
   watchOptions: {
     poll: true
   }

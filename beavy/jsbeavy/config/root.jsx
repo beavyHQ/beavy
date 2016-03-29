@@ -62,53 +62,25 @@ export default class Root extends React.Component {
   }
 
   render () {
-    let debugTools = null
-
-    if (__REDUX_DEV_TOOLS__) {
-      const { DevTools, LogMonitor, DebugPanel } = require('redux-devtools/lib/react')
-      if (__DEBUG_NW__) {
-        const win = window.open(
-              null,
-              'redux-devtools', // give it a name so it reuses the same window
-              'menubar=no,location=no,resizable=yes,scrollbars=no,status=no'
-            )
-
-            // reload in case it's reusing the same window with the old content
-        win.location.reload()
-
-            // wait a little bit for it to reload, then render
-        setTimeout(() => {
-          React.render(
-                <DebugPanel top right bottom left >
-                  <DevTools store={this.props.store} monitor={LogMonitor} />
-                </DebugPanel>
-                , win.document.body)
-        }, 10)
-        return
-      } else {
-        debugTools = (
-            <DebugPanel top left bottom key='debugPanel'>
-              <DevTools store={this.props.store} monitor={LogMonitor} />
-            </DebugPanel>
-          )
-      }
+    if (__REDUX_DEV_TOOLS__ ){
+      const { showDevTools } = require('./devTools');
+      showDevTools(this.props.store);
     }
 
     setupViews(this.props.application)
 
     return (
-      <div>
-        {debugTools}
-          <IntlProvider locale='en' messages={ window.PRELOAD.MESSAGES }>
-            <Provider store={this.props.store}>
-              <ReduxRouter>
-                <Route component={this.props.application}>
-                  {this.getRoutes()}
-                </Route>
-              </ReduxRouter>
-            </Provider>
-          </IntlProvider>
-        </div>
+      <IntlProvider locale='en' messages={ window.PRELOAD.MESSAGES }>
+        <Provider store={this.props.store}>
+          <div>
+            <ReduxRouter>
+              <Route component={this.props.application}>
+                {this.getRoutes()}
+              </Route>
+            </ReduxRouter>
+          </div>
+        </Provider>
+      </IntlProvider>
     )
   }
 }
