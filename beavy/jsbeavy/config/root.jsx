@@ -1,4 +1,4 @@
-/*global __DEBUG_NW__, __REDUX_DEV_TOOLS__, __CONFIG__URLS_HOME */
+/*global __REDUX_DEV_TOOLS__, __CONFIG__URLS_HOME */
 import React from 'react'
 import { Provider } from 'react-redux'
 import { Route, Redirect } from 'react-router'
@@ -62,9 +62,9 @@ export default class Root extends React.Component {
   }
 
   render () {
-    if (__REDUX_DEV_TOOLS__ ){
-      const { showDevTools } = require('./devTools');
-      showDevTools(this.props.store);
+    if (__REDUX_DEV_TOOLS__) {
+      const { showDevTools } = require('./devTools')
+      showDevTools(this.props.store)
     }
 
     setupViews(this.props.application)
