@@ -40,12 +40,14 @@ export default function configureStore (initialState) {
   let createStoreWithMiddleware = applyMiddleware.apply(this, middlewares)
 
   if (__REDUX_DEV_TOOLS__) {
-    const { devTools, persistState } = require('redux-devtools')
+    const { DevTools } = require('../config/devTools')
+    const { persistState } = require('redux-devtools')
+
     createStoreWithMiddleware = compose(
         createStoreWithMiddleware,
         reduxReactRouter({ createHistory }),
         // Provides support for DevTools:
-        devTools(),
+        DevTools.instrument(),
         // Lets you write ?debug_session=<name> in address bar to persist debug sessions
         persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
       )
