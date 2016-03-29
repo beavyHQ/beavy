@@ -74,7 +74,7 @@ module.exports = function (options) {
   var externals = [ ]
   var modulesDirectories = ['web_modules', 'node_modules']
   var extensions = ['', '.web.js', '.js', '.jsx']
-  var root = JS_ROOT
+  var root = [path.resolve(ROOT, 'beavy_apps', appConfig.APP, 'frontend'), JS_ROOT]
   var publicPath = options.devServer ? 'http://localhost:2992/assets/' : '/assets/'
   var output = {
     path: path.join(ROOT, 'assets'),
