@@ -17,7 +17,7 @@ API_MIMETYPES = set((
 def load_modules_and_app(app):
     logger = getLogger("beavy.loadModules")
     loaders = []
-    for modl in app.config.get("MODULES", []):
+    for modl in (app.config.get("MODULES", None) or []):
         # load module
         logger.debug("Importing Module {}".format(modl))
         subm = importlib.import_module("beavy_modules.{}".format(modl))
