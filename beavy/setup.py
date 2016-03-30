@@ -18,7 +18,7 @@ from beavy import views     # noqa
 
 
 # register blueprints
-from .blueprints import setup as register_blueprints
+from .blueprints import setup as register_blueprints  # noqa
 register_blueprints(app)
 
 

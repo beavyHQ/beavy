@@ -90,6 +90,9 @@ def pytest(path=None, no_coverage=False, maxfail=0,  # noqa
         arguments.append("--cov={}".format(x))
         arguments.append(x)
 
+    def simple_add(x):
+        arguments.append(x)
+
     if maxfail:
         arguments.append("--maxfail={}".format(maxfail))
 
@@ -100,7 +103,7 @@ def pytest(path=None, no_coverage=False, maxfail=0,  # noqa
         arguments.append("--pdb")
 
     if no_coverage:
-        add_path = lambda x: arguments.append(x)
+        add_path = simple_add
     else:
         arguments.extend(["--cov-config", ".coveragerc"])
         add_path = add_path_with_coverage

@@ -19,8 +19,8 @@ def before_all(context):
     context.default_browser = os.getenv("BEHAVE_DEFAULT_BROWSER", 'chrome')
 
     context.default_browser_size = (1280, 1024)
-    default_url = "http://localhost:{}".format(app.config.get("DEBUG", False)
-                                               and "2992" or "5000")
+    port = "2992" if app.config.get("DEBUG", False) else "5000"
+    default_url = "http://localhost:{}".format(port)
     context.base_url = os.getenv("BEHAVE_BASE_URL", default_url)
 
     benv.before_all(context)
