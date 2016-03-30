@@ -35,7 +35,7 @@ if __name__ == '__main__':
         collect(os.path.join(BASE_DIR, "beavy", "requirements", "base.txt"))
         collect(os.path.join(BASE_DIR, "beavy", "requirements", "dev.txt"))
 
-    for module in config["MODULES"]:
+    for module in (config["MODULES"] or ()):
         filename = os.path.join(BASE_DIR,
                                 "beavy_modules", module, "requirements.txt")
         if os.path.exists(filename):
