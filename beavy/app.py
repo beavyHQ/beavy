@@ -161,7 +161,7 @@ for handler in app.logger.handlers:
 cache = Cache(app)
 
 #  -------------- initialize i18n --------------
-from flask.ext.icu import ICU, get_messages
+from flask.ext.icu import ICU, get_messages           # noqa
 icu = ICU(app, app.config.get("DEFAULT_LANGUAGE"))
 
 
@@ -183,9 +183,9 @@ def get_locale():
 
 
 #  ------ Database setup is done after here ----------
-from beavy.models.user import User
-from beavy.models.role import Role
-from beavy.models.social_connection import SocialConnection
+from beavy.models.user import User  # noqa
+from beavy.models.role import Role  # noqa
+from beavy.models.social_connection import SocialConnection  # noqa
 
 # Setup Flask-Security
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
@@ -202,7 +202,7 @@ admin = Admin(app,
               template_mode='bootstrap3',)
 
 
-from beavy.common.admin_model_view import AdminModelView
+from beavy.common.admin_model_view import AdminModelView     # noqa
 # setup admin UI stuff
 admin.add_view(AdminModelView(User, db.session,
                               name="Users",
@@ -211,7 +211,7 @@ admin.add_view(AdminModelView(User, db.session,
 
 
 #  ----- finally, load all configured modules ---------
-from .setup import replaceHomeEndpoint, generate_capability_maps
+from .setup import replaceHomeEndpoint, generate_capability_maps    # noqa
 
 # set up static files loading using the manifest in production
 setup_statics(app)
@@ -219,10 +219,10 @@ setup_statics(app)
 # and set the home endpoint
 replaceHomeEndpoint(app)
 
-from .models.object import Object
+from .models.object import Object   # noqa
 generate_capability_maps(Object)
 
-from .models.activity import Activity
+from .models.activity import Activity   # noqa
 generate_capability_maps(Activity)
 
 # ----- some debug features
@@ -231,7 +231,7 @@ if app.debug:
 
     @app.before_first_request
     def ensure_users():
-        from datetime import datetime
+        from datetime import datetime    # noqa
         admin_role = user_datastore.find_or_create_role('admin')
         pw = encrypt_password("password")
 

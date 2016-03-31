@@ -7,8 +7,8 @@ class BaseUser(Schema):
         type_ = "user"
 
     id = fields.Function(lambda obj: obj.__LOOKUP_ATTRS__ and
-                         getattr(obj, obj.__LOOKUP_ATTRS__[0])
-                         or obj.id)
+                         getattr(obj, obj.__LOOKUP_ATTRS__[0]) or
+                         obj.id)
     beavyId = fields.Integer(attribute="id")
     name = fields.String()
     active = fields.Boolean()

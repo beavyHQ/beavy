@@ -102,15 +102,16 @@ class AmazonISBNFinder:
 
 class AlternateFinder:
     def __call__(self, soup, data, url=None):
-        map = lambda link: (link.get("type") or
-                            link.get("media") or
-                            link.get("hreflang") or
-                            link.get("href").split("://", 1)[0],
-                            link.get("href"))
+        def mapper(link):
+            return (link.get("type") or
+                    link.get("media") or
+                    link.get("hreflang") or
+                    link.get("href").split("://", 1)[0],
+                    link.get("href"))
         data["alternates"] = target = {}
 
         for name in ("alternate", "alternative"):
-            target.update(dict([map(link)
+            target.update(dict([mapper(link)
                                 for link in soup.find_all('link',
                                                           {'rel': name})]))
 

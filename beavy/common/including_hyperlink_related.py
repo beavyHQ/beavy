@@ -1,9 +1,9 @@
 
-from marshmallow_jsonapi.fields import HyperlinkRelated
+from marshmallow_jsonapi.fields import Relationship
 from marshmallow_jsonapi.utils import get_value_or_raise
 
 
-class IncludingHyperlinkRelated(HyperlinkRelated):
+class IncludingHyperlinkRelated(Relationship):
 
     def __init__(self, nestedObj, *args,  **kwargs):
         if callable(nestedObj):
