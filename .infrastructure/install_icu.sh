@@ -1,9 +1,9 @@
 #!/bin/bash
 
 set -e
-mkdir -p ~/.icu_cache
-mkdir -p ~/lib
-cd ~/.icu_cache
+mkdir -p "$HOME/.icu_cache"
+mkdir -p "$HOME/lib"
+cd "$HOME/.icu_cache"
 if [ ! -d "icu4c-57rc-src" ]; then
     echo "Downloading latest ICU – please wait."
     wget --quiet http://download.icu-project.org/files/icu4c/57rc/icu4c-57rc-src.tgz
@@ -15,9 +15,9 @@ if [ ! -d "icu4c-57rc-src" ]; then
     mv icu icu4c-57rc-src
 fi
 
-[ "$TRAVIS" == "true" ] && PREFIX="~/lib" || PREFIX="/usr"
+[ "$TRAVIS" == "true" ] && PREFIX="$HOME/lib" || PREFIX="/usr"
 
 echo "Compiling and installing ICU to $PREFIX"
 cd icu4c-57rc-src/source
-./configure prefix=$PREFIX && make && make install
+./configure --prefix=$PREFIX && make && make install
 echo "ICU successfully installed."
