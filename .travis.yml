@@ -1,5 +1,5 @@
-sudo: false
-
+sudo: required
+dist: trusty
 language: python
 
 python:
@@ -15,6 +15,7 @@ env:
     - DEPLOY_BRANCH=master
     # ✨ END OF CHANGES
     - BEAVY_ENV=TEST
+    - LD_LIBRARY_PATH=/home/travis/lib
     - secure: 42qbN2sBRUwB8q99XdMJDsr1FelB3fUA8wRjRbH7ZGKRDH6CKHALno/RV2QIzpbJTlwi/6ax5MV3FQTEPN5p726Zj1JiwOun3RW2kRdqCm/xNGyh4B5FxJxyzq0hSIFdJCXihJd1Frm2JltHMkRCadl6VtlmdY9L7N1SRHQoJs0X4wU354LJFpDu2trBZKESUWee73VgdynDwlT6nehwcj42TxyXt9lr3moZUHLIfXvnyMFL7tp1CDMdbAkD4m1hq1UG1jxHQRbHfzTEtem+8oVAi8I3Hrpds4/lnIjP6/LJi8bR3c9rKKykKe1EKZnhYUf/lwD00jdR4g8c1tR3F/kTByFjxGFRfpRUzJXi6dD8Q2JOdu8zVAuIgnZg2Gh+c5z+V3/L27ax1x4sYyiXbi/lQpbE6XSkn4wLWi9Y1TK1kl1N92NkVipLwHz535tcWLwQ9KwzpVUBznGcYw5XQO3sbVcSF4PiEpiET+MjwV5o5MkOfD67FATZo9GlSwKpmSoSsd2JgpjzieRNt+VDyC4liDWco2HA3191DSO2f/q91w3bpwlGRCKP/X78npeIVGCMOzWSnTmPtOLZd3MjC/g/HFb90SG6cjAC1nTkR8RHTAXYBSnUZgr1Gl/8A1I86LSDKhXGoBGHjJTFt0ViAX+Ho9Yn0LCrtrN7SeiuSEs=
   matrix:
     # ✨ REPLACE THESE WITH THE APP YOU WANT TO BUILD
@@ -38,7 +39,7 @@ before_install:
   # install all node dependencies
   - npm install --all
   # install all python dependencies (requires a config.yml!)
-  - LD_LIBRARY_PATH=~/lib python install.py
+  - python install.py
   # install coveralls to send coverage stats there
   - pip install coveralls
 
