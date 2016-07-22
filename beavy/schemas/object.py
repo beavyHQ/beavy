@@ -22,14 +22,7 @@ class ObjectField(MorphingSchema):
 
 
 class ObjectSchema(ObjectField, Schema):
-    # These are not used; adding to prevent
-    # errors thrown by marshamllow_jsonapi, e.g.:
-    #   - "Must specify type_ class Meta option"
-    class Meta:
-        type_ = "object"
-
-    id = fields.Integer()
-
+    pass
 
 
 objects_paged = makePaginationSchema(ObjectSchema)()
