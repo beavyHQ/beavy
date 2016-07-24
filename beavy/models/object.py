@@ -14,7 +14,7 @@ from collections import defaultdict
 
 class ObjectQuery(AccessQuery):
 
-    def by_capability(self, aborting=True, abort_code=404, *caps):
+    def by_capability(self, *caps, aborting=True, abort_code=404):
         caps = set(chain.from_iterable(map(lambda c:
                                            getattr(Object.TypesForCapability,
                                                    getattr(c, 'value', c), []),
