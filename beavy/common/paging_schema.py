@@ -1,5 +1,5 @@
 from marshmallow import Schema, fields, post_dump
-
+from beavy.common.morphing_schema import MorphingNested
 
 class BasePaging(Schema):
     has_next = fields.Boolean()
@@ -17,11 +17,11 @@ class BasePaging(Schema):
         # FIXME: add support for paging links
         return {
             "meta": data,
-            "data": items.get("data", []),
-            "links": items.get("links", [])
+            "data": items,
+            #"links": items.get("links", [])
             }
 
 
-def makePaginationSchema(itemsCls, field_cls=fields.Nested):
+def makePaginationSchema(itemsCls, field_cls=MorphingNested):
     return type("{}Paging".format(itemsCls.__class__.__name__),
                 (BasePaging, ), dict(items=field_cls(itemsCls, many=True)))
