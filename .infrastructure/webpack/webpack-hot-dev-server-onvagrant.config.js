@@ -1,7 +1,7 @@
 var config = require('./make-webpack-config')({
   devServer: true,
   hotComponents: true,
-  devtool: '#cheap-module-eval-source-map',
+  devtool: '#inline-source-map',
   separateStylesheet: true,
   debug: true,
   redux_dev_tools: true,
