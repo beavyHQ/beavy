@@ -17,8 +17,8 @@ class BasePaging(Schema):
         # FIXME: add support for paging links
         return {
             "meta": data,
-            "data": items,
-            #"links": items.get("links", [])
+            "data": [item.get("data") for item in items],
+            "links": []
             }
 
 
