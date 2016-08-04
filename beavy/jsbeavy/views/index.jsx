@@ -5,6 +5,7 @@ import { make_url } from 'utils'
 
 import UserView from 'views/UserView'
 import HomeView from 'views/HomeView'
+import LatestView from 'views/LatestView'
 
 export default function setupViews (Application) {
   addExtension('routes',
@@ -19,4 +20,7 @@ export default function setupViews (Application) {
       <Route key='account' name='account' path={make_url.account('')}>
         {getExtensions('accountRoutes')}
       </Route>)
+
+  addExtension('routes',
+      <Route key='latest' name='latest' path='/latest' component={LatestView} />)
 }
