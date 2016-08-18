@@ -60,7 +60,6 @@ export default class InfiniteList extends Component {
                      onInfiniteLoad={::this.handleInfiniteLoad}
                      loadingSpinnerDelegate={this.elementInfiniteLoad()}
                      isInfiniteLoading={this.props.isFetching}
-                     preloadBatchSize={20}
          className='infinite-list'
          scrollNumberCallback={this.scrollCallback}
          selectedItem={this.props.selectedItem}
