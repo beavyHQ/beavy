@@ -85,7 +85,7 @@ export default class InfiniteList extends Component {
     window.addEventListener('resize', this.handleResize)
   }
 
-  componentDidUnmount () {
+  componentWillUnmount () {
     window.removeEventListener('resize', this.handleResize)
   }
 
