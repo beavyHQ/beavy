@@ -56,7 +56,7 @@ export default class InfiniteList extends Component {
     console.log(map(this.props.children, (c, i) => <SizeReportWrapper element={c} reportHeight={(height) => this.reportHeight(i, height)} />))
     return <Infinite elementHeight={this.state.elementHeights}
                      containerHeight={this.state.containerHeight}
-                     infiniteLoadBeginBottomOffset={this.props.meta.has_next && 400}
+                     infiniteLoadBeginEdgeOffset={this.props.meta.has_next && 400}
                      onInfiniteLoad={::this.handleInfiniteLoad}
                      loadingSpinnerDelegate={this.elementInfiniteLoad()}
                      isInfiniteLoading={this.props.isFetching}
