@@ -1,43 +1,60 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { LIST } from 'reducers/list'
+import { getStoreEntity } from 'utils'
+import { LATEST } from 'reducers/latest'
+import { loadLatest } from 'actions/latest'
+import InfiniteList from 'components/InfiniteList'
 
-const Link = ({
-  key,
-  title,
-  url
-}) => (
-  <li key={key}>
-    <a target="_blank" href={url}>{title}</a>
-  </li>
-)
-
-const LinksList = ({
-  links
-}) => (
-  <ul>
-    {links.map(l => 
-      <Link key={l.id} {...l} />
-    )}
-  </ul>
-)
-
-const mapDataToEntities = (data, entities) => {
-  return data.map((item) => {
-    return entities[item.type][item.id]
-  })
-}
-
-const mapStateToProps = (state) => {
-  return {
-    links: mapDataToEntities(
-      state.list.data,
-      state.entities
+// This should be a stateless component but if it's to be
+// consumed by the InfiniteList later, we'll need to add
+// a ref and you can't do that on stateless components.
+class Link extends Component {
+  render() {
+    const props = this.props
+    return (
+      <li key={props.key} style={{height: 350}}>
+        <a target="_blank" href={props.url}>{props.title}</a>
+      </li>
     )
   }
 }
 
+const LinksList = ({
+  meta,
+  links,
+  loadMore
+}) => (
+  <InfiniteList
+    meta={meta}
+    loader={loadMore}
+    minimalItemHeight={24}
+  >
+    {links.map(l =>
+      <Link key={l.id} {...l} />
+    )}
+  </InfiniteList>
+)
+
+const mapStateToProps = (state) => {
+  return {
+    meta: state[LATEST].meta,
+    links: state[LATEST].data.map((item) => {
+      return getStoreEntity(state, item)
+    })
+  }
+}
+
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    loadMore: (page) => {
+      console.log('loadMore', {page: page})
+      dispatch(loadLatest(page))
+    }
+  }
+}
+
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(LinksList)
 
