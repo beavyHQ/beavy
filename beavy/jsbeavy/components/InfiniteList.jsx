@@ -1,5 +1,6 @@
 /*eslint-disable react/no-multi-comp*/
 import React, { Component, PropTypes} from 'react'
+import ReactDOM from  'react-dom'
 import { FormattedMessage } from 'react-intl'
 import Infinite from 'react-infinite'
 import map from 'lodash/collection/map'
@@ -12,7 +13,7 @@ class SizeReportWrapper extends Component {
   }
   componentDidMount () {
     console.log('mounted')
-    var el = React.findDOMNode(this.refs.child)
+    var el = ReactDOM.findDOMNode(this.refs.child)
     this.props.reportHeight(el.offsetHeight)
   }
   render () {
