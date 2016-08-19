@@ -1,5 +1,4 @@
 import { CALL_API } from 'middleware/api'
-import { make_url } from 'utils'
 import { LATEST } from 'reducers/latest'
 
 export const LATEST_REQUEST = 'LATEST_REQUEST'

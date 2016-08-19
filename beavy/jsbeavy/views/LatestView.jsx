@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { getStoreEntity } from 'utils'
@@ -9,11 +10,11 @@ import InfiniteList from 'components/InfiniteList'
 // consumed by the InfiniteList later, we'll need to add
 // a ref and you can't do that on stateless components.
 class Link extends Component {
-  render() {
+  render () {
     const props = this.props
     return (
       <li key={props.key} style={{height: 350}}>
-        <a target="_blank" href={props.url}>{props.title}</a>
+        <a target='_blank' href={props.url}>{props.title}</a>
       </li>
     )
   }
@@ -43,7 +44,7 @@ const mapStateToProps = (state) => {
     links: state[LATEST].data.map((item) => {
       return getStoreEntity(state, item)
     }),
-    isFetching: state[LATEST].isFetching ? true : false
+    isFetching: state[LATEST].isFetching
   }
 }
 
@@ -60,4 +61,4 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(LinksList)
-
+/* eslint-enable react/no-multi-comp */

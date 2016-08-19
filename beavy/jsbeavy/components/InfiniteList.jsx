@@ -1,6 +1,6 @@
 /*eslint-disable react/no-multi-comp*/
 import React, { Component, PropTypes} from 'react'
-import ReactDOM from  'react-dom'
+import ReactDOM from 'react-dom'
 import { FormattedMessage } from 'react-intl'
 import Infinite from 'react-infinite'
 import map from 'lodash/collection/map'
@@ -38,7 +38,7 @@ export default class InfiniteList extends Component {
     super(props)
     let minimalItemHeight = props.minimalItemHeight || 100
     this.state = {
-      elementHeights: map(props.children, x => minimalItemHeight),
+      elementHeights: map(props.children, x => minimalItemHeight)
     }
   }
 
@@ -54,7 +54,7 @@ export default class InfiniteList extends Component {
     // prop to undefined, or not to set it all. We are setting it ot undefined
     // when has_next == false.
     return <Infinite elementHeight={this.state.elementHeights}
-                     useWindowAsScrollContainer={true}
+                     useWindowAsScrollContainer
                      infiniteLoadBeginEdgeOffset={!this.props.meta.has_next ? undefined : 200}
                      onInfiniteLoad={::this.handleInfiniteLoad}
                      loadingSpinnerDelegate={this.elementInfiniteLoad()}
