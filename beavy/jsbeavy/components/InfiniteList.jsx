@@ -41,7 +41,6 @@ export default class InfiniteList extends Component {
     let minimalItemHeight = props.minimalItemHeight || 100
     this.state = {
       elementHeights: map(props.children, x => minimalItemHeight),
-      containerHeight: window.innerHeight - 60
     }
   }
 
@@ -55,10 +54,11 @@ export default class InfiniteList extends Component {
     console.log(this.state)
     console.log(map(this.props.children, (c, i) => <SizeReportWrapper element={c} reportHeight={(height) => this.reportHeight(i, height)} />))
     return <Infinite elementHeight={this.state.elementHeights}
-                     containerHeight={this.state.containerHeight}
                      infiniteLoadBeginEdgeOffset={this.props.meta.has_next && 400}
+                     useWindowAsScrollContainer={true}
                      onInfiniteLoad={::this.handleInfiniteLoad}
                      loadingSpinnerDelegate={this.elementInfiniteLoad()}
+                     preloadBatchSize={Infinite.containerHeightScaleFactor(2)}
                      isInfiniteLoading={this.props.isFetching}
          className='infinite-list'
          scrollNumberCallback={this.scrollCallback}
@@ -74,18 +74,6 @@ export default class InfiniteList extends Component {
     let curHeights = this.state.elementHeights
     curHeights[i] = height
     this.setState({elementHeights: curHeights})
-  }
-
-  handleResize (e) {
-    this.setState({containerHeight: window.innerHeight - 60})
-  }
-
-  componentDidMount () {
-    window.addEventListener('resize', this.handleResize)
-  }
-
-  componentWillUnmount () {
-    window.removeEventListener('resize', this.handleResize)
   }
 
   componentWillReceiveProps (newProps) {
