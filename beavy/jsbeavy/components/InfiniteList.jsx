@@ -4,7 +4,7 @@ import ReactDOM from  'react-dom'
 import { FormattedMessage } from 'react-intl'
 import Infinite from 'react-infinite'
 import map from 'lodash/collection/map'
-import fill from 'lodash/array/fill'
+import { fill, isEqual } from 'lodash'
 
 class SizeReportWrapper extends Component {
   propTypes: {
@@ -46,7 +46,7 @@ export default class InfiniteList extends Component {
   }
 
   shouldComponentUpdate (nextProps, nextState) {
-    var propsChanged = this.props !== nextProps
+    var propsChanged = !isEqual(this.props, nextProps)
     var stateChanged = this.state !== nextState
     return propsChanged || stateChanged
   }
