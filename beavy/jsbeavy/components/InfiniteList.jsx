@@ -88,8 +88,9 @@ export default class InfiniteList extends Component {
   }
 
   handleInfiniteLoad () {
-    console.log('LOAD MOA!')
-    this.props.loader(this.props.meta.page + 1)
+    if (this.props.meta.has_next && !this.props.isFetching) {
+      this.props.loader(this.props.meta.page + 1)
+    }
   }
 
   elementInfiniteLoad () {
