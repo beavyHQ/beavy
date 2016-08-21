@@ -27,5 +27,5 @@ class MorphingNested(fields.Nested, MorphingSchema):
 
     def _serialize(self, nested_obj, attr, obj):
         rv = [self._get_serializer(obj).dump(obj).data
-                    for obj in nested_obj]
+              for obj in nested_obj]
         return rv

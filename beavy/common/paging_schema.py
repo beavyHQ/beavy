@@ -1,6 +1,7 @@
 from marshmallow import Schema, fields, post_dump
 from beavy.common.morphing_schema import MorphingNested
 
+
 class BasePaging(Schema):
     has_next = fields.Boolean()
     has_prev = fields.Boolean()
