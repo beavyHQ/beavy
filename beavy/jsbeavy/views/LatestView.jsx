@@ -22,12 +22,14 @@ class Link extends Component {
 const LinksList = ({
   meta,
   links,
+  isFetching,
   loadMore
 }) => (
   <InfiniteList
     meta={meta}
     loader={loadMore}
     minimalItemHeight={24}
+    isFetching={isFetching}
   >
     {links.map(l =>
       <Link key={l.id} {...l} />
@@ -40,7 +42,8 @@ const mapStateToProps = (state) => {
     meta: state[LATEST].meta,
     links: state[LATEST].data.map((item) => {
       return getStoreEntity(state, item)
-    })
+    }),
+    isFetching: state[LATEST].isFetching ? true : false
   }
 }
 
