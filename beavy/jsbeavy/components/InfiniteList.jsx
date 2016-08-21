@@ -12,12 +12,10 @@ class SizeReportWrapper extends Component {
     element: PropTypes.Component.isRequired,
   }
   componentDidMount () {
-    console.log('mounted')
     var el = ReactDOM.findDOMNode(this.refs.child)
     this.props.reportHeight(el.offsetHeight)
   }
   render () {
-    console.log('rendering')
     return React.cloneElement(this.props.element, {ref: 'child'})
   }
 }
@@ -51,8 +49,6 @@ export default class InfiniteList extends Component {
   }
 
   render () {
-    console.log(this.state)
-    console.log(map(this.props.children, (c, i) => <SizeReportWrapper element={c} reportHeight={(height) => this.reportHeight(i, height)} />))
     return <Infinite elementHeight={this.state.elementHeights}
                      useWindowAsScrollContainer={true}
                      infiniteLoadBeginEdgeOffset={!this.props.meta.has_next ? undefined : 200}
@@ -70,7 +66,6 @@ export default class InfiniteList extends Component {
   }
 
   reportHeight (i, height) {
-    console.log(i, height)
     let curHeights = this.state.elementHeights
     curHeights[i] = height
     this.setState({elementHeights: curHeights})
@@ -83,7 +78,6 @@ export default class InfiniteList extends Component {
       newState.elementHeights = this.state.elementHeights.concat(
         fill(Array(newProps.children.length - this.props.children.length), minimalItemHeight))
     }
-    console.log(newState)
     this.setState(newState)
   }
 
