@@ -49,6 +49,10 @@ export default class InfiniteList extends Component {
   }
 
   render () {
+    // Note that the slightly confusing way of disabling infinite loading
+    // on the Infinite component, is to set the infiniteLoadBeginEdgeOffset
+    // prop to undefined, or not to set it all. We are setting it ot undefined
+    // when has_next == false.
     return <Infinite elementHeight={this.state.elementHeights}
                      useWindowAsScrollContainer={true}
                      infiniteLoadBeginEdgeOffset={!this.props.meta.has_next ? undefined : 200}
