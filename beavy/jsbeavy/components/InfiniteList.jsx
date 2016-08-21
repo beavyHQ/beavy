@@ -60,7 +60,11 @@ export default class InfiniteList extends Component {
          scrollNumberCallback={this.scrollCallback}
          selectedItem={this.props.selectedItem}
                      >
-        {map(this.props.children, (c, i) => <SizeReportWrapper key={i} element={c} reportHeight={(height) => this.reportHeight(i, height)} />
+        {map(this.props.children, (c, i) =>
+            <SizeReportWrapper
+              key={i}
+              element={c}
+              reportHeight={(height) => this.reportHeight(i, height)} />
         )}
     </Infinite>
   }
