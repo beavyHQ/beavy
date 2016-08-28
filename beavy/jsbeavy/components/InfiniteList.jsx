@@ -38,7 +38,8 @@ export default class InfiniteList extends Component {
     super(props)
     let minimalItemHeight = props.minimalItemHeight || 100
     this.state = {
-      elementHeights: map(props.children, x => minimalItemHeight)
+      elementHeights: map(props.children, x => minimalItemHeight),
+      containerHeight: window.innerHeight - 60
     }
   }
 
@@ -54,11 +55,10 @@ export default class InfiniteList extends Component {
     // prop to undefined, or not to set it all. We are setting it ot undefined
     // when has_next == false.
     return <Infinite elementHeight={this.state.elementHeights}
-                     useWindowAsScrollContainer
+                     containerHeight={this.state.containerHeight}
                      infiniteLoadBeginEdgeOffset={!this.props.meta.has_next ? undefined : 200}
                      onInfiniteLoad={::this.handleInfiniteLoad}
                      loadingSpinnerDelegate={this.elementInfiniteLoad()}
-                     preloadBatchSize={Infinite.containerHeightScaleFactor(2)}
                      isInfiniteLoading={this.props.isFetching}
          className='infinite-list'
          scrollNumberCallback={this.scrollCallback}
