@@ -13,7 +13,7 @@ class Link extends Component {
   render () {
     const props = this.props
     return (
-      <li key={props.key} style={{height: 350}}>
+      <li key={props.key} style={{height: 20}}>
         <a target='_blank' href={props.url}>{props.title}</a>
       </li>
     )
